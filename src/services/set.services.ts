@@ -35,9 +35,9 @@ export const deleteSetData = async (_id: string) => {
     }
 }
 
-export const getSetDataBycardTypeId = async (cardTypeId: string) => {
+export const getSetDataBycardTypeId = async (cardTypeId: string, userId: string) => {
     try {
-        const result = await Set.find({ cardTypeId: cardTypeId?.toString() });
+        const result = await Set.find({ cardTypeId: cardTypeId?.toString(), userId: userId?.toString() });
         return result;
     } catch (err) {
         throw err;

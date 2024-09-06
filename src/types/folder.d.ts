@@ -1,4 +1,4 @@
-export interface ISet {
+export interface IFolder {
     _id?: ObjectId;
     name: string;
     isPrivate: boolean;

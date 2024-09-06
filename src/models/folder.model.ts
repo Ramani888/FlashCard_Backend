@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const env = process.env;
 
-const SetSchema = new Schema({
+const FolderSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -26,4 +26,4 @@ const SetSchema = new Schema({
 }, {timestamps: true})
 
 const dbConnection = mongoose.connection.useDb(env.MONGODB_DATABASE ?? '');
-export const Set = dbConnection.model('Set', SetSchema, 'Set');
+export const Folder = dbConnection.model('Folder', FolderSchema, 'Folder');

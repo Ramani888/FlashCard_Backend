@@ -1,4 +1,4 @@
-export const createSetValidation = {
+export const createfolderValidation = {
     name: 'required|string',
     isPrivate: 'required|boolean',
     color: 'required|string',
@@ -6,15 +6,15 @@ export const createSetValidation = {
     userId: 'required|string'
 };
 
-export const updateSetValidation = {
+export const updateFolderValidation = {
     _id: 'required|string',
 };
 
-export const deleteSetValidation = {
+export const deleteFolderValidation = {
     _id: 'required|string',
 };
 
-export const getSetValidation = {
+export const getFolderValidation = {
     cardTypeId: 'required|string',
     userId: 'required|string'
 };

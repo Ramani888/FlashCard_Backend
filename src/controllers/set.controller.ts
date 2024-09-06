@@ -37,9 +37,9 @@ export const deleteSet = async (req: AuthorizedRequest, res: Response) => {
 }
 
 export const getSetBycardTypeId = async (req: AuthorizedRequest, res: Response) => {
-    const { cardTypeId } = req.query;
+    const { cardTypeId, userId } = req.query;
     try {
-        const data = await getSetDataBycardTypeId(cardTypeId);
+        const data = await getSetDataBycardTypeId(cardTypeId, userId);
         res.status(StatusCodes.OK).send(data);
     } catch (err) {
         console.error(err);
