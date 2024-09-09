@@ -14,6 +14,9 @@ import { SignUpApiSource } from "../utils/constants/signUp";
 import { signUpValidation, verifyOtpValidation } from "../utils/validates/signUp.validate";
 import { signUp, verifyOtp } from "../controllers/signUp.controller";
 import { verify } from "crypto";
+import { LoginApiSource } from "../utils/constants/login";
+import { loginValidation } from "../utils/validates/login.validate";
+import { login } from "../controllers/login.controller";
 
 enum RouteSource {
     Body,
@@ -32,6 +35,9 @@ router.get('/card/type', getCardType)
 //Sign Up
 router.post(SignUpApiSource?.post?.signUp?.path, validateBody(signUpValidation), signUp)
 router.post(SignUpApiSource.post.verifyOtp.path, validateBody(verifyOtpValidation), verifyOtp)
+
+//Login
+router.post(LoginApiSource.post.login.path, validateBody(loginValidation), login)
 
 //Set
 router.post(SetApiSource.post.createSet.path, validateBody(createSetValidation), insertSet)
