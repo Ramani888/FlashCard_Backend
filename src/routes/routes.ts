@@ -6,6 +6,10 @@ import { validateBody } from "../middlewares/bodyValidate.middleware";
 import { createSetValidation, deleteSetValidation, getSetValidation, updateSetValidation } from "../utils/validates/set.validate";
 import { createFolder, deleteFolder, getFolderBycardTypeId, updateFolder } from "../controllers/folder.controller";
 import { createfolderValidation, deleteFolderValidation, getFolderValidation, updateFolderValidation } from "../utils/validates/folder.validate";
+import { SetApiSource } from "../utils/constants/set";
+import { FolderApiSource } from "../utils/constants/folder";
+import { CardApiSource } from "../utils/constants/card";
+import { createCardValidation } from "../utils/validates/card.validate";
 
 enum RouteSource {
     Body,
@@ -22,14 +26,17 @@ router.get('/demo', getDemoRequest)
 router.get('/card/type', getCardType)
 
 //Set
-router.post('/set', validateBody(createSetValidation), insertSet)
-router.put('/set', validateBody(updateSetValidation), updateSet)
-router.delete('/set', validateBody(deleteSetValidation, RouteSource?.Query), deleteSet)
-router.get('/set', validateBody(getSetValidation, RouteSource?.Query), getSetBycardTypeId)
+router.post(SetApiSource.post.createSet.path, validateBody(createSetValidation), insertSet)
+router.put(SetApiSource.put.updateSet.path, validateBody(updateSetValidation), updateSet)
+router.delete(SetApiSource.delete.deleteSet.path, validateBody(deleteSetValidation, RouteSource?.Query), deleteSet)
+router.get(SetApiSource.get.getSet.path, validateBody(getSetValidation, RouteSource?.Query), getSetBycardTypeId)
 
 //Folder
-router.post('/folder', validateBody(createfolderValidation), createFolder)
-router.put('/folder', validateBody(updateFolderValidation), updateFolder)
-router.delete('/folder', validateBody(deleteFolderValidation, RouteSource?.Query), deleteFolder)
-router.get('/folder', validateBody(getFolderValidation, RouteSource?.Query), getFolderBycardTypeId)
+router.post(FolderApiSource.post.createFolder.path, validateBody(createfolderValidation), createFolder)
+router.put(FolderApiSource.put.updateFolder.path, validateBody(updateFolderValidation), updateFolder)
+router.delete(FolderApiSource.delete.deleteFolder.path, validateBody(deleteFolderValidation, RouteSource?.Query), deleteFolder)
+router.get(FolderApiSource.get.getFolder.path, validateBody(getFolderValidation, RouteSource?.Query), getFolderBycardTypeId)
+
+//Card
+// router.post(CardApiSource.post.createCard.path, validateBody(createCardValidation), createCard)
 export default router;
