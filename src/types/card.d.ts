@@ -4,6 +4,7 @@ export interface ICard {
     bottom: string;
     note?: string;
     setId: string;
+    folderId: string;
     cardTypeId: string;
     userId: string;
     isBlur?: boolean;

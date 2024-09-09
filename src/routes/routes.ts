@@ -1,15 +1,15 @@
 import express from "express";
 import { getDemoRequest } from "../controllers/demo.controller";
-import { getCardType } from "../controllers/card.controller";
+import { createCard, deleteCard, getCard, getCardType, updateCard } from "../controllers/card.controller";
 import { deleteSet, getSetBycardTypeId, getSetByfolderId, insertSet, updateSet } from "../controllers/set.controller";
 import { validateBody } from "../middlewares/bodyValidate.middleware";
-import { createSetValidation, deleteSetValidation, getSetValidation, updateSetValidation } from "../utils/validates/set.validate";
+import { createSetValidation, deleteSetValidation, getSetByFolderValidation, getSetValidation, updateSetValidation } from "../utils/validates/set.validate";
 import { createFolder, deleteFolder, getFolderBycardTypeId, updateFolder } from "../controllers/folder.controller";
 import { createfolderValidation, deleteFolderValidation, getFolderValidation, updateFolderValidation } from "../utils/validates/folder.validate";
 import { SetApiSource } from "../utils/constants/set";
 import { FolderApiSource } from "../utils/constants/folder";
 import { CardApiSource } from "../utils/constants/card";
-import { createCardValidation } from "../utils/validates/card.validate";
+import { createCardValidation, deleteCardValidation, getCardValidation, updateCardValidation } from "../utils/validates/card.validate";
 import { SignUpApiSource } from "../utils/constants/signUp";
 import { signUpValidation, verifyOtpValidation } from "../utils/validates/signUp.validate";
 import { signUp, verifyOtp } from "../controllers/signUp.controller";
@@ -44,7 +44,7 @@ router.post(SetApiSource.post.createSet.path, validateBody(createSetValidation),
 router.put(SetApiSource.put.updateSet.path, validateBody(updateSetValidation), updateSet)
 router.delete(SetApiSource.delete.deleteSet.path, validateBody(deleteSetValidation, RouteSource?.Query), deleteSet)
 router.get(SetApiSource.get.getSet.path, validateBody(getSetValidation, RouteSource?.Query), getSetBycardTypeId)
-router.get(SetApiSource.get.getSetByFolderId.path, validateBody(getSetValidation, RouteSource?.Query), getSetByfolderId)
+router.get(SetApiSource.get.getSetByFolderId.path, validateBody(getSetByFolderValidation, RouteSource?.Query), getSetByfolderId)
 
 //Folder
 router.post(FolderApiSource.post.createFolder.path, validateBody(createfolderValidation), createFolder)
@@ -53,5 +53,8 @@ router.delete(FolderApiSource.delete.deleteFolder.path, validateBody(deleteFolde
 router.get(FolderApiSource.get.getFolder.path, validateBody(getFolderValidation, RouteSource?.Query), getFolderBycardTypeId)
 
 //Card
-// router.post(CardApiSource.post.createCard.path, validateBody(createCardValidation), createCard)
+router.post(CardApiSource.post.createCard.path, validateBody(createCardValidation), createCard)
+router.put(CardApiSource.put.updateCard.path, validateBody(updateCardValidation), updateCard)
+router.get(CardApiSource.get.getCard.path, validateBody(getCardValidation, RouteSource?.Query), getCard)
+router.delete(CardApiSource.delete.deleteCard.path, validateBody(deleteCardValidation, RouteSource?.Query), deleteCard)
 export default router;
