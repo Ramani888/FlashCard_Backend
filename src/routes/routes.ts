@@ -1,7 +1,7 @@
 import express from "express";
 import { getDemoRequest } from "../controllers/demo.controller";
 import { getCardType } from "../controllers/card.controller";
-import { deleteSet, getSetBycardTypeId, insertSet, updateSet } from "../controllers/set.controller";
+import { deleteSet, getSetBycardTypeId, getSetByfolderId, insertSet, updateSet } from "../controllers/set.controller";
 import { validateBody } from "../middlewares/bodyValidate.middleware";
 import { createSetValidation, deleteSetValidation, getSetValidation, updateSetValidation } from "../utils/validates/set.validate";
 import { createFolder, deleteFolder, getFolderBycardTypeId, updateFolder } from "../controllers/folder.controller";
@@ -44,6 +44,7 @@ router.post(SetApiSource.post.createSet.path, validateBody(createSetValidation),
 router.put(SetApiSource.put.updateSet.path, validateBody(updateSetValidation), updateSet)
 router.delete(SetApiSource.delete.deleteSet.path, validateBody(deleteSetValidation, RouteSource?.Query), deleteSet)
 router.get(SetApiSource.get.getSet.path, validateBody(getSetValidation, RouteSource?.Query), getSetBycardTypeId)
+router.get(SetApiSource.get.getSetByFolderId.path, validateBody(getSetValidation, RouteSource?.Query), getSetByfolderId)
 
 //Folder
 router.post(FolderApiSource.post.createFolder.path, validateBody(createfolderValidation), createFolder)

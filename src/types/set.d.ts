@@ -5,4 +5,5 @@ export interface ISet {
     color: string;
     cardTypeId: string;
     userId: string;
+    folderId: string;
 }

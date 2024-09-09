@@ -2,8 +2,9 @@ export const createSetValidation = {
     name: 'required|string',
     isPrivate: 'required|boolean',
     color: 'required|string',
+    userId: 'required|string',
     cardTypeId: 'required|string',
-    userId: 'required|string'
+    folderId: 'required|string',
 };
 
 export const updateSetValidation = {
@@ -15,6 +16,7 @@ export const deleteSetValidation = {
 };
 
 export const getSetValidation = {
+    folderId: 'required|string',
     cardTypeId: 'required|string',
     userId: 'required|string'
 };

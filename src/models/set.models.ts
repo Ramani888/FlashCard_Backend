@@ -22,6 +22,10 @@ const SetSchema = new Schema({
     userId: {
         type: String,
         required: true
+    },
+    folderId: {
+        type: String,
+        required: true
     }
 }, {timestamps: true})
 

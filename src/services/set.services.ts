@@ -43,3 +43,12 @@ export const getSetDataBycardTypeId = async (cardTypeId: string, userId: string)
         throw err;
     }
 }
+
+export const getSetDataByfolderId = async (folderId: string, cardTypeId: string, userId: string) => {
+    try {
+        const result = await Set.find({ folderId: folderId?.toString(), cardTypeId: cardTypeId?.toString(), userId: userId?.toString() });
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}

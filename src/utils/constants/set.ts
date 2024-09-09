@@ -9,6 +9,7 @@ export const SetApiSource = {
         deleteSet: { path: '/set',  message: 'Set Deleted Successfully.' }
     },
     get: {
-        getSet: { path: '/set',  message: 'Set get Successfully.' }
+        getSet: { path: '/set',  message: 'Set get Successfully.' },
+        getSetByFolderId: { path: '/folder/set', message: 'Set get Successfully.'}
     }
 }
