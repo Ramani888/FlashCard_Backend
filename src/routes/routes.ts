@@ -10,6 +10,10 @@ import { SetApiSource } from "../utils/constants/set";
 import { FolderApiSource } from "../utils/constants/folder";
 import { CardApiSource } from "../utils/constants/card";
 import { createCardValidation } from "../utils/validates/card.validate";
+import { SignUpApiSource } from "../utils/constants/signUp";
+import { signUpValidation, verifyOtpValidation } from "../utils/validates/signUp.validate";
+import { signUp, verifyOtp } from "../controllers/signUp.controller";
+import { verify } from "crypto";
 
 enum RouteSource {
     Body,
@@ -24,6 +28,10 @@ router.get('/demo', getDemoRequest)
 
 //Card Type
 router.get('/card/type', getCardType)
+
+//Sign Up
+router.post(SignUpApiSource?.post?.signUp?.path, validateBody(signUpValidation), signUp)
+router.post(SignUpApiSource.post.verifyOtp.path, validateBody(verifyOtpValidation), verifyOtp)
 
 //Set
 router.post(SetApiSource.post.createSet.path, validateBody(createSetValidation), insertSet)

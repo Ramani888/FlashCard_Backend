@@ -13,3 +13,11 @@ export type UserJwt = {
     dataModelId: number;
     exp?: number;
 };
+
+export interface IUser {
+  _id?: ObjectId;
+  email: string;
+  userName: string;
+  password: string;
+  picture?: string;
+}
