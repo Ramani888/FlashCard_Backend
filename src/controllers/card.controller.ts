@@ -1,7 +1,7 @@
 import { AuthorizedRequest } from "../types/user";
 import { StatusCodes } from "http-status-codes";
 import { Response } from 'express';
-import { createCardData, deleteCardData, getCardData, getCardTypeData, updateCardData } from "../services/card.service";
+import { blurAllCardData, createCardData, deleteCardData, getCardBySetId, getCardData, getCardTypeData, updateCardData } from "../services/card.service";
 import { CardApiSource } from "../utils/constants/card";
 
 export const getCardType = async (req: AuthorizedRequest, res: Response) => {
@@ -52,6 +52,24 @@ export const deleteCard = async (req: AuthorizedRequest, res: Response) => {
     try {
         await deleteCardData(_id);
         res.status(StatusCodes.OK).send({ success: true, message: CardApiSource.delete.deleteCard.message });
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const blurAllCard = async (req: AuthorizedRequest, res: Response) => {
+    const { setId } = req.query;
+    try {
+        const cardData = await getCardBySetId(setId);
+        const updateCardData = cardData?.map((item) => {
+            return {
+                ...item,
+                isBlur: true
+            }
+        })
+        await blurAllCardData(updateCardData);
+        res.status(StatusCodes.OK).send({ success: true, message: CardApiSource.put.blurAllCard.message });
     } catch (err) {
         console.error(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });

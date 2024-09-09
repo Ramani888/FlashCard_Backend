@@ -1,6 +1,6 @@
 import express from "express";
 import { getDemoRequest } from "../controllers/demo.controller";
-import { createCard, deleteCard, getCard, getCardType, updateCard } from "../controllers/card.controller";
+import { blurAllCard, createCard, deleteCard, getCard, getCardType, updateCard } from "../controllers/card.controller";
 import { deleteSet, getSetBycardTypeId, getSetByfolderId, insertSet, updateSet } from "../controllers/set.controller";
 import { validateBody } from "../middlewares/bodyValidate.middleware";
 import { createSetValidation, deleteSetValidation, getSetByFolderValidation, getSetValidation, updateSetValidation } from "../utils/validates/set.validate";
@@ -9,7 +9,7 @@ import { createfolderValidation, deleteFolderValidation, getFolderValidation, up
 import { SetApiSource } from "../utils/constants/set";
 import { FolderApiSource } from "../utils/constants/folder";
 import { CardApiSource } from "../utils/constants/card";
-import { createCardValidation, deleteCardValidation, getCardValidation, updateCardValidation } from "../utils/validates/card.validate";
+import { blurAllCardValidation, createCardValidation, deleteCardValidation, getCardValidation, updateCardValidation } from "../utils/validates/card.validate";
 import { SignUpApiSource } from "../utils/constants/signUp";
 import { signUpValidation, verifyOtpValidation } from "../utils/validates/signUp.validate";
 import { signUp, verifyOtp } from "../controllers/signUp.controller";
@@ -30,7 +30,7 @@ const router = express.Router();
 router.get('/demo', getDemoRequest)
 
 //Card Type
-router.get('/card/type', getCardType)
+router.get(CardApiSource.get.getCardType.path, getCardType)
 
 //Sign Up
 router.post(SignUpApiSource?.post?.signUp?.path, validateBody(signUpValidation), signUp)
@@ -57,4 +57,5 @@ router.post(CardApiSource.post.createCard.path, validateBody(createCardValidatio
 router.put(CardApiSource.put.updateCard.path, validateBody(updateCardValidation), updateCard)
 router.get(CardApiSource.get.getCard.path, validateBody(getCardValidation, RouteSource?.Query), getCard)
 router.delete(CardApiSource.delete.deleteCard.path, validateBody(deleteCardValidation, RouteSource?.Query), deleteCard)
+router.put(CardApiSource.put.blurAllCard.path, validateBody(blurAllCardValidation, RouteSource.Query), blurAllCard)
 export default router;

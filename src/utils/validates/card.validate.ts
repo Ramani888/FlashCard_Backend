@@ -23,3 +23,7 @@ export const getCardValidation = {
 export const deleteCardValidation = {
     _id: 'required|string',
 };
+
+export const blurAllCardValidation = {
+    setId: 'required|string',
+};

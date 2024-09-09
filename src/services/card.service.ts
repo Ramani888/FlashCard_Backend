@@ -43,11 +43,37 @@ export const getCardData = async (setId: string, folderId: string, cardTypeId: s
     }
 }
 
+export const getCardBySetId = async (setId: string) => {
+    try {
+        const result = await Card.find({ setId: setId?.toString() }).lean();
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}
+
 export const deleteCardData = async (_id: string) => {
     try {
         const objectId = new ObjectId(_id?.toString());
         await Card.deleteOne({ _id: objectId });
         return;
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const blurAllCardData = async (updateCardData: any[]) => {
+    try {
+        const updatePromises = updateCardData.map(async (updateData) => {
+            const objectId = new ObjectId(updateData._id?.toString());
+            return await Card.findByIdAndUpdate(objectId, updateData, {
+                new: true,
+                runValidators: true
+            });
+        });
+
+        const results = await Promise.all(updatePromises);
+        return results;
     } catch (err) {
         throw err;
     }
