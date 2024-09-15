@@ -16,7 +16,6 @@ const CardSchema = new Schema({
     },
     folderId: {
         type: String,
-        required: true
     },
     setId: {
         type: String,

@@ -3,7 +3,7 @@ export const createCardValidation = {
     bottom: 'required|string',
     note: 'string',
     setId: 'required|string',
-    folderId: 'required|string',
+    folderId: 'string',
     cardTypeId: 'required|string',
     userId: 'required|string',
     isBlur: 'boolean'
@@ -15,7 +15,7 @@ export const updateCardValidation = {
 
 export const getCardValidation = {
     setId: 'required|string',
-    folderId: 'required|string',
+    folderId: 'string',
     cardTypeId: 'required|string',
     userId: 'required|string'
 };
