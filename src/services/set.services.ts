@@ -60,9 +60,25 @@ export const getSetDataBycardTypeId = async (cardTypeId: string, userId: string)
     }
 }
 
+// export const getSetDataByfolderId = async (folderId: string, cardTypeId: string, userId: string) => {
+//     try {
+//         const result = await Set.find({ folderId: folderId?.toString(), cardTypeId: cardTypeId?.toString(), userId: userId?.toString() });
+//         return result;
+//     } catch (err) {
+//         throw err;
+//     }
+// }
+
 export const getSetDataByfolderId = async (folderId: string, cardTypeId: string, userId: string) => {
     try {
-        const result = await Set.find({ folderId: folderId?.toString(), cardTypeId: cardTypeId?.toString(), userId: userId?.toString() });
+        const result = await Set.find({
+            cardTypeId: cardTypeId?.toString(),
+            userId: userId?.toString(),
+            $and: [
+                { folderId: folderId?.toString() }, // Ensure that folderId matches the given value
+                { folderId: { $exists: true, $ne: null } } // Check that folderId exists and is not null
+            ]
+        });
         return result;
     } catch (err) {
         throw err;
