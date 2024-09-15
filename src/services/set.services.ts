@@ -35,9 +35,25 @@ export const deleteSetData = async (_id: string) => {
     }
 }
 
+// export const getSetDataBycardTypeId = async (cardTypeId: string, userId: string) => {
+//     try {
+//         const result = await Set.find({ cardTypeId: cardTypeId?.toString(), userId: userId?.toString() });
+//         return result;
+//     } catch (err) {
+//         throw err;
+//     }
+// }
+
 export const getSetDataBycardTypeId = async (cardTypeId: string, userId: string) => {
     try {
-        const result = await Set.find({ cardTypeId: cardTypeId?.toString(), userId: userId?.toString() });
+        const result = await Set.find({
+            cardTypeId: cardTypeId?.toString(),
+            userId: userId?.toString(),
+            $or: [
+                { folderId: { $exists: false } },  // Documents where folderId does not exist
+                { folderId: null }                 // Documents where folderId is null
+            ]
+        });
         return result;
     } catch (err) {
         throw err;
