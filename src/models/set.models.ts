@@ -24,8 +24,7 @@ const SetSchema = new Schema({
         required: true
     },
     folderId: {
-        type: String,
-        required: true
+        type: String
     }
 }, {timestamps: true})
 

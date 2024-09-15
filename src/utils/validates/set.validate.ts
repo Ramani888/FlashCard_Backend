@@ -4,7 +4,7 @@ export const createSetValidation = {
     color: 'required|string',
     userId: 'required|string',
     cardTypeId: 'required|string',
-    folderId: 'required|string',
+    folderId: 'string',
 };
 
 export const updateSetValidation = {
