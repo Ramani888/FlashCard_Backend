@@ -84,3 +84,13 @@ export const getSetDataByfolderId = async (folderId: string, cardTypeId: string,
         throw err;
     }
 }
+
+export const getSetBySetId = async (setId: string) => {
+    try {
+        const objectId = new ObjectId(setId?.toString());
+        const result = await Set.findOne({ _id: objectId });
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}

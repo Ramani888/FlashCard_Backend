@@ -43,6 +43,16 @@ export const getCardData = async (setId: string, folderId: string, cardTypeId: s
     }
 }
 
+export const getCardByCardId = async (cardId: string) => {
+    try {
+        const objectId = new ObjectId(cardId?.toString());
+        const result = await Card.findOne({ _id: objectId });
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}
+
 export const getCardBySetId = async (setId: string) => {
     try {
         const result = await Card.find({ setId: setId?.toString() }).lean();

@@ -4,7 +4,8 @@ export const CardApiSource = {
     },
     put: {
         updateCard: { path: '/card',  message: 'Card Updated Successfully.' },
-        blurAllCard: { path: '/blur/all/card', message: 'Blur All Card Successfully.' }
+        blurAllCard: { path: '/blur/all/card', message: 'Blur All Card Successfully.', messageForUnblur: 'Remove Blur From All Card Successfully.' },
+        moveCard: { path: '/move/card', message: 'Move Card Successfully.'}
     },
     delete: {
         deleteCard: { path: '/card',  message: 'Card Deleted Successfully.' }

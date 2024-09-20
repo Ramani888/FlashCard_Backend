@@ -18,3 +18,8 @@ export const getFolderValidation = {
     cardTypeId: 'required|string',
     userId: 'required|string'
 };
+
+export const assignFolderValidation = {
+    folderId: 'required|string',
+    setId: 'required|string'
+}

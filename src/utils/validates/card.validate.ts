@@ -26,4 +26,10 @@ export const deleteCardValidation = {
 
 export const blurAllCardValidation = {
     setId: 'required|string',
+    isBlur: 'required|boolean'
+};
+
+export const moveCardValidation = {
+    setId: 'required|string',
+    cardId: 'required|string'
 };
