@@ -17,6 +17,9 @@ import { verify } from "crypto";
 import { LoginApiSource } from "../utils/constants/login";
 import { loginValidation } from "../utils/validates/login.validate";
 import { login } from "../controllers/login.controller";
+import { NotesApiSource } from "../utils/constants/notes";
+import { createNotesValidation, deleteNotesValidation, getNotesValidation, updateNotesValidation } from "../utils/validates/notes.validate";
+import { createNotes, deleteNotes, getNotes, updateNotes } from "../controllers/notes.controller";
 
 enum RouteSource {
     Body,
@@ -60,4 +63,10 @@ router.get(CardApiSource.get.getCard.path, validateBody(getCardValidation, Route
 router.delete(CardApiSource.delete.deleteCard.path, validateBody(deleteCardValidation, RouteSource?.Query), deleteCard)
 router.put(CardApiSource.put.blurAllCard.path, validateBody(blurAllCardValidation, RouteSource.Query), blurAllCard)
 router.put(CardApiSource.put.moveCard.path, validateBody(moveCardValidation, RouteSource.Query), moveCard)
+
+//Notes
+router.post(NotesApiSource.post.createNotes.path, validateBody(createNotesValidation), createNotes)
+router.put(NotesApiSource.put.updateNotes.path, validateBody(updateNotesValidation), updateNotes)
+router.delete(NotesApiSource.delete.deleteNotes.path, validateBody(deleteNotesValidation, RouteSource.Query), deleteNotes)
+router.get(NotesApiSource.get.getNotes.path, validateBody(getNotesValidation, RouteSource.Query), getNotes)
 export default router;
