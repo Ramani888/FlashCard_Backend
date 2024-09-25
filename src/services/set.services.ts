@@ -37,7 +37,45 @@ export const deleteSetData = async (_id: string) => {
 
 export const getSetData = async (userId: string) => {
     try {
-        const result = await Set.find({ userId: userId?.toString() });
+        const result = await Set.aggregate([
+            {
+                $match: {
+                    userId: userId?.toString()
+                }
+            },
+            {
+                $addFields: {
+                    folderIdObject: { $toObjectId: "$folderId" }, // Convert folderId to ObjectId
+                }
+            },
+            {
+                $lookup: {
+                    from: "Folder",
+                    localField: "folderIdObject",
+                    foreignField: "_id",
+                    as: "folderData"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$folderData", // Unwind to make folderData a single object
+                    preserveNullAndEmptyArrays: true // Keep the original document if no match is found
+                }
+            },
+            {
+                $project: {
+                    "_id": 1,
+                    "name": 1,
+                    "isPrivate": 1,
+                    "color": 1,
+                    "userId": 1,
+                    "folderId": 1,
+                    "createdAt": 1,
+                    "updatedAt": 1,
+                    "folderName": "$folderData.name" // Correctly reference folderData to get folderName
+                }
+            }
+        ]);        
         return result;
     } catch (err) {
         throw err;
@@ -70,13 +108,46 @@ export const getSetData = async (userId: string) => {
 
 export const getSetDataByfolderId = async (folderId: string, userId: string) => {
     try {
-        const result = await Set.find({
-            userId: userId?.toString(),
-            $and: [
-                { folderId: folderId?.toString() }, // Ensure that folderId matches the given value
-                { folderId: { $exists: true, $ne: null } } // Check that folderId exists and is not null
-            ]
-        });
+        const result = await Set.aggregate([
+            {
+                $match: {
+                    userId: userId?.toString(),
+                    folderId: { $exists: true, $ne: null, $eq: folderId?.toString() }
+                }
+            },
+            {
+                $addFields: {
+                    folderIdObject: { $toObjectId: "$folderId" } // Convert folderId to ObjectId
+                }
+            },
+            {
+                $lookup: {
+                    from: "Folder",
+                    localField: "folderIdObject",
+                    foreignField: "_id",
+                    as: "folderData"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$folderData",
+                    preserveNullAndEmptyArrays: true // Keep the set document even if no matching folder is found
+                }
+            },
+            {
+                $project: {
+                    "_id": 1,
+                    "name": 1,
+                    "isPrivate": 1,
+                    "color": 1,
+                    "userId": 1,
+                    "folderId": 1,
+                    "createdAt": 1,
+                    "updatedAt": 1,
+                    "folderName": "$folderData.name" // Extract folderName from folderData
+                }
+            }
+        ]);
         return result;
     } catch (err) {
         throw err;
