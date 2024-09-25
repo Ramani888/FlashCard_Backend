@@ -34,9 +34,9 @@ export const deleteFolderData = async (_id: string) => {
     }
 }
 
-export const getFolderDataBycardTypeId = async (cardTypeId: string, userId: string) => {
+export const getFolderData = async (userId: string) => {
     try {
-        const result = await Folder.find({ cardTypeId: cardTypeId?.toString(), userId: userId?.toString() });
+        const result = await Folder.find({ userId: userId?.toString() });
         return result;
     } catch (err) {
         throw err;

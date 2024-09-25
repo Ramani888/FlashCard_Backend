@@ -1,7 +1,7 @@
 import { AuthorizedRequest } from "../types/user";
 import { StatusCodes } from "http-status-codes";
 import { Response } from 'express';
-import { createFolderData, deleteFolderData, getFolderDataBycardTypeId, updateFolderData } from "../services/folder.service";
+import { createFolderData, deleteFolderData, getFolderData, updateFolderData } from "../services/folder.service";
 import { FolderApiSource } from "../utils/constants/folder";
 import { getCardBySetId, updateCardData } from "../services/card.service";
 import { getSetBySetId, updateSetData } from "../services/set.services";
@@ -39,10 +39,10 @@ export const deleteFolder = async (req: AuthorizedRequest, res: Response) => {
     }
 }
 
-export const getFolderBycardTypeId = async (req: AuthorizedRequest, res: Response) => {
-    const { cardTypeId, userId } = req.query;
+export const getFolder = async (req: AuthorizedRequest, res: Response) => {
+    const { userId } = req.query;
     try {
-        const data = await getFolderDataBycardTypeId(cardTypeId, userId);
+        const data = await getFolderData(userId);
         res.status(StatusCodes.OK).send(data);
     } catch (err) {
         console.error(err);

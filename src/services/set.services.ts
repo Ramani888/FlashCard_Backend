@@ -35,30 +35,29 @@ export const deleteSetData = async (_id: string) => {
     }
 }
 
-// export const getSetDataBycardTypeId = async (cardTypeId: string, userId: string) => {
-//     try {
-//         const result = await Set.find({ cardTypeId: cardTypeId?.toString(), userId: userId?.toString() });
-//         return result;
-//     } catch (err) {
-//         throw err;
-//     }
-// }
-
-export const getSetDataBycardTypeId = async (cardTypeId: string, userId: string) => {
+export const getSetData = async (userId: string) => {
     try {
-        const result = await Set.find({
-            cardTypeId: cardTypeId?.toString(),
-            userId: userId?.toString(),
-            $or: [
-                { folderId: { $exists: false } },  // Documents where folderId does not exist
-                { folderId: null }                 // Documents where folderId is null
-            ]
-        });
+        const result = await Set.find({ userId: userId?.toString() });
         return result;
     } catch (err) {
         throw err;
     }
 }
+
+// export const getSetData = async (userId: string) => {
+//     try {
+//         const result = await Set.find({
+//             userId: userId?.toString(),
+//             $or: [
+//                 { folderId: { $exists: false } },  // Documents where folderId does not exist
+//                 { folderId: null }                 // Documents where folderId is null
+//             ]
+//         });
+//         return result;
+//     } catch (err) {
+//         throw err;
+//     }
+// }
 
 // export const getSetDataByfolderId = async (folderId: string, cardTypeId: string, userId: string) => {
 //     try {
@@ -69,10 +68,9 @@ export const getSetDataBycardTypeId = async (cardTypeId: string, userId: string)
 //     }
 // }
 
-export const getSetDataByfolderId = async (folderId: string, cardTypeId: string, userId: string) => {
+export const getSetDataByfolderId = async (folderId: string, userId: string) => {
     try {
         const result = await Set.find({
-            cardTypeId: cardTypeId?.toString(),
             userId: userId?.toString(),
             $and: [
                 { folderId: folderId?.toString() }, // Ensure that folderId matches the given value

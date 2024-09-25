@@ -34,9 +34,9 @@ export const updateCardData = async (updateData: ICard) => {
     }
 }
 
-export const getCardData = async (setId: string, folderId: string, cardTypeId: string, userId: string) => {
+export const getCardData = async (setId: string, folderId: string, userId: string) => {
     try {
-        const result = await Card.find({ setId: setId?.toString(), folderId: folderId?.toString(), cardTypeId: cardTypeId?.toString(), userId: userId?.toString() });
+        const result = await Card.find({ setId: setId?.toString(), folderId: folderId?.toString(), userId: userId?.toString() });
         return result;
     } catch (err) {
         throw err;

@@ -3,7 +3,6 @@ export interface ISet {
     name: string;
     isPrivate: boolean;
     color: string;
-    cardTypeId: string;
     userId: string;
     folderId: string;
 }

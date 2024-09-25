@@ -37,9 +37,9 @@ export const updateCard = async (req: AuthorizedRequest, res: Response) => {
 }
 
 export const getCard = async (req: AuthorizedRequest, res: Response) => {
-    const { setId, folderId, cardTypeId, userId } = req.query;
+    const { setId, folderId, userId } = req.query;
     try {
-        const data = await getCardData(setId, folderId, cardTypeId, userId);
+        const data = await getCardData(setId, folderId, userId);
         res.status(StatusCodes.OK).send(data);
     } catch (err) {
         console.error(err);

@@ -2,7 +2,6 @@ export const createfolderValidation = {
     name: 'required|string',
     isPrivate: 'required|boolean',
     color: 'required|string',
-    cardTypeId: 'required|string',
     userId: 'required|string'
 };
 
@@ -15,7 +14,6 @@ export const deleteFolderValidation = {
 };
 
 export const getFolderValidation = {
-    cardTypeId: 'required|string',
     userId: 'required|string'
 };
 

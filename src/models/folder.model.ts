@@ -15,10 +15,6 @@ const FolderSchema = new Schema({
         type: String,
         required: true
     },
-    cardTypeId: {
-        type: String,
-        required: true
-    },
     userId: {
         type: String,
         required: true

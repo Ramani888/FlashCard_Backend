@@ -1,7 +1,7 @@
 import { AuthorizedRequest } from "../types/user";
 import { StatusCodes } from "http-status-codes";
 import { Response } from 'express';
-import { deleteSetData, getSetDataBycardTypeId, getSetDataByfolderId, insertSetData, updateSetData } from "../services/set.services";
+import { deleteSetData, getSetData, getSetDataByfolderId, insertSetData, updateSetData } from "../services/set.services";
 import { SetApiSource } from "../utils/constants/set";
 
 export const insertSet = async (req: AuthorizedRequest, res: Response) => {
@@ -37,10 +37,10 @@ export const deleteSet = async (req: AuthorizedRequest, res: Response) => {
     }
 }
 
-export const getSetBycardTypeId = async (req: AuthorizedRequest, res: Response) => {
-    const { cardTypeId, userId } = req.query;
+export const getSet = async (req: AuthorizedRequest, res: Response) => {
+    const { userId } = req.query;
     try {
-        const data = await getSetDataBycardTypeId(cardTypeId, userId);
+        const data = await getSetData(userId);
         res.status(StatusCodes.OK).send(data);
     } catch (err) {
         console.error(err);
@@ -49,9 +49,9 @@ export const getSetBycardTypeId = async (req: AuthorizedRequest, res: Response) 
 }
 
 export const getSetByfolderId = async (req: AuthorizedRequest, res: Response) => {
-    const { folderId, cardTypeId, userId } = req.query;
+    const { folderId, userId } = req.query;
     try {
-        const data = await getSetDataByfolderId(folderId, cardTypeId, userId);
+        const data = await getSetDataByfolderId(folderId, userId);
         res.status(StatusCodes.OK).send(data);
     } catch (err) {
         console.error(err);

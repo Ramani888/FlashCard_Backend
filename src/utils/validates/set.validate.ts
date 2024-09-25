@@ -3,7 +3,6 @@ export const createSetValidation = {
     isPrivate: 'required|boolean',
     color: 'required|string',
     userId: 'required|string',
-    cardTypeId: 'required|string',
     folderId: 'string',
 };
 
@@ -16,12 +15,10 @@ export const deleteSetValidation = {
 };
 
 export const getSetValidation = {
-    cardTypeId: 'required|string',
     userId: 'required|string'
 };
 
 export const getSetByFolderValidation = {
     folderId: 'required|string',
-    cardTypeId: 'required|string',
     userId: 'required|string'
 };
