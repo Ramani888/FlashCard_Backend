@@ -63,6 +63,24 @@ export const getSetData = async (userId: string) => {
                 }
             },
             {
+                $addFields: {
+                    setIdString: { $toString: "$_id" } // Convert ObjectId to string for matching
+                }
+            },
+            {
+                $lookup: {
+                    from: "Card", // Assuming 'Card' collection stores cards linked to sets
+                    localField: "setIdString", // Use the string version of _id to find matching cards
+                    foreignField: "setId", // Assuming 'setId' in the Card collection is a string
+                    as: "cards" // Name the array with cards found
+                }
+            },
+            {
+                $addFields: {
+                    cardCount: { $size: "$cards" } // Get the count of cards per set
+                }
+            },
+            {
                 $project: {
                     "_id": 1,
                     "name": 1,
@@ -72,7 +90,8 @@ export const getSetData = async (userId: string) => {
                     "folderId": 1,
                     "createdAt": 1,
                     "updatedAt": 1,
-                    "folderName": "$folderData.name" // Correctly reference folderData to get folderName
+                    "folderName": "$folderData.name", // Correctly reference folderData to get folderName
+                    "cardCount": 1 // Include card count in the final projection
                 }
             }
         ]);        
@@ -81,6 +100,7 @@ export const getSetData = async (userId: string) => {
         throw err;
     }
 }
+
 
 // export const getSetData = async (userId: string) => {
 //     try {
@@ -135,6 +155,24 @@ export const getSetDataByfolderId = async (folderId: string, userId: string) => 
                 }
             },
             {
+                $addFields: {
+                    setIdString: { $toString: "$_id" } // Convert ObjectId to string for matching
+                }
+            },
+            {
+                $lookup: {
+                    from: "Card", // Assuming 'Card' collection stores cards linked to sets
+                    localField: "setIdString", // Use the string version of _id to find matching cards
+                    foreignField: "setId", // Assuming 'setId' in the Card collection is a string
+                    as: "cards" // Name the array with cards found
+                }
+            },
+            {
+                $addFields: {
+                    cardCount: { $size: "$cards" } // Get the count of cards per set
+                }
+            },
+            {
                 $project: {
                     "_id": 1,
                     "name": 1,
@@ -144,7 +182,8 @@ export const getSetDataByfolderId = async (folderId: string, userId: string) => 
                     "folderId": 1,
                     "createdAt": 1,
                     "updatedAt": 1,
-                    "folderName": "$folderData.name" // Extract folderName from folderData
+                    "folderName": "$folderData.name", // Extract folderName from folderData
+                    "cardCount": 1 // Include card count in the final projection
                 }
             }
         ]);
