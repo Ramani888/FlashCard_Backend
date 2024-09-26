@@ -20,6 +20,9 @@ import { login } from "../controllers/login.controller";
 import { NotesApiSource } from "../utils/constants/notes";
 import { createNotesValidation, deleteNotesValidation, getNotesValidation, updateNotesValidation } from "../utils/validates/notes.validate";
 import { createNotes, deleteNotes, getNotes, updateNotes } from "../controllers/notes.controller";
+import { ContactsApiSource } from "../utils/constants/contacts";
+import { addContactsValidation, getContactsValidation, getUsersValidation } from "../utils/validates/contacts.validate";
+import { addContact, getContacts, getUsers } from "../controllers/contacts.controller";
 
 enum RouteSource {
     Body,
@@ -69,4 +72,9 @@ router.post(NotesApiSource.post.createNotes.path, validateBody(createNotesValida
 router.put(NotesApiSource.put.updateNotes.path, validateBody(updateNotesValidation), updateNotes)
 router.delete(NotesApiSource.delete.deleteNotes.path, validateBody(deleteNotesValidation, RouteSource.Query), deleteNotes)
 router.get(NotesApiSource.get.getNotes.path, validateBody(getNotesValidation, RouteSource.Query), getNotes)
+
+//Contacts
+router.get(ContactsApiSource.get.getUsers.path, validateBody(getUsersValidation, RouteSource.Query), getUsers)
+router.post(ContactsApiSource.post.addContacts.path, validateBody(addContactsValidation), addContact)
+router.get(ContactsApiSource.get.getContacts.path, validateBody(getContactsValidation, RouteSource.Query), getContacts)
 export default router;
