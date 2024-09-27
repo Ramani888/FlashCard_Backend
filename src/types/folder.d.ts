@@ -11,3 +11,10 @@ export interface IImagesFolder {
     color: string;
     userId: string;
 }
+
+export interface IPdfFolder {
+    _id?: ObjectId;
+    name: string;
+    color: string;
+    userId: string;
+}

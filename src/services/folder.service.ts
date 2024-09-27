@@ -1,6 +1,7 @@
 import { Folder } from "../models/folder.model";
 import { ImagesFolder } from "../models/imagesFolder.model";
-import { IFolder, IImagesFolder } from "../types/folder";
+import { PdfFolder } from "../models/pdfFolder.model";
+import { IFolder, IImagesFolder, IPdfFolder } from "../types/folder";
 import { ObjectId } from 'mongodb';
 
 export const createFolderData = async (data: IFolder) => {
@@ -79,6 +80,47 @@ export const deleteImagesFolderData = async (_id: string) => {
     try {
         const objectId = new ObjectId(_id?.toString());
         await ImagesFolder.deleteOne({ _id: objectId });
+        return;
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const createPdfFolderData = async (data: IPdfFolder) => {
+    try {
+        const newData = new PdfFolder(data);
+        await newData.save();
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const updatePdfFolderData = async (updateData: IPdfFolder) => {
+    try {
+        const objectId = new ObjectId(updateData?._id?.toString());
+        const result = await PdfFolder.findByIdAndUpdate(objectId, updateData, {
+            new: true,
+            runValidators: true
+        });
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const getPdfFolderData = async (userId: string) => {
+    try {
+        const result = await PdfFolder.find({ userId: userId?.toString() });
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const deletePdfFolderData = async (_id: string) => {
+    try {
+        const objectId = new ObjectId(_id?.toString());
+        await PdfFolder.deleteOne({ _id: objectId });
         return;
     } catch (err) {
         throw err;

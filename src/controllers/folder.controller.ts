@@ -1,8 +1,8 @@
 import { AuthorizedRequest } from "../types/user";
 import { StatusCodes } from "http-status-codes";
 import { Response } from 'express';
-import { createFolderData, createImagesFolderData, deleteFolderData, deleteImagesFolderData, getFolderData, getImagesFolderData, updateFolderData, updateImagesFolderData } from "../services/folder.service";
-import { FolderApiSource, ImagesFolderApiSource } from "../utils/constants/folder";
+import { createFolderData, createImagesFolderData, createPdfFolderData, deleteFolderData, deleteImagesFolderData, deletePdfFolderData, getFolderData, getImagesFolderData, getPdfFolderData, updateFolderData, updateImagesFolderData, updatePdfFolderData } from "../services/folder.service";
+import { FolderApiSource, ImagesFolderApiSource, PdfFolderApiSource } from "../utils/constants/folder";
 import { getCardBySetId, updateCardData } from "../services/card.service";
 import { getSetBySetId, updateSetData } from "../services/set.services";
 
@@ -122,6 +122,50 @@ export const deleteImagesFolder = async (req: AuthorizedRequest, res: Response) 
     try {
         await deleteImagesFolderData(_id);
         res.status(StatusCodes.OK).send({ success: true, message: ImagesFolderApiSource.delete.deleteFolder.message });
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const createPdfFolder = async (req: AuthorizedRequest, res: Response) => {
+    const bodyData = req.body; 
+    try {
+        await createPdfFolderData(bodyData);
+        res.status(StatusCodes.OK).send({ success: true, message: PdfFolderApiSource.post.createFolder.message });
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const updatePdfFolder = async (req: AuthorizedRequest, res: Response) => {
+    const bodyData = req.body;
+    try {
+        await updatePdfFolderData(bodyData);
+        res.status(StatusCodes.OK).send({ success: true, message: PdfFolderApiSource.put.updateFolder.message });
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const getPdfFolder = async (req: AuthorizedRequest, res: Response) => {
+    const { userId } = req.query;
+    try {
+        const data = await getPdfFolderData(userId);
+        res.status(StatusCodes.OK).send(data);
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const deletePdfFolder = async (req: AuthorizedRequest, res: Response) => {
+    const { _id } = req.query;
+    try {
+        await deletePdfFolderData(_id);
+        res.status(StatusCodes.OK).send({ success: true, message: PdfFolderApiSource.delete.deleteFolder.message });
     } catch (err) {
         console.error(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });

@@ -38,3 +38,22 @@ export const getImagesFolderValidation = {
 export const deleteImagesFolderValidation = {
     _id: 'required|string',
 };
+
+export const createPdfFolderValidation = {
+    name: 'required|string',
+    color: 'required|string',
+    userId: 'required|string'
+};
+
+export const updatePdfFolderValidation = {
+    _id: 'required|string',
+};
+
+export const getPdfFolderValidation = {
+    userId: 'required|string'
+};
+
+export const deletePdfFolderValidation = {
+    _id: 'required|string',
+};
+
