@@ -1,5 +1,5 @@
 import express from "express";
-import { getDemoRequest } from "../controllers/demo.controller";
+import { getDemoRequest, uploadImage } from "../controllers/demo.controller";
 import { blurAllCard, createCard, deleteCard, getCard, getCardType, moveCard, updateCard } from "../controllers/card.controller";
 import { deleteSet, getSet, getSetByfolderId, insertSet, updateSet } from "../controllers/set.controller";
 import { validateBody } from "../middlewares/bodyValidate.middleware";
@@ -23,6 +23,7 @@ import { createNotes, deleteNotes, getNotes, updateNotes } from "../controllers/
 import { ContactsApiSource } from "../utils/constants/contacts";
 import { addContactsValidation, getContactsValidation, getUsersValidation } from "../utils/validates/contacts.validate";
 import { addContact, getContacts, getUsers } from "../controllers/contacts.controller";
+import upload from "./uploadConfig";
 
 enum RouteSource {
     Body,
@@ -77,4 +78,6 @@ router.get(NotesApiSource.get.getNotes.path, validateBody(getNotesValidation, Ro
 router.get(ContactsApiSource.get.getUsers.path, validateBody(getUsersValidation, RouteSource.Query), getUsers)
 router.post(ContactsApiSource.post.addContacts.path, validateBody(addContactsValidation), addContact)
 router.get(ContactsApiSource.get.getContacts.path, validateBody(getContactsValidation, RouteSource.Query), getContacts)
+
+router.post('/upload', upload.single('image'), uploadImage)
 export default router;

@@ -1,6 +1,5 @@
 export const createfolderValidation = {
     name: 'required|string',
-    isPrivate: 'required|boolean',
     color: 'required|string',
     userId: 'required|string'
 };

@@ -7,10 +7,6 @@ const FolderSchema = new Schema({
         type: String,
         required: true
     },
-    isPrivate: {
-        type: Boolean,
-        required: true
-    },
     color: {
         type: String,
         required: true
