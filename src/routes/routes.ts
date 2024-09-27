@@ -4,10 +4,10 @@ import { blurAllCard, createCard, deleteCard, getCard, getCardType, moveCard, up
 import { deleteSet, getSet, getSetByfolderId, insertSet, updateSet } from "../controllers/set.controller";
 import { validateBody } from "../middlewares/bodyValidate.middleware";
 import { createSetValidation, deleteSetValidation, getSetByFolderValidation, getSetValidation, updateSetValidation } from "../utils/validates/set.validate";
-import { assignFolder, createFolder, deleteFolder, getFolder, updateFolder } from "../controllers/folder.controller";
-import { assignFolderValidation, createfolderValidation, deleteFolderValidation, getFolderValidation, updateFolderValidation } from "../utils/validates/folder.validate";
+import { assignFolder, createFolder, createImagesFolder, deleteFolder, deleteImagesFolder, getFolder, getImagesFolder, updateFolder, updateImagesFolder } from "../controllers/folder.controller";
+import { assignFolderValidation, createfolderValidation, createImagesFolderValidation, deleteFolderValidation, deleteImagesFolderValidation, getFolderValidation, getImagesFolderValidation, updateFolderValidation, updateImagesFolderValidation } from "../utils/validates/folder.validate";
 import { SetApiSource } from "../utils/constants/set";
-import { FolderApiSource } from "../utils/constants/folder";
+import { FolderApiSource, ImagesFolderApiSource } from "../utils/constants/folder";
 import { CardApiSource } from "../utils/constants/card";
 import { blurAllCardValidation, createCardValidation, deleteCardValidation, getCardValidation, moveCardValidation, updateCardValidation } from "../utils/validates/card.validate";
 import { SignUpApiSource } from "../utils/constants/signUp";
@@ -80,4 +80,10 @@ router.post(ContactsApiSource.post.addContacts.path, validateBody(addContactsVal
 router.get(ContactsApiSource.get.getContacts.path, validateBody(getContactsValidation, RouteSource.Query), getContacts)
 
 router.post('/upload', upload.single('image'), uploadImage)
+
+//ImagesFolder
+router.post(ImagesFolderApiSource.post.createFolder.path, validateBody(createImagesFolderValidation), createImagesFolder)
+router.put(ImagesFolderApiSource.put.updateFolder.path, validateBody(updateImagesFolderValidation), updateImagesFolder)
+router.get(ImagesFolderApiSource.get.getFolder.path, validateBody(getImagesFolderValidation, RouteSource.Query), getImagesFolder)
+router.delete(ImagesFolderApiSource.delete.deleteFolder.path, validateBody(deleteImagesFolderValidation, RouteSource.Query), deleteImagesFolder)
 export default router;

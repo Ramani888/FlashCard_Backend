@@ -4,3 +4,10 @@ export interface IFolder {
     color: string;
     userId: string;
 }
+
+export interface IImagesFolder {
+    _id?: ObjectId;
+    name: string;
+    color: string;
+    userId: string;
+}

@@ -1,8 +1,8 @@
 import { AuthorizedRequest } from "../types/user";
 import { StatusCodes } from "http-status-codes";
 import { Response } from 'express';
-import { createFolderData, deleteFolderData, getFolderData, updateFolderData } from "../services/folder.service";
-import { FolderApiSource } from "../utils/constants/folder";
+import { createFolderData, createImagesFolderData, deleteFolderData, deleteImagesFolderData, getFolderData, getImagesFolderData, updateFolderData, updateImagesFolderData } from "../services/folder.service";
+import { FolderApiSource, ImagesFolderApiSource } from "../utils/constants/folder";
 import { getCardBySetId, updateCardData } from "../services/card.service";
 import { getSetBySetId, updateSetData } from "../services/set.services";
 
@@ -78,6 +78,50 @@ export const assignFolder = async (req: AuthorizedRequest, res: Response) => {
         }
 
         res.status(StatusCodes.OK).send({ success: true, message: FolderApiSource.put.assignFolder.message });
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const createImagesFolder = async (req: AuthorizedRequest, res: Response) => {
+    const bodyData = req.body; 
+    try {
+        await createImagesFolderData(bodyData);
+        res.status(StatusCodes.OK).send({ success: true, message: ImagesFolderApiSource.post.createFolder.message });
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const updateImagesFolder = async (req: AuthorizedRequest, res: Response) => {
+    const bodyData = req.body;
+    try {
+        await updateImagesFolderData(bodyData);
+        res.status(StatusCodes.OK).send({ success: true, message: ImagesFolderApiSource.put.updateFolder.message });
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const getImagesFolder = async (req: AuthorizedRequest, res: Response) => {
+    const { userId } = req.query;
+    try {
+        const data = await getImagesFolderData(userId);
+        res.status(StatusCodes.OK).send(data);
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const deleteImagesFolder = async (req: AuthorizedRequest, res: Response) => {
+    const { _id } = req.query;
+    try {
+        await deleteImagesFolderData(_id);
+        res.status(StatusCodes.OK).send({ success: true, message: ImagesFolderApiSource.delete.deleteFolder.message });
     } catch (err) {
         console.error(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });

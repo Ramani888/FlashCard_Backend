@@ -13,3 +13,18 @@ export const FolderApiSource = {
         getFolder: { path: '/folder',  message: 'Folder get Successfully.' }
     }
 }
+
+export const ImagesFolderApiSource = {
+    post: {
+        createFolder: { path: '/images/folder', message: 'Folder Created Successfully.'}
+    },
+    put: {
+        updateFolder: { path: '/images/folder', message: 'Folder Update Successfully.' }
+    },
+    get: {
+        getFolder: { path: '/images/folder',  message: 'Folder get Successfully.' }
+    },
+    delete: {
+        deleteFolder: { path: '/images/folder',  message: 'Folder Deleted Successfully.' }
+    },
+}
