@@ -15,7 +15,7 @@ export const getImagesById = async (_id: string) => {
     try {
         const objectId = new ObjectId(_id?.toString());
         const result = await Images.findOne({ _id: objectId });
-        return result;
+        return result?.toObject();
     } catch (err) {
         throw err;
     }
@@ -37,6 +37,15 @@ export const updateImagesData = async (updateData: IImages) => {
 export const getImagesData = async (userId: string) => {
     try {
         const result = await Images.find({ userId: userId?.toString() });
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const getImagesDataByFolderId = async (userId: string, folderId: string) => {
+    try {
+        const result = await Images.find({ userId: userId?.toString(), folderId: folderId?.toString() });
         return result;
     } catch (err) {
         throw err;

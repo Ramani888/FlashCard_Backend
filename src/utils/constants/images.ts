@@ -3,10 +3,12 @@ export const ImagesApiSource = {
         uploadImage: { path: '/images', message: 'Image Upload Successfully.' }
     },
     put: {
-        updateImage: { path: '/images', message: 'Image Update Successfully.'}
+        updateImage: { path: '/images', message: 'Image Update Successfully.'},
+        assignImageFolder: { path: '/assign/image/folder', message: 'Image Assign Folder Successfully.' }
     },
     get: {
-        getImages: { path: '/images',  message: 'Images Get Successfully.' }
+        getImages: { path: '/images',  message: 'Images Get Successfully.' },
+        getImagesByFolderId: { path: '/folder/images', message: 'Images Get Successfully.'}
     },
     delete: {
         deleteImage: { path: '/images',  message: 'Image Deleted Successfully.' }

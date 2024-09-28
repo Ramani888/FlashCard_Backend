@@ -24,11 +24,11 @@ import { addContactsValidation, getContactsValidation, getUsersValidation } from
 import { addContact, getContacts, getUsers } from "../controllers/contacts.controller";
 import upload from "./uploadConfig";
 import { ImagesApiSource } from "../utils/constants/images";
-import { deleteImageValidation, getImageValidation, updateImageValidation, uploadImageValidation } from "../utils/validates/images.validate";
-import { deleteImages, getImages, updateImages, uploadImages } from "../controllers/images.controller";
+import { assignImageFolderValidation, deleteImageValidation, getImageByFolderIdValidation, getImageValidation, updateImageValidation, uploadImageValidation } from "../utils/validates/images.validate";
+import { assignImageFolder, deleteImages, getImages, getImagesByFolderId, updateImages, uploadImages } from "../controllers/images.controller";
 import { PdfApiSource } from "../utils/constants/pdf";
-import { deletePdfValidation, getPdfValidation, updatePdfValidation, uploadPdfValidation } from "../utils/validates/pdf.validation";
-import { deletePdf, getPdf, updatePdf, uploadPdf } from "../controllers/pdf.controller";
+import { assignPdfFolderValidation, deletePdfValidation, getPdfByFolderIdValidation, getPdfValidation, updatePdfValidation, uploadPdfValidation } from "../utils/validates/pdf.validation";
+import { assignPdfFolder, deletePdf, getPdf, getPdfByFolderId, updatePdf, uploadPdf } from "../controllers/pdf.controller";
 
 enum RouteSource {
     Body,
@@ -102,11 +102,15 @@ router.delete(PdfFolderApiSource.delete.deleteFolder.path, validateBody(deletePd
 router.post(ImagesApiSource.post.uploadImage.path, upload.single('image'), validateBody(uploadImageValidation), uploadImages)
 router.put(ImagesApiSource.put.updateImage.path, upload.single('image'), validateBody(updateImageValidation), updateImages)
 router.get(ImagesApiSource.get.getImages.path, validateBody(getImageValidation, RouteSource.Query), getImages)
+router.get(ImagesApiSource.get.getImagesByFolderId.path, validateBody(getImageByFolderIdValidation, RouteSource.Query), getImagesByFolderId)
 router.delete(ImagesApiSource.delete.deleteImage.path, validateBody(deleteImageValidation, RouteSource.Query), deleteImages)
+router.put(ImagesApiSource.put.assignImageFolder.path, validateBody(assignImageFolderValidation, RouteSource.Query), assignImageFolder)
 
 //Uload Pdf
 router.post(PdfApiSource.post.uploadPdf.path, upload.single('pdf'), validateBody(uploadPdfValidation), uploadPdf)
 router.put(PdfApiSource.put.updatePdf.path, upload.single('pdf'), validateBody(updatePdfValidation), updatePdf)
 router.get(PdfApiSource.get.getPdf.path, validateBody(getPdfValidation, RouteSource.Query), getPdf)
+router.get(PdfApiSource.get.getPdfByFolderId.path, validateBody(getPdfByFolderIdValidation, RouteSource.Query), getPdfByFolderId)
 router.delete(PdfApiSource.delete.deletePdf.path, validateBody(deletePdfValidation, RouteSource.Query), deletePdf)
+router.put(PdfApiSource.put.assignPdfFolder.path, validateBody(assignPdfFolderValidation, RouteSource.Query), assignPdfFolder)
 export default router;

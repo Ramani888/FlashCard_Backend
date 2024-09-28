@@ -15,7 +15,7 @@ export const getPdfById = async (_id: string) => {
     try {
         const objectId = new ObjectId(_id?.toString());
         const result = await Pdf.findOne({ _id: objectId });
-        return result;
+        return result?.toObject();
     } catch (err) {
         throw err;
     }
@@ -37,6 +37,15 @@ export const updatePdfData = async (updateData: IPdf) => {
 export const getPdfData = async (userId: string) => {
     try {
         const result = await Pdf.find({ userId: userId?.toString() });
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const getPdfDataByFolderId = async (userId: string, folderId: string) => {
+    try {
+        const result = await Pdf.find({ userId: userId?.toString(), folderId: folderId?.toString() });
         return result;
     } catch (err) {
         throw err;

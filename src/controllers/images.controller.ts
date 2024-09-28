@@ -3,7 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { Response } from 'express';
 import { deleteFromS3, uploadToS3 } from "../routes/uploadConfig";
 import { ImagesApiSource } from "../utils/constants/images";
-import { deleteImagesData, getImagesById, getImagesData, updateImagesData, uploadImagesData } from "../services/images.service";
+import { deleteImagesData, getImagesById, getImagesData, getImagesDataByFolderId, updateImagesData, uploadImagesData } from "../services/images.service";
 import { FLASHCARD_IMAGES_V1_BUCKET_NAME } from "../utils/constants/general";
 
 export const uploadImages = async (req: AuthorizedRequest, res: Response) => {
@@ -54,6 +54,17 @@ export const getImages = async (req: AuthorizedRequest, res: Response) => {
     }
 }
 
+export const getImagesByFolderId = async (req: AuthorizedRequest, res: Response) => {
+    const { userId, folderId } = req.query;
+    try {
+        const data = await getImagesDataByFolderId(userId, folderId);
+        res.status(StatusCodes.OK).send(data);
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
 export const deleteImages = async (req: AuthorizedRequest, res: Response) => {
     const { _id } = req.query;
     try {
@@ -63,6 +74,19 @@ export const deleteImages = async (req: AuthorizedRequest, res: Response) => {
         }
         await deleteImagesData(_id);
         res.status(StatusCodes.OK).send({ success: true, message: ImagesApiSource.delete.deleteImage.message });
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const assignImageFolder = async (req: AuthorizedRequest, res: Response) => {
+    const { _id, folderId } = req.query;
+    try {
+        const imagesData = await getImagesById(_id)
+        if (!imagesData) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Image data not found.' });
+        await updateImagesData({...imagesData, folderId: folderId})
+        res.status(StatusCodes.OK).send({ success: true, message: ImagesApiSource.put.assignImageFolder.message });
     } catch (err) {
         console.error(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
