@@ -17,9 +17,9 @@ const s3 = new S3({
 });
 
 // Function to upload a file to S3
-export const uploadToS3 = async (file: Express.Multer.File, bucketName?: string): Promise<string> => {
+export const uploadToS3 = async (file: Express.Multer.File, bucketName: string): Promise<string> => {
   const params = {
-    Bucket: bucketName || 'flashcard-images-v1',
+    Bucket: bucketName,
     Key: `${Date.now()}-${file.originalname}`,
     Body: file.buffer,
     ContentType: file.mimetype,
@@ -38,9 +38,9 @@ export const uploadToS3 = async (file: Express.Multer.File, bucketName?: string)
   }
 };
 
-export const deleteFromS3 = async (fileUrl: string, bucketName?: string): Promise<void> => {
+export const deleteFromS3 = async (fileUrl: string, bucketName: string): Promise<void> => {
   try {
-    const bucket = bucketName || 'flashcard-images-v1';
+    const bucket = bucketName;
 
     // Extract key from URL and decode it
     const key = extractKeyFromObjectUrl(fileUrl, bucket);

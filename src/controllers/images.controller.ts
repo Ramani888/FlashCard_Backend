@@ -4,6 +4,7 @@ import { Response } from 'express';
 import { deleteFromS3, uploadToS3 } from "../routes/uploadConfig";
 import { ImagesApiSource } from "../utils/constants/images";
 import { deleteImagesData, getImagesById, getImagesData, updateImagesData, uploadImagesData } from "../services/images.service";
+import { FLASHCARD_IMAGES_V1_BUCKET_NAME } from "../utils/constants/general";
 
 export const uploadImages = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
@@ -12,7 +13,7 @@ export const uploadImages = async (req: AuthorizedRequest, res: Response) => {
             res.status(StatusCodes.BAD_REQUEST).send({ error: 'Image file is missing.' });
             return;
         }
-        const imageUrl = await uploadToS3(req.file);
+        const imageUrl = await uploadToS3(req.file, FLASHCARD_IMAGES_V1_BUCKET_NAME);
         await uploadImagesData({...bodyData, url: imageUrl});
         res.status(StatusCodes.OK).send({ success: true, message: ImagesApiSource.post.uploadImage.message });
     } catch (err) {
@@ -28,9 +29,9 @@ export const updateImages = async (req: AuthorizedRequest, res: Response) => {
         if (file) {
             const imagesData = await getImagesById(bodyData?._id)
             if (imagesData) {
-                await deleteFromS3(imagesData?.url)
+                await deleteFromS3(imagesData?.url, FLASHCARD_IMAGES_V1_BUCKET_NAME)
             }
-            const imageUrl = await uploadToS3(req.file);
+            const imageUrl = await uploadToS3(req.file, FLASHCARD_IMAGES_V1_BUCKET_NAME);
             await updateImagesData({...bodyData, url: imageUrl})
         } else {
             await updateImagesData(bodyData)
@@ -58,7 +59,7 @@ export const deleteImages = async (req: AuthorizedRequest, res: Response) => {
     try {
         const imagesData = await getImagesById(_id)
         if (imagesData) {
-            await deleteFromS3(imagesData?.url)
+            await deleteFromS3(imagesData?.url, FLASHCARD_IMAGES_V1_BUCKET_NAME)
         }
         await deleteImagesData(_id);
         res.status(StatusCodes.OK).send({ success: true, message: ImagesApiSource.delete.deleteImage.message });
