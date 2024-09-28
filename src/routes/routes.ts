@@ -13,7 +13,6 @@ import { blurAllCardValidation, createCardValidation, deleteCardValidation, getC
 import { SignUpApiSource } from "../utils/constants/signUp";
 import { signUpValidation, verifyOtpValidation } from "../utils/validates/signUp.validate";
 import { signUp, verifyOtp } from "../controllers/signUp.controller";
-import { verify } from "crypto";
 import { LoginApiSource } from "../utils/constants/login";
 import { loginValidation } from "../utils/validates/login.validate";
 import { login } from "../controllers/login.controller";
@@ -24,6 +23,9 @@ import { ContactsApiSource } from "../utils/constants/contacts";
 import { addContactsValidation, getContactsValidation, getUsersValidation } from "../utils/validates/contacts.validate";
 import { addContact, getContacts, getUsers } from "../controllers/contacts.controller";
 import upload from "./uploadConfig";
+import { ImagesApiSource } from "../utils/constants/images";
+import { deleteImageValidation, getImageValidation, updateImageValidation, uploadImageValidation } from "../utils/validates/images.validate";
+import { deleteImages, getImages, updateImages, uploadImages } from "../controllers/images.controller";
 
 enum RouteSource {
     Body,
@@ -92,4 +94,10 @@ router.post(PdfFolderApiSource.post.createFolder.path, validateBody(createPdfFol
 router.put(PdfFolderApiSource.put.updateFolder.path, validateBody(updatePdfFolderValidation), updatePdfFolder)
 router.get(PdfFolderApiSource.get.getFolder.path, validateBody(getPdfFolderValidation, RouteSource.Query), getPdfFolder)
 router.delete(PdfFolderApiSource.delete.deleteFolder.path, validateBody(deletePdfFolderValidation, RouteSource.Query), deletePdfFolder)
+
+//Upload Images
+router.post(ImagesApiSource.post.uploadImage.path, upload.single('image'), validateBody(uploadImageValidation), uploadImages)
+router.put(ImagesApiSource.put.updateImage.path, upload.single('image'), validateBody(updateImageValidation), updateImages)
+router.get(ImagesApiSource.get.getImages.path, validateBody(getImageValidation, RouteSource.Query), getImages)
+router.delete(ImagesApiSource.delete.deleteImage.path, validateBody(deleteImageValidation, RouteSource.Query), deleteImages)
 export default router;
