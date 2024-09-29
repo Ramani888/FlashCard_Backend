@@ -27,6 +27,7 @@ export const uploadToS3 = async (file: Express.Multer.File, bucketName: string):
   };
 
   try {
+    console.log('s3', s3)
     // Upload file using s3.upload() from aws-sdk v2
     const uploadResult = await s3.upload(params).promise();
 
