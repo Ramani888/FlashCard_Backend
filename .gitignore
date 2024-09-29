@@ -1,5 +1,5 @@
 node_modules*/
-dist*/
+# dist*/
 *.idea
 .idea*/
 .env
@@ -9,7 +9,7 @@ scripts*/
 node_modules
 node_modules*/
 **/node_modules
-dist*/
+# dist*/
 *.idea
 .idea*/
 .env
