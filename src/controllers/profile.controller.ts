@@ -19,7 +19,8 @@ export const updateProfilePicture = async (req: AuthorizedRequest, res: Response
         }
         const imageUrl = await uploadToS3(req.file, FLASHCARD_IMAGES_V1_BUCKET_NAME);
         await updateProfilePictureData({...bodyData, picture: imageUrl});
-        res.status(StatusCodes.OK).send({ success: true, message: ProfileApiSource.put.updateProfilePicture.message });
+        const updateUserData = await getUserById(bodyData?._id);
+        res.status(StatusCodes.OK).send({ user: updateUserData, success: true, message: ProfileApiSource.put.updateProfilePicture.message });
     } catch (err) {
         console.error(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
