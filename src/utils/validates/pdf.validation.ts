@@ -1,6 +1,7 @@
 export const uploadPdfValidation = {
     userId: 'required|string',
-    color: 'required|string'
+    color: 'required|string',
+    name: 'required|string'
 };
 
 export const updatePdfValidation = {

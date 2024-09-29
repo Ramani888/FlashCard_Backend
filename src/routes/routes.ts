@@ -106,7 +106,7 @@ router.get(ImagesApiSource.get.getImagesByFolderId.path, validateBody(getImageBy
 router.delete(ImagesApiSource.delete.deleteImage.path, validateBody(deleteImageValidation, RouteSource.Query), deleteImages)
 router.put(ImagesApiSource.put.assignImageFolder.path, validateBody(assignImageFolderValidation, RouteSource.Query), assignImageFolder)
 
-//Uload Pdf
+//Upload Pdf
 router.post(PdfApiSource.post.uploadPdf.path, upload.single('pdf'), validateBody(uploadPdfValidation), uploadPdf)
 router.put(PdfApiSource.put.updatePdf.path, upload.single('pdf'), validateBody(updatePdfValidation), updatePdf)
 router.get(PdfApiSource.get.getPdf.path, validateBody(getPdfValidation, RouteSource.Query), getPdf)

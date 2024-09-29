@@ -4,4 +4,5 @@ export interface IPdf {
     userId: string;
     folderId?: string;
     color: string;
+    name: string;
 }
