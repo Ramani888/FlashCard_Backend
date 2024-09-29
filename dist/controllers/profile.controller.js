@@ -28,7 +28,8 @@ const updateProfilePicture = (req, res) => __awaiter(void 0, void 0, void 0, fun
         }
         const imageUrl = yield (0, uploadConfig_1.uploadToS3)(req.file, general_1.FLASHCARD_IMAGES_V1_BUCKET_NAME);
         yield (0, profile_service_1.updateProfilePictureData)(Object.assign(Object.assign({}, bodyData), { picture: imageUrl }));
-        res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: profile_1.ProfileApiSource.put.updateProfilePicture.message });
+        const updateUserData = yield (0, profile_service_1.getUserById)(bodyData === null || bodyData === void 0 ? void 0 : bodyData._id);
+        res.status(http_status_codes_1.StatusCodes.OK).send({ user: updateUserData, success: true, message: profile_1.ProfileApiSource.put.updateProfilePicture.message });
     }
     catch (err) {
         console.error(err);
