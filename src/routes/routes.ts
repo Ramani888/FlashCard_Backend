@@ -29,6 +29,9 @@ import { assignImageFolder, deleteImages, getImages, getImagesByFolderId, update
 import { PdfApiSource } from "../utils/constants/pdf";
 import { assignPdfFolderValidation, deletePdfValidation, getPdfByFolderIdValidation, getPdfValidation, updatePdfValidation, uploadPdfValidation } from "../utils/validates/pdf.validation";
 import { assignPdfFolder, deletePdf, getPdf, getPdfByFolderId, updatePdf, uploadPdf } from "../controllers/pdf.controller";
+import { ProfileApiSource } from "../utils/constants/profile";
+import { updateProfilePictureValidation } from "../utils/validates/profile.validate";
+import { updateProfilePicture } from "../controllers/profile.controller";
 
 enum RouteSource {
     Body,
@@ -114,4 +117,7 @@ router.get(PdfApiSource.get.getPdf.path, validateBody(getPdfValidation, RouteSou
 router.get(PdfApiSource.get.getPdfByFolderId.path, validateBody(getPdfByFolderIdValidation, RouteSource.Query), getPdfByFolderId)
 router.delete(PdfApiSource.delete.deletePdf.path, validateBody(deletePdfValidation, RouteSource.Query), deletePdf)
 router.put(PdfApiSource.put.assignPdfFolder.path, validateBody(assignPdfFolderValidation, RouteSource.Query), assignPdfFolder)
+
+//Profile
+router.put(ProfileApiSource.put.updateProfilePicture.path, upload.single('picture'), validateBody(updateProfilePictureValidation), updateProfilePicture)
 export default router;
