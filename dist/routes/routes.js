@@ -35,6 +35,9 @@ const images_controller_1 = require("../controllers/images.controller");
 const pdf_1 = require("../utils/constants/pdf");
 const pdf_validation_1 = require("../utils/validates/pdf.validation");
 const pdf_controller_1 = require("../controllers/pdf.controller");
+const profile_1 = require("../utils/constants/profile");
+const profile_validate_1 = require("../utils/validates/profile.validate");
+const profile_controller_1 = require("../controllers/profile.controller");
 var RouteSource;
 (function (RouteSource) {
     RouteSource[RouteSource["Body"] = 0] = "Body";
@@ -105,4 +108,6 @@ router.get(pdf_1.PdfApiSource.get.getPdf.path, (0, bodyValidate_middleware_1.val
 router.get(pdf_1.PdfApiSource.get.getPdfByFolderId.path, (0, bodyValidate_middleware_1.validateBody)(pdf_validation_1.getPdfByFolderIdValidation, RouteSource.Query), pdf_controller_1.getPdfByFolderId);
 router.delete(pdf_1.PdfApiSource.delete.deletePdf.path, (0, bodyValidate_middleware_1.validateBody)(pdf_validation_1.deletePdfValidation, RouteSource.Query), pdf_controller_1.deletePdf);
 router.put(pdf_1.PdfApiSource.put.assignPdfFolder.path, (0, bodyValidate_middleware_1.validateBody)(pdf_validation_1.assignPdfFolderValidation, RouteSource.Query), pdf_controller_1.assignPdfFolder);
+//Profile
+router.put(profile_1.ProfileApiSource.put.updateProfilePicture.path, uploadConfig_1.default.single('picture'), (0, bodyValidate_middleware_1.validateBody)(profile_validate_1.updateProfilePictureValidation), profile_controller_1.updateProfilePicture);
 exports.default = router;
