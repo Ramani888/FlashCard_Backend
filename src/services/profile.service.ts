@@ -14,3 +14,13 @@ export const updateProfilePictureData = async (updateData: IUser) => {
         throw err;
     }
 }
+
+export const getUserById = async (_id: string) => {
+    try {
+        const objectId = new ObjectId(_id?.toString());
+        const result = await User.findOne({ _id: objectId });
+        return result?.toObject();
+    } catch (err) {
+        throw err;
+    }
+}
