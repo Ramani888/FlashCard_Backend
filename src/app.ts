@@ -10,7 +10,9 @@ const cors = require('cors')
 const port = process.env.PORT || 3010;
 const mongoUri = process.env.DATABASE_URL || 'mongodb+srv://CVLCluster1:Ramani%407258@atlascluster.g9ls9b9.mongodb.net/FlashCard';
 
-mongoose.connect(mongoUri);
+mongoose.connect(mongoUri, {
+  serverSelectionTimeoutMS: 5000, // Optional: timeout for server selection
+});
 const database = mongoose.connection;
 
 database.on('error', (error: any) => {
