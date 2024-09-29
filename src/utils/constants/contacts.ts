@@ -5,5 +5,8 @@ export const ContactsApiSource = {
     },
     post: {
         addContacts: { path: '/contacts', message: 'Contacts Add Successfully.' }
-    }
+    },
+    delete: {
+        deleteContacts: { path: '/contacts',  message: 'Contacts Deleted Successfully.' }
+    },
 }

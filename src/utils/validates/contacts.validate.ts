@@ -11,3 +11,7 @@ export const addContactsValidation = {
 export const getContactsValidation = {
     userId: 'required|string'
 }
+
+export const deleteContactsValidation = {
+    _id: 'required|string',
+};

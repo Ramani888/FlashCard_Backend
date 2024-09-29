@@ -2,7 +2,7 @@ import { AuthorizedRequest } from "../types/user";
 import { StatusCodes } from "http-status-codes";
 import { Response } from 'express';
 import { ContactsApiSource } from "../utils/constants/contacts";
-import { addContactData, getContactByUserId, getContactByUserIdAndContactUserId, getContactsData, getUsersData } from "../services/contacts.service";
+import { addContactData, deleteContactsData, getContactByUserId, getContactByUserIdAndContactUserId, getContactsData, getUsersData } from "../services/contacts.service";
 
 export const getUsers = async (req: AuthorizedRequest, res: Response) => {
     const { search, userId } = req.query;
@@ -46,6 +46,17 @@ export const getContacts = async (req: AuthorizedRequest, res: Response) => {
     try {
         const data = await getContactsData(userId);
         res.status(StatusCodes.OK).send(data);
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const deleteContacts = async (req: AuthorizedRequest, res: Response) => {
+    const { _id } = req.query;
+    try {
+        await deleteContactsData(_id);
+        res.status(StatusCodes.OK).send({ success: true, message: ContactsApiSource.delete.deleteContacts.message });
     } catch (err) {
         console.error(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });

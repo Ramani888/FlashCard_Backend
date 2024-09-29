@@ -20,8 +20,8 @@ import { NotesApiSource } from "../utils/constants/notes";
 import { createNotesValidation, deleteNotesValidation, getNotesValidation, updateNotesValidation } from "../utils/validates/notes.validate";
 import { createNotes, deleteNotes, getNotes, updateNotes } from "../controllers/notes.controller";
 import { ContactsApiSource } from "../utils/constants/contacts";
-import { addContactsValidation, getContactsValidation, getUsersValidation } from "../utils/validates/contacts.validate";
-import { addContact, getContacts, getUsers } from "../controllers/contacts.controller";
+import { addContactsValidation, deleteContactsValidation, getContactsValidation, getUsersValidation } from "../utils/validates/contacts.validate";
+import { addContact, deleteContacts, getContacts, getUsers } from "../controllers/contacts.controller";
 import upload from "./uploadConfig";
 import { ImagesApiSource } from "../utils/constants/images";
 import { assignImageFolderValidation, deleteImageValidation, getImageByFolderIdValidation, getImageValidation, updateImageValidation, uploadImageValidation } from "../utils/validates/images.validate";
@@ -83,6 +83,7 @@ router.get(NotesApiSource.get.getNotes.path, validateBody(getNotesValidation, Ro
 router.get(ContactsApiSource.get.getUsers.path, validateBody(getUsersValidation, RouteSource.Query), getUsers)
 router.post(ContactsApiSource.post.addContacts.path, validateBody(addContactsValidation), addContact)
 router.get(ContactsApiSource.get.getContacts.path, validateBody(getContactsValidation, RouteSource.Query), getContacts)
+router.delete(ContactsApiSource.delete.deleteContacts.path, validateBody(deleteContactsValidation, RouteSource.Query), deleteContacts)
 
 router.post('/upload', upload.single('image'), uploadImage)
 

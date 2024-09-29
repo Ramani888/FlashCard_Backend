@@ -89,3 +89,13 @@ export const getContactsData = async (userId: string) => {
         throw err;
     }
 }
+
+export const deleteContactsData = async (_id: string) => {
+    try {
+        const objectId = new ObjectId(_id?.toString());
+        await Contacts.deleteOne({ _id: objectId });
+        return;
+    } catch (err) {
+        throw err;
+    }
+}
