@@ -36,12 +36,14 @@ export const updateCardData = async (updateData: ICard) => {
 
 export const getCardData = async (setId: string, userId: string) => {
     try {
-        const result = await Card.find({ setId: setId?.toString(), userId: userId?.toString() });
-        return result;
+      const result = await Card.find({ setId: setId?.toString(), userId: userId?.toString() })
+        .sort({ position: 1 });
+      return result;
     } catch (err) {
-        throw err;
+      throw err;
     }
 }
+  
 
 export const getCardByCardId = async (cardId: string) => {
     try {
