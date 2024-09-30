@@ -18,7 +18,7 @@ export const createCard = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
     try {
         const cardData = await getCardWithLargestPosition(bodyData?.userId, bodyData?.setId);
-        const position = cardData ? cardData?.position + 1 : 1;
+        const position = cardData?.position ? cardData?.position + 1 : 1;
         await createCardData({...bodyData, position: position});
         res.status(StatusCodes.OK).send({ success: true, message: CardApiSource.post.createCard.message }); 
     } catch (err) {
