@@ -7,4 +7,5 @@ export interface ICard {
     folderId: string;
     userId: string;
     isBlur?: boolean;
+    position: number;
 }

@@ -28,6 +28,10 @@ const CardSchema = new Schema({
     isBlur: {
         type: Boolean,
         default: false
+    },
+    position: {
+        type: Number,
+        required: true
     }
 }, {timestamps: true})
 

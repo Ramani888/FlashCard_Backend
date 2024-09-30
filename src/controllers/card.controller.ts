@@ -1,7 +1,7 @@
 import { AuthorizedRequest } from "../types/user";
 import { StatusCodes } from "http-status-codes";
 import { Response } from 'express';
-import { blurAllCardData, createCardData, deleteCardData, getCardByCardId, getCardBySetId, getCardData, getCardTypeData, updateCardData } from "../services/card.service";
+import { blurAllCardData, createCardData, deleteCardData, getCardByCardId, getCardBySetId, getCardData, getCardTypeData, getCardWithLargestPosition, updateCardData } from "../services/card.service";
 import { CardApiSource } from "../utils/constants/card";
 
 export const getCardType = async (req: AuthorizedRequest, res: Response) => {
@@ -17,7 +17,9 @@ export const getCardType = async (req: AuthorizedRequest, res: Response) => {
 export const createCard = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
     try {
-        await createCardData(bodyData);
+        const cardData = await getCardWithLargestPosition(bodyData?.userId, bodyData?.setId);
+        const position = cardData ? cardData?.position + 1 : 1;
+        await createCardData({...bodyData, position: position});
         res.status(StatusCodes.OK).send({ success: true, message: CardApiSource.post.createCard.message }); 
     } catch (err) {
         console.error(err);
@@ -37,9 +39,9 @@ export const updateCard = async (req: AuthorizedRequest, res: Response) => {
 }
 
 export const getCard = async (req: AuthorizedRequest, res: Response) => {
-    const { setId, folderId, userId } = req.query;
+    const { setId, userId } = req.query;
     try {
-        const data = await getCardData(setId, folderId, userId);
+        const data = await getCardData(setId, userId);
         res.status(StatusCodes.OK).send(data);
     } catch (err) {
         console.error(err);

@@ -34,9 +34,9 @@ export const updateCardData = async (updateData: ICard) => {
     }
 }
 
-export const getCardData = async (setId: string, folderId: string, userId: string) => {
+export const getCardData = async (setId: string, userId: string) => {
     try {
-        const result = await Card.find({ setId: setId?.toString(), folderId: folderId?.toString(), userId: userId?.toString() });
+        const result = await Card.find({ setId: setId?.toString(), userId: userId?.toString() });
         return result;
     } catch (err) {
         throw err;
@@ -86,5 +86,14 @@ export const blurAllCardData = async (updateCardData: any[]) => {
         return results;
     } catch (err) {
         throw err;
+    }
+}
+
+export const getCardWithLargestPosition = async (userId: string, setId: string) => {
+    try {
+      const result = await Card.findOne({ userId: userId?.toString(), setId: setId?.toString() }).sort({ position: -1 });
+      return result?.toObject();
+    } catch (error) {
+      throw error;
     }
 }

@@ -14,7 +14,6 @@ export const updateCardValidation = {
 
 export const getCardValidation = {
     setId: 'required|string',
-    folderId: 'string',
     userId: 'required|string'
 };
 
