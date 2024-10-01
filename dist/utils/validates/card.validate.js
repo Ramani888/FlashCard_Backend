@@ -15,7 +15,6 @@ exports.updateCardValidation = {
 };
 exports.getCardValidation = {
     setId: 'required|string',
-    folderId: 'string',
     userId: 'required|string'
 };
 exports.deleteCardValidation = {

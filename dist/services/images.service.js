@@ -50,7 +50,43 @@ const updateImagesData = (updateData) => __awaiter(void 0, void 0, void 0, funct
 exports.updateImagesData = updateImagesData;
 const getImagesData = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield images_model_1.Images.find({ userId: userId === null || userId === void 0 ? void 0 : userId.toString() });
+        const result = yield images_model_1.Images.aggregate([
+            {
+                $match: {
+                    userId: userId === null || userId === void 0 ? void 0 : userId.toString()
+                }
+            },
+            {
+                $addFields: {
+                    folderIdObject: { $toObjectId: "$folderId" }, // Convert folderId to ObjectId
+                }
+            },
+            {
+                $lookup: {
+                    from: "ImagesFolder",
+                    localField: "folderIdObject",
+                    foreignField: "_id",
+                    as: "folderData"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$folderData", // Unwind to make folderData a single object
+                    preserveNullAndEmptyArrays: true // Keep the original document if no match is found
+                }
+            },
+            {
+                $project: {
+                    "_id": 1,
+                    "url": 1,
+                    "userId": 1,
+                    "folderId": 1,
+                    "createdAt": 1,
+                    "updatedAt": 1,
+                    "folderName": "$folderData.name", // Correctly reference folderData to get folderName
+                }
+            }
+        ]);
         return result;
     }
     catch (err) {

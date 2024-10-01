@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.blurAllCardData = exports.deleteCardData = exports.getCardBySetId = exports.getCardByCardId = exports.getCardData = exports.updateCardData = exports.createCardData = exports.getCardTypeData = void 0;
+exports.getCardWithLargestPosition = exports.blurAllCardData = exports.deleteCardData = exports.getCardBySetId = exports.getCardByCardId = exports.getCardData = exports.updateCardData = exports.createCardData = exports.getCardTypeData = void 0;
 const card_model_1 = require("../models/card.model");
 const cardType_model_1 = require("../models/cardType.model");
 const mongodb_1 = require("mongodb");
@@ -48,9 +48,10 @@ const updateCardData = (updateData) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.updateCardData = updateCardData;
-const getCardData = (setId, folderId, userId) => __awaiter(void 0, void 0, void 0, function* () {
+const getCardData = (setId, userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield card_model_1.Card.find({ setId: setId === null || setId === void 0 ? void 0 : setId.toString(), folderId: folderId === null || folderId === void 0 ? void 0 : folderId.toString(), userId: userId === null || userId === void 0 ? void 0 : userId.toString() });
+        const result = yield card_model_1.Card.find({ setId: setId === null || setId === void 0 ? void 0 : setId.toString(), userId: userId === null || userId === void 0 ? void 0 : userId.toString() })
+            .sort({ position: 1 });
         return result;
     }
     catch (err) {
@@ -108,3 +109,13 @@ const blurAllCardData = (updateCardData) => __awaiter(void 0, void 0, void 0, fu
     }
 });
 exports.blurAllCardData = blurAllCardData;
+const getCardWithLargestPosition = (userId, setId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield card_model_1.Card.findOne({ userId: userId === null || userId === void 0 ? void 0 : userId.toString(), setId: setId === null || setId === void 0 ? void 0 : setId.toString() }).sort({ position: -1 });
+        return result === null || result === void 0 ? void 0 : result.toObject();
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.getCardWithLargestPosition = getCardWithLargestPosition;

@@ -27,7 +27,9 @@ exports.getCardType = getCardType;
 const createCard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bodyData = req.body;
     try {
-        yield (0, card_service_1.createCardData)(bodyData);
+        const cardData = yield (0, card_service_1.getCardWithLargestPosition)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.userId, bodyData === null || bodyData === void 0 ? void 0 : bodyData.setId);
+        const position = (cardData === null || cardData === void 0 ? void 0 : cardData.position) ? (cardData === null || cardData === void 0 ? void 0 : cardData.position) + 1 : 1;
+        yield (0, card_service_1.createCardData)(Object.assign(Object.assign({}, bodyData), { position: position }));
         res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: card_1.CardApiSource.post.createCard.message });
     }
     catch (err) {
@@ -49,9 +51,9 @@ const updateCard = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.updateCard = updateCard;
 const getCard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { setId, folderId, userId } = req.query;
+    const { setId, userId } = req.query;
     try {
-        const data = yield (0, card_service_1.getCardData)(setId, folderId, userId);
+        const data = yield (0, card_service_1.getCardData)(setId, userId);
         res.status(http_status_codes_1.StatusCodes.OK).send(data);
     }
     catch (err) {
