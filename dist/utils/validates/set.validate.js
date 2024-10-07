@@ -16,9 +16,11 @@ exports.deleteSetValidation = {
     _id: 'required|string',
 };
 exports.getSetValidation = {
-    userId: 'required|string'
+    userId: 'required|string',
+    search: 'string',
 };
 exports.getSetByFolderValidation = {
     folderId: 'required|string',
-    userId: 'required|string'
+    userId: 'required|string',
+    search: 'string',
 };

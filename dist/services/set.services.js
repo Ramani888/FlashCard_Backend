@@ -49,13 +49,31 @@ const deleteSetData = (_id) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.deleteSetData = deleteSetData;
-const getSetData = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+const getSetData = (userId, search) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        let query;
+        if (search) {
+            const cleanedSearch = search.trim().replace(/\s+/g, ' ');
+            if (cleanedSearch) {
+                query = {
+                    userId: userId === null || userId === void 0 ? void 0 : userId.toString(),
+                    name: { $regex: cleanedSearch, $options: 'i' }
+                };
+            }
+            else {
+                query = {
+                    userId: userId === null || userId === void 0 ? void 0 : userId.toString()
+                };
+            }
+        }
+        else {
+            query = {
+                userId: userId === null || userId === void 0 ? void 0 : userId.toString()
+            };
+        }
         const result = yield set_models_1.Set.aggregate([
             {
-                $match: {
-                    userId: userId === null || userId === void 0 ? void 0 : userId.toString()
-                }
+                $match: query
             },
             {
                 $addFields: {
@@ -104,6 +122,7 @@ const getSetData = (userId) => __awaiter(void 0, void 0, void 0, function* () {
                     "folderId": 1,
                     "createdAt": 1,
                     "updatedAt": 1,
+                    "isHighlight": 1,
                     "folderName": "$folderData.name", // Correctly reference folderData to get folderName
                     "cardCount": 1 // Include card count in the final projection
                 }
@@ -138,14 +157,34 @@ exports.getSetData = getSetData;
 //         throw err;
 //     }
 // }
-const getSetDataByfolderId = (folderId, userId) => __awaiter(void 0, void 0, void 0, function* () {
+const getSetDataByfolderId = (folderId, userId, search) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield set_models_1.Set.aggregate([
-            {
-                $match: {
+        let query;
+        if (search) {
+            const cleanedSearch = search.trim().replace(/\s+/g, ' ');
+            if (cleanedSearch) {
+                query = {
+                    userId: userId === null || userId === void 0 ? void 0 : userId.toString(),
+                    folderId: { $exists: true, $ne: null, $eq: folderId === null || folderId === void 0 ? void 0 : folderId.toString() },
+                    name: { $regex: cleanedSearch, $options: 'i' }
+                };
+            }
+            else {
+                query = {
                     userId: userId === null || userId === void 0 ? void 0 : userId.toString(),
                     folderId: { $exists: true, $ne: null, $eq: folderId === null || folderId === void 0 ? void 0 : folderId.toString() }
-                }
+                };
+            }
+        }
+        else {
+            query = {
+                userId: userId === null || userId === void 0 ? void 0 : userId.toString(),
+                folderId: { $exists: true, $ne: null, $eq: folderId === null || folderId === void 0 ? void 0 : folderId.toString() }
+            };
+        }
+        const result = yield set_models_1.Set.aggregate([
+            {
+                $match: query
             },
             {
                 $addFields: {

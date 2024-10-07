@@ -14,7 +14,8 @@ exports.deleteFolderValidation = {
     _id: 'required|string',
 };
 exports.getFolderValidation = {
-    userId: 'required|string'
+    userId: 'required|string',
+    search: 'string'
 };
 exports.assignFolderValidation = {
     folderId: 'required|string',

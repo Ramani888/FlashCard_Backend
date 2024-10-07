@@ -50,9 +50,9 @@ const deleteSet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.deleteSet = deleteSet;
 const getSet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId } = req.query;
+    const { userId, search } = req.query;
     try {
-        const data = yield (0, set_services_1.getSetData)(userId);
+        const data = yield (0, set_services_1.getSetData)(userId, search);
         res.status(http_status_codes_1.StatusCodes.OK).send(data);
     }
     catch (err) {
@@ -62,9 +62,9 @@ const getSet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getSet = getSet;
 const getSetByfolderId = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { folderId, userId } = req.query;
+    const { folderId, userId, search } = req.query;
     try {
-        const data = yield (0, set_services_1.getSetDataByfolderId)(folderId, userId);
+        const data = yield (0, set_services_1.getSetDataByfolderId)(folderId, userId, search);
         res.status(http_status_codes_1.StatusCodes.OK).send(data);
     }
     catch (err) {

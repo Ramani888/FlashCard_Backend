@@ -52,9 +52,9 @@ const deleteFolder = (req, res) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.deleteFolder = deleteFolder;
 const getFolder = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { userId } = req.query;
+    const { userId, search } = req.query;
     try {
-        const data = yield (0, folder_service_1.getFolderData)(userId);
+        const data = yield (0, folder_service_1.getFolderData)(userId, search);
         res.status(http_status_codes_1.StatusCodes.OK).send(data);
     }
     catch (err) {

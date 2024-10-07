@@ -50,9 +50,29 @@ const deleteFolderData = (_id) => __awaiter(void 0, void 0, void 0, function* ()
     }
 });
 exports.deleteFolderData = deleteFolderData;
-const getFolderData = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+const getFolderData = (userId, search) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield folder_model_1.Folder.find({ userId: userId === null || userId === void 0 ? void 0 : userId.toString() });
+        let query;
+        if (search) {
+            const cleanedSearch = search.trim().replace(/\s+/g, ' ');
+            if (cleanedSearch) {
+                query = {
+                    userId: userId === null || userId === void 0 ? void 0 : userId.toString(),
+                    name: { $regex: cleanedSearch, $options: 'i' }
+                };
+            }
+            else {
+                query = {
+                    userId: userId === null || userId === void 0 ? void 0 : userId.toString()
+                };
+            }
+        }
+        else {
+            query = {
+                userId: userId === null || userId === void 0 ? void 0 : userId.toString()
+            };
+        }
+        const result = yield folder_model_1.Folder.find(query);
         return result;
     }
     catch (err) {
