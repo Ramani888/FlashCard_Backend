@@ -4,7 +4,8 @@ exports.assignPdfFolderValidation = exports.deletePdfValidation = exports.getPdf
 exports.uploadPdfValidation = {
     userId: 'required|string',
     color: 'required|string',
-    name: 'required|string'
+    name: 'required|string',
+    isHighlight: 'required|boolean',
 };
 exports.updatePdfValidation = {
     _id: 'required|string',

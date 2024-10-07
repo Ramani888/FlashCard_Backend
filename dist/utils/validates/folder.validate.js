@@ -4,7 +4,8 @@ exports.deletePdfFolderValidation = exports.getPdfFolderValidation = exports.upd
 exports.createfolderValidation = {
     name: 'required|string',
     color: 'required|string',
-    userId: 'required|string'
+    userId: 'required|string',
+    isHighlight: 'required|boolean'
 };
 exports.updateFolderValidation = {
     _id: 'required|string',
@@ -22,7 +23,8 @@ exports.assignFolderValidation = {
 exports.createImagesFolderValidation = {
     name: 'required|string',
     color: 'required|string',
-    userId: 'required|string'
+    userId: 'required|string',
+    isHighlight: 'required|boolean'
 };
 exports.updateImagesFolderValidation = {
     _id: 'required|string',
@@ -36,7 +38,8 @@ exports.deleteImagesFolderValidation = {
 exports.createPdfFolderValidation = {
     name: 'required|string',
     color: 'required|string',
-    userId: 'required|string'
+    userId: 'required|string',
+    isHighlight: 'required|boolean'
 };
 exports.updatePdfFolderValidation = {
     _id: 'required|string',

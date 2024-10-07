@@ -46,6 +46,10 @@ const SetSchema = new mongoose_1.Schema({
     },
     folderId: {
         type: String
+    },
+    isHighlight: {
+        type: Boolean,
+        required: true
     }
 }, { timestamps: true });
 const dbConnection = mongoose_1.default.connection.useDb((_a = env.MONGODB_DATABASE) !== null && _a !== void 0 ? _a : '');

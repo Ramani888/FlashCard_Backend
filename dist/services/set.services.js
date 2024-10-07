@@ -194,6 +194,7 @@ const getSetDataByfolderId = (folderId, userId) => __awaiter(void 0, void 0, voi
                     "folderId": 1,
                     "createdAt": 1,
                     "updatedAt": 1,
+                    "isHighlight": 1,
                     "folderName": "$folderData.name", // Extract folderName from folderData
                     "cardCount": 1 // Include card count in the final projection
                 }

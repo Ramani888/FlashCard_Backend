@@ -7,6 +7,7 @@ exports.createSetValidation = {
     color: 'required|string',
     userId: 'required|string',
     folderId: 'string',
+    isHighlight: 'required|boolean',
 };
 exports.updateSetValidation = {
     _id: 'required|string',

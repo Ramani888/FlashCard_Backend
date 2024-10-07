@@ -5,7 +5,8 @@ exports.createNotesValidation = {
     name: 'required|string',
     color: 'required|string',
     userId: 'required|string',
-    note: 'string'
+    note: 'string',
+    isHighlight: 'required|boolean'
 };
 exports.updateNotesValidation = {
     _id: 'required|string',
