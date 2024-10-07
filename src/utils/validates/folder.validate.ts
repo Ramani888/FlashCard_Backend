@@ -14,7 +14,8 @@ export const deleteFolderValidation = {
 };
 
 export const getFolderValidation = {
-    userId: 'required|string'
+    userId: 'required|string',
+    search: 'string'
 };
 
 export const assignFolderValidation = {

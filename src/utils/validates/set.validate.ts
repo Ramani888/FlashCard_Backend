@@ -16,10 +16,12 @@ export const deleteSetValidation = {
 };
 
 export const getSetValidation = {
-    userId: 'required|string'
+    userId: 'required|string',
+    search: 'string',
 };
 
 export const getSetByFolderValidation = {
     folderId: 'required|string',
-    userId: 'required|string'
+    userId: 'required|string',
+    search: 'string',
 };

@@ -35,13 +35,30 @@ export const deleteSetData = async (_id: string) => {
     }
 }
 
-export const getSetData = async (userId: string) => {
+export const getSetData = async (userId: string, search: string) => {
     try {
-        const result = await Set.aggregate([
-            {
-                $match: {
+        let query;
+        if (search) {
+            const cleanedSearch = search.trim().replace(/\s+/g, ' ');
+            if (cleanedSearch) {
+                query = {
+                    userId: userId?.toString(),
+                    name: { $regex: cleanedSearch, $options: 'i' }
+                }
+            } else {
+                query = {
                     userId: userId?.toString()
                 }
+            }
+        } else {
+            query = {
+                userId: userId?.toString()
+            }
+        }
+
+        const result = await Set.aggregate([
+            {
+                $match: query
             },
             {
                 $addFields: {
@@ -90,6 +107,7 @@ export const getSetData = async (userId: string) => {
                     "folderId": 1,
                     "createdAt": 1,
                     "updatedAt": 1,
+                    "isHighlight": 1,
                     "folderName": "$folderData.name", // Correctly reference folderData to get folderName
                     "cardCount": 1 // Include card count in the final projection
                 }
@@ -126,14 +144,33 @@ export const getSetData = async (userId: string) => {
 //     }
 // }
 
-export const getSetDataByfolderId = async (folderId: string, userId: string) => {
+export const getSetDataByfolderId = async (folderId: string, userId: string, search: string) => {
     try {
-        const result = await Set.aggregate([
-            {
-                $match: {
+        let query;
+        if (search) {
+            const cleanedSearch = search.trim().replace(/\s+/g, ' ');
+            if (cleanedSearch) {
+                query = {
+                    userId: userId?.toString(),
+                    folderId: { $exists: true, $ne: null, $eq: folderId?.toString() },
+                    name: { $regex: cleanedSearch, $options: 'i' }
+                }
+            } else {
+                query = {
                     userId: userId?.toString(),
                     folderId: { $exists: true, $ne: null, $eq: folderId?.toString() }
                 }
+            }
+        } else {
+            query = {
+                userId: userId?.toString(),
+                folderId: { $exists: true, $ne: null, $eq: folderId?.toString() }
+            }
+        }
+        
+        const result = await Set.aggregate([
+            {
+                $match: query
             },
             {
                 $addFields: {

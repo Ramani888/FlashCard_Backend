@@ -36,9 +36,27 @@ export const deleteFolderData = async (_id: string) => {
     }
 }
 
-export const getFolderData = async (userId: string) => {
+export const getFolderData = async (userId: string, search: string) => {
     try {
-        const result = await Folder.find({ userId: userId?.toString() });
+        let query;
+        if (search) {
+            const cleanedSearch = search.trim().replace(/\s+/g, ' ');
+            if (cleanedSearch) {
+                query = {
+                    userId: userId?.toString(),
+                    name: { $regex: cleanedSearch, $options: 'i' }
+                }
+            } else {
+                query = {
+                    userId: userId?.toString()
+                }
+            }
+        } else {
+            query = {
+                userId: userId?.toString()
+            }
+        }
+        const result = await Folder.find(query);
         return result;
     } catch (err) {
         throw err;

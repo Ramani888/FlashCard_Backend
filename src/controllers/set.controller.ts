@@ -38,9 +38,9 @@ export const deleteSet = async (req: AuthorizedRequest, res: Response) => {
 }
 
 export const getSet = async (req: AuthorizedRequest, res: Response) => {
-    const { userId } = req.query;
+    const { userId, search } = req.query;
     try {
-        const data = await getSetData(userId);
+        const data = await getSetData(userId, search);
         res.status(StatusCodes.OK).send(data);
     } catch (err) {
         console.error(err);
@@ -49,9 +49,9 @@ export const getSet = async (req: AuthorizedRequest, res: Response) => {
 }
 
 export const getSetByfolderId = async (req: AuthorizedRequest, res: Response) => {
-    const { folderId, userId } = req.query;
+    const { folderId, userId, search } = req.query;
     try {
-        const data = await getSetDataByfolderId(folderId, userId);
+        const data = await getSetDataByfolderId(folderId, userId, search);
         res.status(StatusCodes.OK).send(data);
     } catch (err) {
         console.error(err);

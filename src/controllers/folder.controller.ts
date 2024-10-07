@@ -40,9 +40,9 @@ export const deleteFolder = async (req: AuthorizedRequest, res: Response) => {
 }
 
 export const getFolder = async (req: AuthorizedRequest, res: Response) => {
-    const { userId } = req.query;
+    const { userId, search } = req.query;
     try {
-        const data = await getFolderData(userId);
+        const data = await getFolderData(userId, search);
         res.status(StatusCodes.OK).send(data);
     } catch (err) {
         console.error(err);
