@@ -14,6 +14,10 @@ const PdfFolderSchema = new Schema({
     userId: {
         type: String,
         required: true
+    },
+    isHighlight: {
+        type: Boolean,
+        required: true
     }
 }, {timestamps: true})
 

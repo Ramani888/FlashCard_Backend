@@ -17,6 +17,10 @@ const NotesSchema = new Schema({
     },
     note: {
         type: String,
+    },
+    isHighlight: {
+        type: Boolean,
+        required: true
     }
 }, {timestamps: true})
 

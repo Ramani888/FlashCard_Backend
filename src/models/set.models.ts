@@ -21,6 +21,10 @@ const SetSchema = new Schema({
     },
     folderId: {
         type: String
+    },
+    isHighlight: {
+        type: Boolean,
+        required: true
     }
 }, {timestamps: true})
 

@@ -4,4 +4,5 @@ export interface INotes {
     color: string;
     userId: string;
     note?: string;
+    isHighlight: boolean;
 }

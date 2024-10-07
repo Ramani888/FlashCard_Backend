@@ -2,7 +2,8 @@ export const createNotesValidation = {
     name: 'required|string',
     color: 'required|string',
     userId: 'required|string',
-    note: 'string'
+    note: 'string',
+    isHighlight: 'required|boolean'
 };
 
 export const updateNotesValidation = {

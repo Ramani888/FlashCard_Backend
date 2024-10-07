@@ -1,7 +1,8 @@
 export const createfolderValidation = {
     name: 'required|string',
     color: 'required|string',
-    userId: 'required|string'
+    userId: 'required|string',
+    isHighlight: 'required|boolean'
 };
 
 export const updateFolderValidation = {
@@ -24,7 +25,8 @@ export const assignFolderValidation = {
 export const createImagesFolderValidation = {
     name: 'required|string',
     color: 'required|string',
-    userId: 'required|string'
+    userId: 'required|string',
+    isHighlight: 'required|boolean'
 };
 
 export const updateImagesFolderValidation = {
@@ -42,7 +44,8 @@ export const deleteImagesFolderValidation = {
 export const createPdfFolderValidation = {
     name: 'required|string',
     color: 'required|string',
-    userId: 'required|string'
+    userId: 'required|string',
+    isHighlight: 'required|boolean'
 };
 
 export const updatePdfFolderValidation = {

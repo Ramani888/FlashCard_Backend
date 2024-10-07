@@ -14,6 +14,10 @@ const FolderSchema = new Schema({
     userId: {
         type: String,
         required: true
+    },
+    isHighlight: {
+        type: Boolean,
+        default: false
     }
 }, {timestamps: true})
 

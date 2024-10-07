@@ -21,6 +21,10 @@ const PdfSchema = new Schema({
     name: {
         type: String,
         required: true
+    },
+    isHighlight: {
+        type: Boolean,
+        required: true
     }
 }, {timestamps: true})
 

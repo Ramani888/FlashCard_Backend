@@ -5,4 +5,5 @@ export interface ISet {
     color: string;
     userId: string;
     folderId: string;
+    isHighlight: boolean;
 }

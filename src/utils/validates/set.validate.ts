@@ -4,6 +4,7 @@ export const createSetValidation = {
     color: 'required|string',
     userId: 'required|string',
     folderId: 'string',
+    isHighlight: 'required|boolean',
 };
 
 export const updateSetValidation = {

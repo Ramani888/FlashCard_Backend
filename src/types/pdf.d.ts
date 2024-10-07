@@ -5,4 +5,5 @@ export interface IPdf {
     folderId?: string;
     color: string;
     name: string;
+    isHighlight: boolean;
 }

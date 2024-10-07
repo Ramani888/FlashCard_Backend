@@ -3,6 +3,7 @@ export interface IFolder {
     name: string;
     color: string;
     userId: string;
+    isHighlight: boolean;
 }
 
 export interface IImagesFolder {
@@ -10,6 +11,7 @@ export interface IImagesFolder {
     name: string;
     color: string;
     userId: string;
+    isHighlight: boolean;
 }
 
 export interface IPdfFolder {
@@ -17,4 +19,5 @@ export interface IPdfFolder {
     name: string;
     color: string;
     userId: string;
+    isHighlight: boolean;
 }
