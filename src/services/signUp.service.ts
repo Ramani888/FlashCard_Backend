@@ -43,6 +43,20 @@ export const updateTempUser = async (data: IUser, otp: number) => {
     }
 }
 
+export const updateTempUserPassword = async (data: IUser, otp: number) => {
+    try {
+        const result = await TempUser.findOneAndUpdate(
+            { email: data?.email },
+            { $set: { otp: otp, password: data?.password }},
+            { new: true, upsert: false }
+        );
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}
+
+
 export const createUser = async (data: IUser) => {
     try {
         const userData = {

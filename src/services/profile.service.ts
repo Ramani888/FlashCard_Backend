@@ -1,3 +1,4 @@
+import { Tier } from "../models/tier.model";
 import { User } from "../models/user.model";
 import { IUser } from "../types/user";
 import { ObjectId } from 'mongodb';
@@ -20,6 +21,28 @@ export const getUserById = async (_id: string) => {
         const objectId = new ObjectId(_id?.toString());
         const result = await User.findOne({ _id: objectId });
         return result?.toObject();
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const getSubscriptionData = async () => {
+    try {
+        const result = await Tier.find();
+        return result;
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const updatePasswordData = async (updateData: IUser) => {
+    try {
+        const result = await User.findOneAndUpdate(
+            { email: updateData?.email },
+            { $set: { password: updateData?.password }},
+            { new: true, upsert: false }
+        );
+        return result;
     } catch (err) {
         throw err;
     }

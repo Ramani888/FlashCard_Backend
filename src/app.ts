@@ -3,6 +3,9 @@ import { MongoClient } from 'mongodb';
 import mongoose from "mongoose";
 import dotenv from 'dotenv';
 import routes from './routes/routes'
+import axios from 'axios';
+// const OpenAI = require('openai');
+import OpenAI from "openai";
 dotenv.config();
 
 const app = express();
