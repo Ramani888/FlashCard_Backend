@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyOtpValidation = exports.signUpValidation = void 0;
+exports.resendOtpValidation = exports.verifyOtpValidation = exports.signUpValidation = void 0;
 exports.signUpValidation = {
     email: 'required|email',
     userName: 'required|string',
@@ -9,4 +9,7 @@ exports.signUpValidation = {
 exports.verifyOtpValidation = {
     email: 'required|email',
     otp: 'required|numeric'
+};
+exports.resendOtpValidation = {
+    email: 'required|email',
 };

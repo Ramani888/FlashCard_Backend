@@ -9,7 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserById = exports.updateProfilePictureData = void 0;
+exports.updatePasswordData = exports.getSubscriptionData = exports.getUserById = exports.updateProfilePictureData = void 0;
+const tier_model_1 = require("../models/tier.model");
 const user_model_1 = require("../models/user.model");
 const mongodb_1 = require("mongodb");
 const updateProfilePictureData = (updateData) => __awaiter(void 0, void 0, void 0, function* () {
@@ -38,3 +39,23 @@ const getUserById = (_id) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getUserById = getUserById;
+const getSubscriptionData = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield tier_model_1.Tier.find();
+        return result;
+    }
+    catch (err) {
+        throw err;
+    }
+});
+exports.getSubscriptionData = getSubscriptionData;
+const updatePasswordData = (updateData) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield user_model_1.User.findOneAndUpdate({ email: updateData === null || updateData === void 0 ? void 0 : updateData.email }, { $set: { password: updateData === null || updateData === void 0 ? void 0 : updateData.password } }, { new: true, upsert: false });
+        return result;
+    }
+    catch (err) {
+        throw err;
+    }
+});
+exports.updatePasswordData = updatePasswordData;

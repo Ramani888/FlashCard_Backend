@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.verifyOtp = exports.signUp = void 0;
+exports.resendOtp = exports.verifyOtp = exports.signUp = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const signUp_service_1 = require("../services/signUp.service");
 const general_1 = require("../utils/helpers/general");
@@ -68,3 +68,30 @@ const verifyOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.verifyOtp = verifyOtp;
+const resendOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { email } = req.query;
+    try {
+        // Check if the user already exists
+        const existingUser = yield (0, signUp_service_1.getUserByEmail)(email);
+        if (existingUser)
+            return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'User already exists.' });
+        // Generate OTP
+        const otp = (0, general_1.generateOTP)();
+        // Check if the temp user already exists
+        const existingTempUser = yield (0, signUp_service_1.getTempUserByEmail)(email);
+        if (existingTempUser) {
+            yield (0, signUp_service_1.updateTempUser)({ email: email }, Number(otp));
+        }
+        else {
+            return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'User not found.' });
+        }
+        // Send Mail
+        yield (0, sendMail_1.default)(email, 'Your OTP Code', `Your OTP is ${otp}`);
+        res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: signUp_1.SignUpApiSource.put.resendOtp.message });
+    }
+    catch (err) {
+        console.error(err);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+});
+exports.resendOtp = resendOtp;

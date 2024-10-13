@@ -52,6 +52,7 @@ router.get(card_1.CardApiSource.get.getCardType.path, card_controller_1.getCardT
 //Sign Up
 router.post((_b = (_a = signUp_1.SignUpApiSource === null || signUp_1.SignUpApiSource === void 0 ? void 0 : signUp_1.SignUpApiSource.post) === null || _a === void 0 ? void 0 : _a.signUp) === null || _b === void 0 ? void 0 : _b.path, (0, bodyValidate_middleware_1.validateBody)(signUp_validate_1.signUpValidation), signUp_controller_1.signUp);
 router.post(signUp_1.SignUpApiSource.post.verifyOtp.path, (0, bodyValidate_middleware_1.validateBody)(signUp_validate_1.verifyOtpValidation), signUp_controller_1.verifyOtp);
+router.put(signUp_1.SignUpApiSource.put.resendOtp.path, (0, bodyValidate_middleware_1.validateBody)(signUp_validate_1.resendOtpValidation, RouteSource === null || RouteSource === void 0 ? void 0 : RouteSource.Query), signUp_controller_1.resendOtp);
 //Login
 router.post(login_1.LoginApiSource.post.login.path, (0, bodyValidate_middleware_1.validateBody)(login_validate_1.loginValidation), login_controller_1.login);
 //Set
@@ -110,4 +111,8 @@ router.delete(pdf_1.PdfApiSource.delete.deletePdf.path, (0, bodyValidate_middlew
 router.put(pdf_1.PdfApiSource.put.assignPdfFolder.path, (0, bodyValidate_middleware_1.validateBody)(pdf_validation_1.assignPdfFolderValidation, RouteSource.Query), pdf_controller_1.assignPdfFolder);
 //Profile
 router.put(profile_1.ProfileApiSource.put.updateProfilePicture.path, uploadConfig_1.default.single('picture'), (0, bodyValidate_middleware_1.validateBody)(profile_validate_1.updateProfilePictureValidation), profile_controller_1.updateProfilePicture);
+router.put(profile_1.ProfileApiSource.put.updatePassword.path, (0, bodyValidate_middleware_1.validateBody)(profile_validate_1.updatePasswordValidation), profile_controller_1.updatePassword);
+router.put(profile_1.ProfileApiSource.put.updatePasswordVerifyOtp.path, (0, bodyValidate_middleware_1.validateBody)(profile_validate_1.updatePasswordVerifyOtpValidation), profile_controller_1.updatePasswordVerifyOtp);
+//Subscription
+router.get(profile_1.ProfileApiSource.get.getSubscription.path, profile_controller_1.getSubscription);
 exports.default = router;

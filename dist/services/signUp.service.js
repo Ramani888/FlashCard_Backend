@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUser = exports.updateTempUser = exports.createTempUser = exports.getTempUserByEmail = exports.getUserByEmail = void 0;
+exports.createUser = exports.updateTempUserPassword = exports.updateTempUser = exports.createTempUser = exports.getTempUserByEmail = exports.getUserByEmail = void 0;
 const tempUser_model_1 = require("../models/tempUser.model");
 const user_model_1 = require("../models/user.model");
 const getUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
@@ -53,6 +53,16 @@ const updateTempUser = (data, otp) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.updateTempUser = updateTempUser;
+const updateTempUserPassword = (data, otp) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield tempUser_model_1.TempUser.findOneAndUpdate({ email: data === null || data === void 0 ? void 0 : data.email }, { $set: { otp: otp, password: data === null || data === void 0 ? void 0 : data.password } }, { new: true, upsert: false });
+        return result;
+    }
+    catch (err) {
+        throw err;
+    }
+});
+exports.updateTempUserPassword = updateTempUserPassword;
 const createUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const userData = {
