@@ -11,8 +11,8 @@ import { FolderApiSource, ImagesFolderApiSource, PdfFolderApiSource } from "../u
 import { CardApiSource } from "../utils/constants/card";
 import { blurAllCardValidation, createCardValidation, deleteCardValidation, getCardValidation, moveCardValidation, updateCardValidation } from "../utils/validates/card.validate";
 import { SignUpApiSource } from "../utils/constants/signUp";
-import { signUpValidation, verifyOtpValidation } from "../utils/validates/signUp.validate";
-import { signUp, verifyOtp } from "../controllers/signUp.controller";
+import { resendOtpValidation, signUpValidation, verifyOtpValidation } from "../utils/validates/signUp.validate";
+import { resendOtp, signUp, verifyOtp } from "../controllers/signUp.controller";
 import { LoginApiSource } from "../utils/constants/login";
 import { loginValidation } from "../utils/validates/login.validate";
 import { login } from "../controllers/login.controller";
@@ -30,8 +30,8 @@ import { PdfApiSource } from "../utils/constants/pdf";
 import { assignPdfFolderValidation, deletePdfValidation, getPdfByFolderIdValidation, getPdfValidation, updatePdfValidation, uploadPdfValidation } from "../utils/validates/pdf.validation";
 import { assignPdfFolder, deletePdf, getPdf, getPdfByFolderId, updatePdf, uploadPdf } from "../controllers/pdf.controller";
 import { ProfileApiSource } from "../utils/constants/profile";
-import { updateProfilePictureValidation } from "../utils/validates/profile.validate";
-import { updateProfilePicture } from "../controllers/profile.controller";
+import { updatePasswordValidation, updatePasswordVerifyOtpValidation, updateProfilePictureValidation } from "../utils/validates/profile.validate";
+import { getSubscription, updatePassword, updatePasswordVerifyOtp, updateProfilePicture } from "../controllers/profile.controller";
 
 enum RouteSource {
     Body,
@@ -50,6 +50,7 @@ router.get(CardApiSource.get.getCardType.path, getCardType)
 //Sign Up
 router.post(SignUpApiSource?.post?.signUp?.path, validateBody(signUpValidation), signUp)
 router.post(SignUpApiSource.post.verifyOtp.path, validateBody(verifyOtpValidation), verifyOtp)
+router.put(SignUpApiSource.put.resendOtp.path, validateBody(resendOtpValidation, RouteSource?.Query), resendOtp)
 
 //Login
 router.post(LoginApiSource.post.login.path, validateBody(loginValidation), login)
@@ -120,4 +121,9 @@ router.put(PdfApiSource.put.assignPdfFolder.path, validateBody(assignPdfFolderVa
 
 //Profile
 router.put(ProfileApiSource.put.updateProfilePicture.path, upload.single('picture'), validateBody(updateProfilePictureValidation), updateProfilePicture)
+router.put(ProfileApiSource.put.updatePassword.path, validateBody(updatePasswordValidation), updatePassword)
+router.put(ProfileApiSource.put.updatePasswordVerifyOtp.path, validateBody(updatePasswordVerifyOtpValidation), updatePasswordVerifyOtp)
+
+//Subscription
+router.get(ProfileApiSource.get.getSubscription.path, getSubscription)
 export default router;

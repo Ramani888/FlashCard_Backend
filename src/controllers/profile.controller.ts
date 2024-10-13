@@ -4,7 +4,11 @@ import { Response } from 'express';
 import { FLASHCARD_IMAGES_V1_BUCKET_NAME } from "../utils/constants/general";
 import { deleteFromS3, uploadToS3 } from "../routes/uploadConfig";
 import { ProfileApiSource } from "../utils/constants/profile";
-import { getUserById, updateProfilePictureData } from "../services/profile.service";
+import { getSubscriptionData, getUserById, updatePasswordData, updateProfilePictureData } from "../services/profile.service";
+import { getTempUserByEmail, getUserByEmail, updateTempUserPassword } from "../services/signUp.service";
+import { generateOTP } from "../utils/helpers/general";
+import { NotesApiSource } from "../utils/constants/notes";
+import sendMail from "../utils/helpers/sendMail";
 
 export const updateProfilePicture = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
@@ -26,4 +30,56 @@ export const updateProfilePicture = async (req: AuthorizedRequest, res: Response
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
     }
 
+}
+
+export const getSubscription = async (req: AuthorizedRequest, res: Response) => {
+    try {
+        const data = await getSubscriptionData();
+        res.status(StatusCodes.OK).send(data);
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const updatePassword = async (req: AuthorizedRequest, res: Response) => {
+    const bodyData = req.body;
+    try {
+        // Check if the user exists or not
+        const existingUser = await getUserByEmail(bodyData?.email);
+        if (!existingUser) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User does not exists.' });
+
+        // Generate OTP
+        const otp = generateOTP();
+
+        // Check if the temp user already exists
+        const existingTempUser = await getTempUserByEmail(bodyData?.email);
+        if (existingTempUser) {
+            updateTempUserPassword(bodyData, Number(otp))
+        } else {
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User does not exists.' });
+        }
+
+         // Send Mail
+         await sendMail(bodyData?.email, 'Your OTP Code', `Your OTP is ${otp}`);
+        // await updatePasswordData(bodyData);
+        res.status(StatusCodes.OK).send({ success: true, message: ProfileApiSource.put.updatePassword.message });
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const updatePasswordVerifyOtp = async (req: AuthorizedRequest, res: Response) => {
+    const bodyData = req.body;
+    try {
+        const existingTempUser = await getTempUserByEmail(bodyData?.email);
+        if (Number(existingTempUser?.otp) !== Number(bodyData?.otp)) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'OTP Does Not Match.' });
+        
+        await updatePasswordData(bodyData);
+        res.status(StatusCodes.OK).send({ success: true, message: ProfileApiSource.put.updatePasswordVerifyOtp.message });
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
 }

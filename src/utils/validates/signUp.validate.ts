@@ -8,3 +8,7 @@ export const verifyOtpValidation = {
     email: 'required|email',
     otp: 'required|numeric'
 }
+
+export const resendOtpValidation = {
+    email: 'required|email',
+}
