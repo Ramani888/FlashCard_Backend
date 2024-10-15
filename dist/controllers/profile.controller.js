@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePasswordVerifyOtp = exports.updatePassword = exports.getSubscription = exports.updateProfilePicture = void 0;
+exports.createSupport = exports.updatePasswordVerifyOtp = exports.updatePassword = exports.getSubscription = exports.updateProfilePicture = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const general_1 = require("../utils/constants/general");
 const uploadConfig_1 = require("../routes/uploadConfig");
@@ -97,3 +97,24 @@ const updatePasswordVerifyOtp = (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 });
 exports.updatePasswordVerifyOtp = updatePasswordVerifyOtp;
+const createSupport = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const bodyData = req.body;
+    try {
+        const sentenceData = (0, general_2.getIssueSentence)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.supportType);
+        if (req.file) {
+            const imageUrl = yield (0, uploadConfig_1.uploadToS3)(req.file, general_1.FLASHCARD_SUPPORT_V1_BUCKET_NAME);
+            yield (0, profile_service_1.createSupportData)(Object.assign(Object.assign({}, bodyData), { image: imageUrl }));
+            yield (0, sendMail_1.default)('ramanidivyesh888@gmail.com', 'SUPPORT', sentenceData, imageUrl); //Roadtojesusministry@gmail.com
+        }
+        else {
+            yield (0, profile_service_1.createSupportData)(Object.assign({}, bodyData));
+            yield (0, sendMail_1.default)('ramanidivyesh888@gmail.com', 'SUPPORT', sentenceData); //Roadtojesusministry@gmail.com
+        }
+        res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: profile_1.ProfileApiSource.post.createSupport.message });
+    }
+    catch (err) {
+        console.error(err);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+});
+exports.createSupport = createSupport;

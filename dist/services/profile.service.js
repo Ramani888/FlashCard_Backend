@@ -9,7 +9,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updatePasswordData = exports.getSubscriptionData = exports.getUserById = exports.updateProfilePictureData = void 0;
+exports.createSupportData = exports.updatePasswordData = exports.getSubscriptionData = exports.getUserById = exports.updateProfilePictureData = void 0;
+const support_model_1 = require("../models/support.model");
 const tier_model_1 = require("../models/tier.model");
 const user_model_1 = require("../models/user.model");
 const mongodb_1 = require("mongodb");
@@ -59,3 +60,13 @@ const updatePasswordData = (updateData) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.updatePasswordData = updatePasswordData;
+const createSupportData = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const newData = new support_model_1.Support(data);
+        yield newData.save();
+    }
+    catch (err) {
+        throw err;
+    }
+});
+exports.createSupportData = createSupportData;

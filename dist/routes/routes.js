@@ -113,6 +113,7 @@ router.put(pdf_1.PdfApiSource.put.assignPdfFolder.path, (0, bodyValidate_middlew
 router.put(profile_1.ProfileApiSource.put.updateProfilePicture.path, uploadConfig_1.default.single('picture'), (0, bodyValidate_middleware_1.validateBody)(profile_validate_1.updateProfilePictureValidation), profile_controller_1.updateProfilePicture);
 router.put(profile_1.ProfileApiSource.put.updatePassword.path, (0, bodyValidate_middleware_1.validateBody)(profile_validate_1.updatePasswordValidation), profile_controller_1.updatePassword);
 router.put(profile_1.ProfileApiSource.put.updatePasswordVerifyOtp.path, (0, bodyValidate_middleware_1.validateBody)(profile_validate_1.updatePasswordVerifyOtpValidation), profile_controller_1.updatePasswordVerifyOtp);
+router.post(profile_1.ProfileApiSource.post.createSupport.path, uploadConfig_1.default.single('image'), (0, bodyValidate_middleware_1.validateBody)(profile_validate_1.createSupportValidation), profile_controller_1.createSupport);
 //Subscription
 router.get(profile_1.ProfileApiSource.get.getSubscription.path, profile_controller_1.getSubscription);
 exports.default = router;
