@@ -82,7 +82,45 @@ export const getImagesData = async (userId: string) => {
 
 export const getImagesDataByFolderId = async (userId: string, folderId: string) => {
     try {
-        const result = await Images.find({ userId: userId?.toString(), folderId: folderId?.toString() });
+        // const result = await Images.find({ userId: userId?.toString(), folderId: folderId?.toString() });
+        const result = await Images.aggregate([
+            {
+                $match: {
+                    userId: userId?.toString(),
+                    folderId: folderId?.toString()
+                }
+            },
+            {
+                $addFields: {
+                    folderIdObject: { $toObjectId: "$folderId" }, // Convert folderId to ObjectId
+                }
+            },
+            {
+                $lookup: {
+                    from: "ImagesFolder",
+                    localField: "folderIdObject",
+                    foreignField: "_id",
+                    as: "folderData"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$folderData", // Unwind to make folderData a single object
+                    preserveNullAndEmptyArrays: true // Keep the original document if no match is found
+                }
+            },
+            {
+                $project: {
+                    "_id": 1,
+                    "url": 1,
+                    "userId": 1,
+                    "folderId": 1,
+                    "createdAt": 1,
+                    "updatedAt": 1,
+                    "folderName": "$folderData.name", // Correctly reference folderData to get folderName
+                }
+            }
+        ]); 
         return result;
     } catch (err) {
         throw err;

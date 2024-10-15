@@ -36,7 +36,47 @@ export const updatePdfData = async (updateData: IPdf) => {
 
 export const getPdfData = async (userId: string) => {
     try {
-        const result = await Pdf.find({ userId: userId?.toString() });
+        // const result = await Pdf.find({ userId: userId?.toString() });
+        const result = await Pdf.aggregate([
+            {
+                $match: {
+                    userId: userId?.toString()
+                }
+            },
+            {
+                $addFields: {
+                    folderIdObject: { $toObjectId: "$folderId" }, 
+                }
+            },
+            {
+                $lookup: {
+                    from: "PdfFolder",
+                    localField: "folderIdObject",
+                    foreignField: "_id",
+                    as: "folderData"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$folderData", // Unwind to make folderData a single object
+                    preserveNullAndEmptyArrays: true // Keep the original document if no match is found
+                }
+            },
+            {
+                $project: {
+                    "_id": 1,
+                    "url": 1,
+                    "folderId": 1,
+                    "userId": 1,
+                    "color": 1,
+                    "name": 1,
+                    "isHighlight": 1,
+                    "createdAt": 1,
+                    "updatedAt": 1,
+                    "folderName": "$folderData.name",
+                }
+            }
+        ])
         return result;
     } catch (err) {
         throw err;
@@ -45,7 +85,48 @@ export const getPdfData = async (userId: string) => {
 
 export const getPdfDataByFolderId = async (userId: string, folderId: string) => {
     try {
-        const result = await Pdf.find({ userId: userId?.toString(), folderId: folderId?.toString() });
+        // const result = await Pdf.find({ userId: userId?.toString(), folderId: folderId?.toString() });
+        const result = await Pdf.aggregate([
+            {
+                $match: {
+                    userId: userId?.toString(),
+                    folderId: folderId?.toString()
+                }
+            },
+            {
+                $addFields: {
+                    folderIdObject: { $toObjectId: "$folderId" }, 
+                }
+            },
+            {
+                $lookup: {
+                    from: "PdfFolder",
+                    localField: "folderIdObject",
+                    foreignField: "_id",
+                    as: "folderData"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$folderData", // Unwind to make folderData a single object
+                    preserveNullAndEmptyArrays: true // Keep the original document if no match is found
+                }
+            },
+            {
+                $project: {
+                    "_id": 1,
+                    "url": 1,
+                    "folderId": 1,
+                    "userId": 1,
+                    "color": 1,
+                    "name": 1,
+                    "isHighlight": 1,
+                    "createdAt": 1,
+                    "updatedAt": 1,
+                    "folderName": "$folderData.name",
+                }
+            }
+        ])
         return result;
     } catch (err) {
         throw err;
