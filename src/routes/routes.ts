@@ -30,8 +30,8 @@ import { PdfApiSource } from "../utils/constants/pdf";
 import { assignPdfFolderValidation, deletePdfValidation, getPdfByFolderIdValidation, getPdfValidation, updatePdfValidation, uploadPdfValidation } from "../utils/validates/pdf.validation";
 import { assignPdfFolder, deletePdf, getPdf, getPdfByFolderId, updatePdf, uploadPdf } from "../controllers/pdf.controller";
 import { ProfileApiSource } from "../utils/constants/profile";
-import { updatePasswordValidation, updatePasswordVerifyOtpValidation, updateProfilePictureValidation } from "../utils/validates/profile.validate";
-import { getSubscription, updatePassword, updatePasswordVerifyOtp, updateProfilePicture } from "../controllers/profile.controller";
+import { createSupportValidation, updatePasswordValidation, updatePasswordVerifyOtpValidation, updateProfilePictureValidation } from "../utils/validates/profile.validate";
+import { createSupport, getSubscription, updatePassword, updatePasswordVerifyOtp, updateProfilePicture } from "../controllers/profile.controller";
 
 enum RouteSource {
     Body,
@@ -123,6 +123,7 @@ router.put(PdfApiSource.put.assignPdfFolder.path, validateBody(assignPdfFolderVa
 router.put(ProfileApiSource.put.updateProfilePicture.path, upload.single('picture'), validateBody(updateProfilePictureValidation), updateProfilePicture)
 router.put(ProfileApiSource.put.updatePassword.path, validateBody(updatePasswordValidation), updatePassword)
 router.put(ProfileApiSource.put.updatePasswordVerifyOtp.path, validateBody(updatePasswordVerifyOtpValidation), updatePasswordVerifyOtp)
+router.post(ProfileApiSource.post.createSupport.path, upload.single('image'), validateBody(createSupportValidation), createSupport)
 
 //Subscription
 router.get(ProfileApiSource.get.getSubscription.path, getSubscription)

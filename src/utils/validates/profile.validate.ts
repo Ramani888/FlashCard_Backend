@@ -12,3 +12,8 @@ export const updatePasswordVerifyOtpValidation = {
     password: 'required|string',
     otp: 'required|numeric'
 }
+
+export const createSupportValidation = {
+    userId: 'required|string',
+    supportType: 'required|string'
+}

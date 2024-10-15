@@ -6,5 +6,8 @@ export const ProfileApiSource = {
     },
     get: {
         getSubscription: { path: '/profile/subscription', message: 'Profile subscription data get successfully.' }
+    },
+    post: {
+        createSupport: { path: '/profile/support', message: 'Your issue has been successfully submitted.' }
     }
 }

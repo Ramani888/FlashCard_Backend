@@ -21,3 +21,10 @@ export interface IUser {
   password?: string;
   picture?: string;
 }
+
+export interface ISupport {
+  _id?: ObjectId;
+  supportType: string;
+  userId: string;
+  image?: string;
+}

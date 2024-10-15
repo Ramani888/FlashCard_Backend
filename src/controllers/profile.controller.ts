@@ -1,12 +1,12 @@
 import { AuthorizedRequest } from "../types/user";
 import { StatusCodes } from "http-status-codes";
 import { Response } from 'express';
-import { FLASHCARD_IMAGES_V1_BUCKET_NAME } from "../utils/constants/general";
+import { FLASHCARD_IMAGES_V1_BUCKET_NAME, FLASHCARD_PDF_V1_BUCKET_NAME, FLASHCARD_SUPPORT_V1_BUCKET_NAME } from "../utils/constants/general";
 import { deleteFromS3, uploadToS3 } from "../routes/uploadConfig";
 import { ProfileApiSource } from "../utils/constants/profile";
-import { getSubscriptionData, getUserById, updatePasswordData, updateProfilePictureData } from "../services/profile.service";
+import { createSupportData, getSubscriptionData, getUserById, updatePasswordData, updateProfilePictureData } from "../services/profile.service";
 import { getTempUserByEmail, getUserByEmail, updateTempUserPassword } from "../services/signUp.service";
-import { generateOTP } from "../utils/helpers/general";
+import { generateOTP, getIssueSentence } from "../utils/helpers/general";
 import { NotesApiSource } from "../utils/constants/notes";
 import sendMail from "../utils/helpers/sendMail";
 
@@ -78,6 +78,26 @@ export const updatePasswordVerifyOtp = async (req: AuthorizedRequest, res: Respo
         
         await updatePasswordData(bodyData);
         res.status(StatusCodes.OK).send({ success: true, message: ProfileApiSource.put.updatePasswordVerifyOtp.message });
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const createSupport = async (req: AuthorizedRequest, res: Response) => {
+    const bodyData = req.body;
+    try {
+        const sentenceData = getIssueSentence(bodyData?.supportType);
+        if (req.file) {
+            const imageUrl = await uploadToS3(req.file, FLASHCARD_SUPPORT_V1_BUCKET_NAME);
+            await createSupportData({...bodyData, image: imageUrl})
+            await sendMail('ramanidivyesh888@gmail.com', 'SUPPORT', sentenceData, imageUrl); //Roadtojesusministry@gmail.com
+        } else {
+            await createSupportData({...bodyData})
+            await sendMail('ramanidivyesh888@gmail.com', 'SUPPORT', sentenceData); //Roadtojesusministry@gmail.com
+        }
+        
+        res.status(StatusCodes.OK).send({ success: true, message: ProfileApiSource.post.createSupport.message });
     } catch (err) {
         console.error(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });

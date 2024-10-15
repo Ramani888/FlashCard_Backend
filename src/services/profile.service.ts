@@ -1,6 +1,7 @@
+import { Support } from "../models/support.model";
 import { Tier } from "../models/tier.model";
 import { User } from "../models/user.model";
-import { IUser } from "../types/user";
+import { ISupport, IUser } from "../types/user";
 import { ObjectId } from 'mongodb';
 
 export const updateProfilePictureData = async (updateData: IUser) => {
@@ -43,6 +44,15 @@ export const updatePasswordData = async (updateData: IUser) => {
             { new: true, upsert: false }
         );
         return result;
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const createSupportData = async (data: ISupport) => {
+    try {
+        const newData = new Support(data);
+        await newData.save();
     } catch (err) {
         throw err;
     }
