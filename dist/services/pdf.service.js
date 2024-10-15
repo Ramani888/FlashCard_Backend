@@ -50,7 +50,47 @@ const updatePdfData = (updateData) => __awaiter(void 0, void 0, void 0, function
 exports.updatePdfData = updatePdfData;
 const getPdfData = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield pdf_model_1.Pdf.find({ userId: userId === null || userId === void 0 ? void 0 : userId.toString() });
+        // const result = await Pdf.find({ userId: userId?.toString() });
+        const result = yield pdf_model_1.Pdf.aggregate([
+            {
+                $match: {
+                    userId: userId === null || userId === void 0 ? void 0 : userId.toString()
+                }
+            },
+            {
+                $addFields: {
+                    folderIdObject: { $toObjectId: "$folderId" },
+                }
+            },
+            {
+                $lookup: {
+                    from: "PdfFolder",
+                    localField: "folderIdObject",
+                    foreignField: "_id",
+                    as: "folderData"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$folderData", // Unwind to make folderData a single object
+                    preserveNullAndEmptyArrays: true // Keep the original document if no match is found
+                }
+            },
+            {
+                $project: {
+                    "_id": 1,
+                    "url": 1,
+                    "folderId": 1,
+                    "userId": 1,
+                    "color": 1,
+                    "name": 1,
+                    "isHighlight": 1,
+                    "createdAt": 1,
+                    "updatedAt": 1,
+                    "folderName": "$folderData.name",
+                }
+            }
+        ]);
         return result;
     }
     catch (err) {
@@ -60,7 +100,48 @@ const getPdfData = (userId) => __awaiter(void 0, void 0, void 0, function* () {
 exports.getPdfData = getPdfData;
 const getPdfDataByFolderId = (userId, folderId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield pdf_model_1.Pdf.find({ userId: userId === null || userId === void 0 ? void 0 : userId.toString(), folderId: folderId === null || folderId === void 0 ? void 0 : folderId.toString() });
+        // const result = await Pdf.find({ userId: userId?.toString(), folderId: folderId?.toString() });
+        const result = yield pdf_model_1.Pdf.aggregate([
+            {
+                $match: {
+                    userId: userId === null || userId === void 0 ? void 0 : userId.toString(),
+                    folderId: folderId === null || folderId === void 0 ? void 0 : folderId.toString()
+                }
+            },
+            {
+                $addFields: {
+                    folderIdObject: { $toObjectId: "$folderId" },
+                }
+            },
+            {
+                $lookup: {
+                    from: "PdfFolder",
+                    localField: "folderIdObject",
+                    foreignField: "_id",
+                    as: "folderData"
+                }
+            },
+            {
+                $unwind: {
+                    path: "$folderData", // Unwind to make folderData a single object
+                    preserveNullAndEmptyArrays: true // Keep the original document if no match is found
+                }
+            },
+            {
+                $project: {
+                    "_id": 1,
+                    "url": 1,
+                    "folderId": 1,
+                    "userId": 1,
+                    "color": 1,
+                    "name": 1,
+                    "isHighlight": 1,
+                    "createdAt": 1,
+                    "updatedAt": 1,
+                    "folderName": "$folderData.name",
+                }
+            }
+        ]);
         return result;
     }
     catch (err) {
