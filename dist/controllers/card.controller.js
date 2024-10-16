@@ -100,7 +100,7 @@ const moveCard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const cardData = yield (0, card_service_1.getCardByCardId)(cardId);
         if (cardData) {
-            const updatedCardData = Object.assign(Object.assign({}, cardData.toObject()), { setId: setId, folderId: cardData.folderId || '', note: (cardData === null || cardData === void 0 ? void 0 : cardData.note) || '' });
+            const updatedCardData = Object.assign(Object.assign({}, cardData), { setId: setId, folderId: cardData.folderId || '', note: (cardData === null || cardData === void 0 ? void 0 : cardData.note) || '' });
             yield (0, card_service_1.updateCardData)(updatedCardData);
         }
         res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: card_1.CardApiSource.put.moveCard.message });

@@ -121,4 +121,5 @@ router.get(profile_1.ProfileApiSource.get.getSubscription.path, profile_controll
 //Mediator
 router.get(mediator_1.MediatorApiSource.get.getMediatorSet.path, (0, bodyValidate_middleware_1.validateBody)(mediator_validate_1.getMediatorSetValidation, RouteSource.Query), mediator_controller_1.getMediatorSet);
 router.put(mediator_1.MediatorApiSource.put.updateMediatorSet.path, (0, bodyValidate_middleware_1.validateBody)(mediator_validate_1.updateMediatorSetValidation, RouteSource.Query), mediator_controller_1.updateMediatorSet);
+router.put(mediator_1.MediatorApiSource.put.updateMediatorCard.path, (0, bodyValidate_middleware_1.validateBody)(mediator_validate_1.updateMediatorCardValidation, RouteSource.Query), mediator_controller_1.updateMediatorCard);
 exports.default = router;

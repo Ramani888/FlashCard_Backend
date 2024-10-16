@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateMediatorSet = exports.getMediatorSet = void 0;
+exports.updateMediatorCard = exports.updateMediatorSet = exports.getMediatorSet = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const mediator_service_1 = require("../services/mediator.service");
 const set_services_1 = require("../services/set.services");
@@ -68,3 +68,34 @@ const updateMediatorSet = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.updateMediatorSet = updateMediatorSet;
+const updateMediatorCard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d;
+    const { userId, setId, cardId } = req.query;
+    try {
+        //Get card data
+        const cardData = yield (0, card_service_1.getCardByCardId)(cardId);
+        //Get set data
+        const setData = yield (0, set_services_1.getSetBySetId)(setId);
+        //Get card data with largest position
+        const largestCardData = yield (0, card_service_1.getCardWithLargestPosition)(userId, setId);
+        const position = (largestCardData === null || largestCardData === void 0 ? void 0 : largestCardData.position) ? (largestCardData === null || largestCardData === void 0 ? void 0 : largestCardData.position) + 1 : 1;
+        //Create copy to card data
+        const newCardData = {
+            top: (_a = cardData === null || cardData === void 0 ? void 0 : cardData.top) !== null && _a !== void 0 ? _a : '',
+            bottom: (_b = cardData === null || cardData === void 0 ? void 0 : cardData.bottom) !== null && _b !== void 0 ? _b : '',
+            note: (_c = cardData === null || cardData === void 0 ? void 0 : cardData.note) !== null && _c !== void 0 ? _c : '',
+            folderId: (_d = setData === null || setData === void 0 ? void 0 : setData.folderId) !== null && _d !== void 0 ? _d : '',
+            setId: setId,
+            userId: userId,
+            isBlur: cardData === null || cardData === void 0 ? void 0 : cardData.isBlur,
+            position: position
+        };
+        yield (0, card_service_1.createCardData)(newCardData);
+        res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: mediator_1.MediatorApiSource.put.updateMediatorCard.message });
+    }
+    catch (err) {
+        console.error(err);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+});
+exports.updateMediatorCard = updateMediatorCard;

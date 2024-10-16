@@ -63,7 +63,7 @@ const getCardByCardId = (cardId) => __awaiter(void 0, void 0, void 0, function* 
     try {
         const objectId = new mongodb_1.ObjectId(cardId === null || cardId === void 0 ? void 0 : cardId.toString());
         const result = yield card_model_1.Card.findOne({ _id: objectId });
-        return result;
+        return result === null || result === void 0 ? void 0 : result.toObject();
     }
     catch (err) {
         throw err;
