@@ -15,8 +15,8 @@ const mongodb_1 = require("mongodb");
 const insertSetData = (data) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newData = new set_models_1.Set(data);
-        yield newData.save();
-        return;
+        const savedData = yield newData.save(); // Save the new data
+        return savedData === null || savedData === void 0 ? void 0 : savedData._id; // Return the _id of the saved document
     }
     catch (err) {
         throw err;
@@ -250,7 +250,7 @@ const getSetBySetId = (setId) => __awaiter(void 0, void 0, void 0, function* () 
     try {
         const objectId = new mongodb_1.ObjectId(setId === null || setId === void 0 ? void 0 : setId.toString());
         const result = yield set_models_1.Set.findOne({ _id: objectId });
-        return result;
+        return result === null || result === void 0 ? void 0 : result.toObject();
     }
     catch (err) {
         throw err;

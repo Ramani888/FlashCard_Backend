@@ -120,4 +120,5 @@ router.post(profile_1.ProfileApiSource.post.createSupport.path, uploadConfig_1.d
 router.get(profile_1.ProfileApiSource.get.getSubscription.path, profile_controller_1.getSubscription);
 //Mediator
 router.get(mediator_1.MediatorApiSource.get.getMediatorSet.path, (0, bodyValidate_middleware_1.validateBody)(mediator_validate_1.getMediatorSetValidation, RouteSource.Query), mediator_controller_1.getMediatorSet);
+router.put(mediator_1.MediatorApiSource.put.updateMediatorSet.path, (0, bodyValidate_middleware_1.validateBody)(mediator_validate_1.updateMediatorSetValidation, RouteSource.Query), mediator_controller_1.updateMediatorSet);
 exports.default = router;
