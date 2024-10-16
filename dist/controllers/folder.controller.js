@@ -77,7 +77,7 @@ const assignFolder = (req, res) => __awaiter(void 0, void 0, void 0, function* (
         /********** second set in update folderId **********/
         const setData = yield (0, set_services_1.getSetBySetId)(setId);
         if (setData) {
-            const updatedSetData = Object.assign(Object.assign({}, setData === null || setData === void 0 ? void 0 : setData.toObject()), { folderId: folderId });
+            const updatedSetData = Object.assign(Object.assign({}, setData), { folderId: folderId });
             yield (0, set_services_1.updateSetData)(updatedSetData);
         }
         res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: folder_1.FolderApiSource.put.assignFolder.message });
