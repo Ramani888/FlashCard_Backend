@@ -38,6 +38,9 @@ const pdf_controller_1 = require("../controllers/pdf.controller");
 const profile_1 = require("../utils/constants/profile");
 const profile_validate_1 = require("../utils/validates/profile.validate");
 const profile_controller_1 = require("../controllers/profile.controller");
+const mediator_1 = require("../utils/constants/mediator");
+const mediator_validate_1 = require("../utils/validates/mediator.validate");
+const mediator_controller_1 = require("../controllers/mediator.controller");
 var RouteSource;
 (function (RouteSource) {
     RouteSource[RouteSource["Body"] = 0] = "Body";
@@ -114,6 +117,7 @@ router.put(profile_1.ProfileApiSource.put.updateProfilePicture.path, uploadConfi
 router.put(profile_1.ProfileApiSource.put.updatePassword.path, (0, bodyValidate_middleware_1.validateBody)(profile_validate_1.updatePasswordValidation), profile_controller_1.updatePassword);
 router.put(profile_1.ProfileApiSource.put.updatePasswordVerifyOtp.path, (0, bodyValidate_middleware_1.validateBody)(profile_validate_1.updatePasswordVerifyOtpValidation), profile_controller_1.updatePasswordVerifyOtp);
 router.post(profile_1.ProfileApiSource.post.createSupport.path, uploadConfig_1.default.single('image'), (0, bodyValidate_middleware_1.validateBody)(profile_validate_1.createSupportValidation), profile_controller_1.createSupport);
-//Subscription
 router.get(profile_1.ProfileApiSource.get.getSubscription.path, profile_controller_1.getSubscription);
+//Mediator
+router.get(mediator_1.MediatorApiSource.get.getMediatorSet.path, (0, bodyValidate_middleware_1.validateBody)(mediator_validate_1.getMediatorSetValidation, RouteSource.Query), mediator_controller_1.getMediatorSet);
 exports.default = router;
