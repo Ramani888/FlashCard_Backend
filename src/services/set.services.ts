@@ -5,8 +5,8 @@ import { ObjectId } from 'mongodb';
 export const insertSetData = async (data: ISet) => {
     try {
         const newData = new Set(data);
-        await newData.save();
-        return;
+        const savedData = await newData.save(); // Save the new data
+        return savedData?._id; // Return the _id of the saved document
     } catch (err) {
         throw err;
     }
@@ -235,7 +235,7 @@ export const getSetBySetId = async (setId: string) => {
     try {
         const objectId = new ObjectId(setId?.toString());
         const result = await Set.findOne({ _id: objectId });
-        return result;
+        return result?.toObject();
     } catch (err) {
         throw err;
     }
