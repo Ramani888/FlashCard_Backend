@@ -49,7 +49,7 @@ export const getCardByCardId = async (cardId: string) => {
     try {
         const objectId = new ObjectId(cardId?.toString());
         const result = await Card.findOne({ _id: objectId });
-        return result;
+        return result?.toObject();
     } catch (err) {
         throw err;
     }

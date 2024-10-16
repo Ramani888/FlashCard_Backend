@@ -88,7 +88,7 @@ export const moveCard = async (req: AuthorizedRequest, res: Response) => {
         const cardData = await getCardByCardId(cardId);
         if (cardData) {
             const updatedCardData = {
-                ...cardData.toObject(),
+                ...cardData,
                 setId: setId,
                 folderId: cardData.folderId || '',
                 note: cardData?.note || '',

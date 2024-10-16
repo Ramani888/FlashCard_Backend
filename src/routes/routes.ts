@@ -33,8 +33,8 @@ import { ProfileApiSource } from "../utils/constants/profile";
 import { createSupportValidation, updatePasswordValidation, updatePasswordVerifyOtpValidation, updateProfilePictureValidation } from "../utils/validates/profile.validate";
 import { createSupport, getSubscription, updatePassword, updatePasswordVerifyOtp, updateProfilePicture } from "../controllers/profile.controller";
 import { MediatorApiSource } from "../utils/constants/mediator";
-import { getMediatorSetValidation, updateMediatorSetValidation } from "../utils/validates/mediator.validate";
-import { getMediatorSet, updateMediatorSet } from "../controllers/mediator.controller";
+import { getMediatorSetValidation, updateMediatorCardValidation, updateMediatorSetValidation } from "../utils/validates/mediator.validate";
+import { getMediatorSet, updateMediatorCard, updateMediatorSet } from "../controllers/mediator.controller";
 
 enum RouteSource {
     Body,
@@ -132,4 +132,6 @@ router.get(ProfileApiSource.get.getSubscription.path, getSubscription)
 //Mediator
 router.get(MediatorApiSource.get.getMediatorSet.path, validateBody(getMediatorSetValidation, RouteSource.Query), getMediatorSet)
 router.put(MediatorApiSource.put.updateMediatorSet.path, validateBody(updateMediatorSetValidation, RouteSource.Query), updateMediatorSet)
+router.put(MediatorApiSource.put.updateMediatorCard.path, validateBody(updateMediatorCardValidation, RouteSource.Query), updateMediatorCard)
+
 export default router;
