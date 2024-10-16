@@ -71,7 +71,7 @@ export const assignFolder = async (req: AuthorizedRequest, res: Response) => {
         const setData = await getSetBySetId(setId);
         if (setData) {
             const updatedSetData = {
-               ...setData?.toObject(),
+               ...setData,
                 folderId: folderId
             };
             await updateSetData(updatedSetData);
