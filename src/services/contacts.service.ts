@@ -80,7 +80,8 @@ export const getContactsData = async (userId: string) => {
                     "updatedAt": 1,
                     "userName": "$userData.userName",
                     "email": "$userData.email",
-                    "password": "$userData.password"
+                    "password": "$userData.password",
+                    "picture": "$userData.picture",
                 }
             }
         ]);        
