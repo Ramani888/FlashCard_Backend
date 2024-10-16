@@ -32,6 +32,9 @@ import { assignPdfFolder, deletePdf, getPdf, getPdfByFolderId, updatePdf, upload
 import { ProfileApiSource } from "../utils/constants/profile";
 import { createSupportValidation, updatePasswordValidation, updatePasswordVerifyOtpValidation, updateProfilePictureValidation } from "../utils/validates/profile.validate";
 import { createSupport, getSubscription, updatePassword, updatePasswordVerifyOtp, updateProfilePicture } from "../controllers/profile.controller";
+import { MediatorApiSource } from "../utils/constants/mediator";
+import { getMediatorSetValidation } from "../utils/validates/mediator.validate";
+import { getMediatorSet } from "../controllers/mediator.controller";
 
 enum RouteSource {
     Body,
@@ -124,7 +127,8 @@ router.put(ProfileApiSource.put.updateProfilePicture.path, upload.single('pictur
 router.put(ProfileApiSource.put.updatePassword.path, validateBody(updatePasswordValidation), updatePassword)
 router.put(ProfileApiSource.put.updatePasswordVerifyOtp.path, validateBody(updatePasswordVerifyOtpValidation), updatePasswordVerifyOtp)
 router.post(ProfileApiSource.post.createSupport.path, upload.single('image'), validateBody(createSupportValidation), createSupport)
-
-//Subscription
 router.get(ProfileApiSource.get.getSubscription.path, getSubscription)
+
+//Mediator
+router.get(MediatorApiSource.get.getMediatorSet.path, validateBody(getMediatorSetValidation, RouteSource.Query), getMediatorSet)
 export default router;
