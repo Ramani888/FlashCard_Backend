@@ -94,7 +94,8 @@ const getContactsData = (userId) => __awaiter(void 0, void 0, void 0, function* 
                     "updatedAt": 1,
                     "userName": "$userData.userName",
                     "email": "$userData.email",
-                    "password": "$userData.password"
+                    "password": "$userData.password",
+                    "picture": "$userData.picture",
                 }
             }
         ]);
