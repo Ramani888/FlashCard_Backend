@@ -35,6 +35,9 @@ import { createSupport, getSubscription, updatePassword, updatePasswordVerifyOtp
 import { MediatorApiSource } from "../utils/constants/mediator";
 import { getMediatorSetValidation, updateMediatorCardValidation, updateMediatorSetValidation } from "../utils/validates/mediator.validate";
 import { getMediatorSet, updateMediatorCard, updateMediatorSet } from "../controllers/mediator.controller";
+import { AiApiSource } from "../utils/constants/AI";
+import { askQuestionValidation } from "../utils/validates/Ai.validate";
+import { getAskQuestionAnswer } from "../controllers/Ai.controller";
 
 enum RouteSource {
     Body,
@@ -133,5 +136,8 @@ router.get(ProfileApiSource.get.getSubscription.path, getSubscription)
 router.get(MediatorApiSource.get.getMediatorSet.path, validateBody(getMediatorSetValidation, RouteSource.Query), getMediatorSet)
 router.put(MediatorApiSource.put.updateMediatorSet.path, validateBody(updateMediatorSetValidation, RouteSource.Query), updateMediatorSet)
 router.put(MediatorApiSource.put.updateMediatorCard.path, validateBody(updateMediatorCardValidation, RouteSource.Query), updateMediatorCard)
+
+//Chat GPT AI
+router.post(AiApiSource.post.askQuestion.path, validateBody(askQuestionValidation), getAskQuestionAnswer)
 
 export default router;
