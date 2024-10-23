@@ -56,7 +56,6 @@ export const updateTempUserPassword = async (data: IUser, otp: number) => {
     }
 }
 
-
 export const createUser = async (data: IUser) => {
     try {
         const userData = {
@@ -65,8 +64,8 @@ export const createUser = async (data: IUser) => {
             password: data?.password,
         }
         const newData = new User(userData);
-        await newData.save();
-        return;
+        const savedUser = await newData.save(); // Save the user and get the saved data
+        return savedUser._id; // Return the newly inserted user's ID
     } catch (err) {
         throw err;
     }

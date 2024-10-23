@@ -5,6 +5,7 @@ import { createTempUser, createUser, getTempUserByEmail, getUserByEmail, updateT
 import { generateOTP } from "../utils/helpers/general";
 import { SignUpApiSource } from "../utils/constants/signUp";
 import sendMail from "../utils/helpers/sendMail";
+import { createUserCreditData, createUserCreditLogsData } from "../services/user.service";
 
 export const signUp = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
@@ -50,7 +51,11 @@ export const verifyOtp = async (req: AuthorizedRequest, res: Response) => {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid OTP.' });
         }
 
-        await createUser(tempUser);
+        const newUserId = await createUser(tempUser);
+
+        //Create New User Credit
+        await createUserCreditData({ userId: newUserId?.toString(), credit: 3 });
+        await createUserCreditLogsData({ userId: newUserId?.toString(), creditBalance: 3, type: 'credited', note: 'When create new acount.' });
         res.status(StatusCodes.OK).send({ success: true, message: SignUpApiSource.post.verifyOtp.userSuccessMsg});
     } catch (err) {
         console.error(err);

@@ -38,6 +38,9 @@ import { getMediatorSet, updateMediatorCard, updateMediatorSet } from "../contro
 import { AiApiSource } from "../utils/constants/AI";
 import { askQuestionValidation } from "../utils/validates/Ai.validate";
 import { getAskQuestionAnswer } from "../controllers/Ai.controller";
+import { UserApiSource } from "../utils/constants/user";
+import { updateUserCreditValidation } from "../utils/validates/user.validate";
+import { updateUserCredit } from "../controllers/user.controller";
 
 enum RouteSource {
     Body,
@@ -140,4 +143,6 @@ router.put(MediatorApiSource.put.updateMediatorCard.path, validateBody(updateMed
 //Chat GPT AI
 router.post(AiApiSource.post.askQuestion.path, validateBody(askQuestionValidation), getAskQuestionAnswer)
 
+//User Credit
+router.put(UserApiSource.put.updateCredit.path, validateBody(updateUserCreditValidation), updateUserCredit)
 export default router;

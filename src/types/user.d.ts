@@ -28,3 +28,17 @@ export interface ISupport {
   userId: string;
   image?: string;
 }
+
+export interface IUserCredit {
+  _id?: ObjectId;
+  userId: string;
+  credit: number;
+}
+
+export interface IUserCreditLogs {
+  _id?: ObjectId;
+  userId: string;
+  creditBalance: number;
+  type: string;
+  note?: string;
+}
