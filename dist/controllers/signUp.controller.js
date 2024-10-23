@@ -18,6 +18,7 @@ const signUp_service_1 = require("../services/signUp.service");
 const general_1 = require("../utils/helpers/general");
 const signUp_1 = require("../utils/constants/signUp");
 const sendMail_1 = __importDefault(require("../utils/helpers/sendMail"));
+const user_service_1 = require("../services/user.service");
 const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bodyData = req.body;
     try {
@@ -59,7 +60,10 @@ const verifyOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         else if (Number(tempUser === null || tempUser === void 0 ? void 0 : tempUser.otp) !== Number(otp)) {
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'Invalid OTP.' });
         }
-        yield (0, signUp_service_1.createUser)(tempUser);
+        const newUserId = yield (0, signUp_service_1.createUser)(tempUser);
+        //Create New User Credit
+        yield (0, user_service_1.createUserCreditData)({ userId: newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString(), credit: 3 });
+        yield (0, user_service_1.createUserCreditLogsData)({ userId: newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString(), creditBalance: 3, type: 'credited', note: 'When create new acount.' });
         res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: signUp_1.SignUpApiSource.post.verifyOtp.userSuccessMsg });
     }
     catch (err) {

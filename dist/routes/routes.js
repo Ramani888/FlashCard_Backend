@@ -44,6 +44,9 @@ const mediator_controller_1 = require("../controllers/mediator.controller");
 const AI_1 = require("../utils/constants/AI");
 const Ai_validate_1 = require("../utils/validates/Ai.validate");
 const Ai_controller_1 = require("../controllers/Ai.controller");
+const user_1 = require("../utils/constants/user");
+const user_validate_1 = require("../utils/validates/user.validate");
+const user_controller_1 = require("../controllers/user.controller");
 var RouteSource;
 (function (RouteSource) {
     RouteSource[RouteSource["Body"] = 0] = "Body";
@@ -127,4 +130,6 @@ router.put(mediator_1.MediatorApiSource.put.updateMediatorSet.path, (0, bodyVali
 router.put(mediator_1.MediatorApiSource.put.updateMediatorCard.path, (0, bodyValidate_middleware_1.validateBody)(mediator_validate_1.updateMediatorCardValidation, RouteSource.Query), mediator_controller_1.updateMediatorCard);
 //Chat GPT AI
 router.post(AI_1.AiApiSource.post.askQuestion.path, (0, bodyValidate_middleware_1.validateBody)(Ai_validate_1.askQuestionValidation), Ai_controller_1.getAskQuestionAnswer);
+//User Credit
+router.put(user_1.UserApiSource.put.updateCredit.path, (0, bodyValidate_middleware_1.validateBody)(user_validate_1.updateUserCreditValidation), user_controller_1.updateUserCredit);
 exports.default = router;

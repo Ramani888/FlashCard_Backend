@@ -71,8 +71,8 @@ const createUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
             password: data === null || data === void 0 ? void 0 : data.password,
         };
         const newData = new user_model_1.User(userData);
-        yield newData.save();
-        return;
+        const savedUser = yield newData.save(); // Save the user and get the saved data
+        return savedUser._id; // Return the newly inserted user's ID
     }
     catch (err) {
         throw err;
