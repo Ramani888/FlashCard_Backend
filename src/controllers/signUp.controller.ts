@@ -27,8 +27,15 @@ export const signUp = async (req: AuthorizedRequest, res: Response) => {
             await createTempUser(bodyData, Number(otp));
         }
 
+        const Template = `
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+                <p>Your OTP Code</p>
+                <p>Your OTP is <strong>${otp}</strong></p>
+            </div>
+        `
+
         // Send Mail
-        await sendMail(bodyData?.email, 'Your OTP Code', `Your OTP is ${otp}`);
+        await sendMail(bodyData?.email, 'OTP Verification', Template);
 
         res.status(StatusCodes.OK).send({ success: true, message: SignUpApiSource.post.signUp.message});        
     } catch (err) {
@@ -87,8 +94,15 @@ export const resendOtp = async (req: AuthorizedRequest, res: Response) => {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User not found.' });
         }
 
+        const Template = `
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+                <p>Your OTP Code</p>
+                <p>Your OTP is <strong>${otp}</strong></p>
+            </div>
+        `
+
         // Send Mail
-        await sendMail(email, 'Your OTP Code', `Your OTP is ${otp}`);
+        await sendMail(email, 'OTP Verification', Template);
 
         res.status(StatusCodes.OK).send({ success: true, message: SignUpApiSource.put.resendOtp.message}); 
     } catch (err) {

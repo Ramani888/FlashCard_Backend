@@ -9,6 +9,7 @@ import { getTempUserByEmail, getUserByEmail, updateTempUserPassword } from "../s
 import { generateOTP, getIssueSentence } from "../utils/helpers/general";
 import { NotesApiSource } from "../utils/constants/notes";
 import sendMail from "../utils/helpers/sendMail";
+import { getSupportEmailTemplate } from "../utils/emailTemplate/support";
 
 export const updateProfilePicture = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
@@ -60,8 +61,15 @@ export const updatePassword = async (req: AuthorizedRequest, res: Response) => {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User does not exists.' });
         }
 
+        const Template = `
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+                <p>Your OTP Code</p>
+                <p>Your OTP is <strong>${otp}</strong></p>
+            </div>
+        `
+
          // Send Mail
-         await sendMail(bodyData?.email, 'Your OTP Code', `Your OTP is ${otp}`);
+         await sendMail(bodyData?.email, 'OTP Verification', Template);
         // await updatePasswordData(bodyData);
         res.status(StatusCodes.OK).send({ success: true, message: ProfileApiSource.put.updatePassword.message });
     } catch (err) {
@@ -87,14 +95,17 @@ export const updatePasswordVerifyOtp = async (req: AuthorizedRequest, res: Respo
 export const createSupport = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
     try {
-        const sentenceData = getIssueSentence(bodyData?.supportType);
+        // const sentenceData = getIssueSentence(bodyData?.supportType);
+        const userData = await getUserById(bodyData?.userId)
+
+        const emailTemplate = getSupportEmailTemplate(String(userData?.email), String(userData?.userName), bodyData?.supportMessage);
         if (req.file) {
             const imageUrl = await uploadToS3(req.file, FLASHCARD_SUPPORT_V1_BUCKET_NAME);
             await createSupportData({...bodyData, image: imageUrl})
-            await sendMail('ramanidivyesh888@gmail.com', 'SUPPORT', sentenceData, imageUrl); //Roadtojesusministry@gmail.com
+            await sendMail('ramanidivyesh888@gmail.com', 'SUPPORT', emailTemplate, imageUrl); //Roadtojesusministry@gmail.com
         } else {
             await createSupportData({...bodyData})
-            await sendMail('ramanidivyesh888@gmail.com', 'SUPPORT', sentenceData); //Roadtojesusministry@gmail.com
+            await sendMail('ramanidivyesh888@gmail.com', 'SUPPORT', emailTemplate); //Roadtojesusministry@gmail.com
         }
         
         res.status(StatusCodes.OK).send({ success: true, message: ProfileApiSource.post.createSupport.message });
