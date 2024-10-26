@@ -21,6 +21,7 @@ const profile_service_1 = require("../services/profile.service");
 const signUp_service_1 = require("../services/signUp.service");
 const general_2 = require("../utils/helpers/general");
 const sendMail_1 = __importDefault(require("../utils/helpers/sendMail"));
+const support_1 = require("../utils/emailTemplate/support");
 const updateProfilePicture = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bodyData = req.body;
     try {
@@ -71,8 +72,14 @@ const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
         else {
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'User does not exists.' });
         }
+        const Template = `
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+                <p>Your OTP Code</p>
+                <p>Your OTP is <strong>${otp}</strong></p>
+            </div>
+        `;
         // Send Mail
-        yield (0, sendMail_1.default)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.email, 'Your OTP Code', `Your OTP is ${otp}`);
+        yield (0, sendMail_1.default)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.email, 'OTP Verification', Template);
         // await updatePasswordData(bodyData);
         res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: profile_1.ProfileApiSource.put.updatePassword.message });
     }
@@ -100,15 +107,17 @@ exports.updatePasswordVerifyOtp = updatePasswordVerifyOtp;
 const createSupport = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bodyData = req.body;
     try {
-        const sentenceData = (0, general_2.getIssueSentence)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.supportType);
+        // const sentenceData = getIssueSentence(bodyData?.supportType);
+        const userData = yield (0, profile_service_1.getUserById)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.userId);
+        const emailTemplate = (0, support_1.getSupportEmailTemplate)(String(userData === null || userData === void 0 ? void 0 : userData.email), String(userData === null || userData === void 0 ? void 0 : userData.userName), bodyData === null || bodyData === void 0 ? void 0 : bodyData.supportMessage);
         if (req.file) {
             const imageUrl = yield (0, uploadConfig_1.uploadToS3)(req.file, general_1.FLASHCARD_SUPPORT_V1_BUCKET_NAME);
             yield (0, profile_service_1.createSupportData)(Object.assign(Object.assign({}, bodyData), { image: imageUrl }));
-            yield (0, sendMail_1.default)('ramanidivyesh888@gmail.com', 'SUPPORT', sentenceData, imageUrl); //Roadtojesusministry@gmail.com
+            yield (0, sendMail_1.default)('ramanidivyesh888@gmail.com', 'SUPPORT', emailTemplate, imageUrl); //Roadtojesusministry@gmail.com
         }
         else {
             yield (0, profile_service_1.createSupportData)(Object.assign({}, bodyData));
-            yield (0, sendMail_1.default)('ramanidivyesh888@gmail.com', 'SUPPORT', sentenceData); //Roadtojesusministry@gmail.com
+            yield (0, sendMail_1.default)('ramanidivyesh888@gmail.com', 'SUPPORT', emailTemplate); //Roadtojesusministry@gmail.com
         }
         res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: profile_1.ProfileApiSource.post.createSupport.message });
     }

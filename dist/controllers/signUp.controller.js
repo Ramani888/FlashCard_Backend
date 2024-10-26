@@ -37,8 +37,14 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         else {
             yield (0, signUp_service_1.createTempUser)(bodyData, Number(otp));
         }
+        const Template = `
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+                <p>Your OTP Code</p>
+                <p>Your OTP is <strong>${otp}</strong></p>
+            </div>
+        `;
         // Send Mail
-        yield (0, sendMail_1.default)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.email, 'Your OTP Code', `Your OTP is ${otp}`);
+        yield (0, sendMail_1.default)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.email, 'OTP Verification', Template);
         res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: signUp_1.SignUpApiSource.post.signUp.message });
     }
     catch (err) {
@@ -93,8 +99,14 @@ const resendOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         else {
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'User not found.' });
         }
+        const Template = `
+            <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+                <p>Your OTP Code</p>
+                <p>Your OTP is <strong>${otp}</strong></p>
+            </div>
+        `;
         // Send Mail
-        yield (0, sendMail_1.default)(email, 'Your OTP Code', `Your OTP is ${otp}`);
+        yield (0, sendMail_1.default)(email, 'OTP Verification', Template);
         res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: signUp_1.SignUpApiSource.put.resendOtp.message });
     }
     catch (err) {

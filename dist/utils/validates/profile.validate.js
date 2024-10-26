@@ -15,5 +15,6 @@ exports.updatePasswordVerifyOtpValidation = {
 };
 exports.createSupportValidation = {
     userId: 'required|string',
-    supportType: 'required|string'
+    supportType: 'required|string',
+    supportMessage: 'required|string'
 };

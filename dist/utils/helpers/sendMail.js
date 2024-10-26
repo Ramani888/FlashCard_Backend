@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const nodemailer_1 = __importDefault(require("nodemailer"));
-const sendMail = (to, subject, text, imageUrl) => __awaiter(void 0, void 0, void 0, function* () {
+const sendMail = (to, subject, htmlTemplate, imageUrl) => __awaiter(void 0, void 0, void 0, function* () {
     const transporter = nodemailer_1.default.createTransport({
         service: 'gmail',
         auth: {
@@ -25,7 +25,7 @@ const sendMail = (to, subject, text, imageUrl) => __awaiter(void 0, void 0, void
         from: 'divyeshr@zeusint.com',
         to,
         subject,
-        text,
+        html: htmlTemplate
     };
     // Add attachment only if imagePath is provided
     if (imageUrl) {
