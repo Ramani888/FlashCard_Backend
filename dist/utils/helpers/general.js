@@ -3,7 +3,7 @@
 //     return Math.floor(100000 + Math.random() * 900000).toString();
 // }
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getIssueSentence = exports.generateOTP = void 0;
+exports.calculateStorage = exports.calculateFileSizeInMB = exports.getIssueSentence = exports.generateOTP = void 0;
 const generateOTP = () => {
     return Math.floor(1000 + Math.random() * 9000).toString();
 };
@@ -25,3 +25,60 @@ const getIssueSentence = (supportType) => {
     }
 };
 exports.getIssueSentence = getIssueSentence;
+const calculateFileSizeInMB = (sizeInBytes) => {
+    const sizeInMB = sizeInBytes / (1024 * 1024); // Convert bytes to MB
+    return {
+        size: parseFloat(sizeInMB.toFixed(2)),
+        unit: 'mb'
+    };
+};
+exports.calculateFileSizeInMB = calculateFileSizeInMB;
+const calculateStorage = (maxSize, maxUnit, coveredSize, coveredUnit, newSize, newUnit, operationType) => {
+    const unitToBytes = {
+        kb: 1024,
+        mb: Math.pow(1024, 2),
+        gb: Math.pow(1024, 3)
+    };
+    // Helper function to convert any storage size to bytes
+    function toBytes(size, unit) {
+        return size * unitToBytes[unit.toLowerCase()];
+    }
+    // Helper function to round small floating-point numbers to avoid precision issues
+    function roundToPrecision(value, precision = 12) {
+        return parseFloat(value.toPrecision(precision));
+    }
+    // Convert all sizes to bytes for calculation
+    const maxStorageBytes = toBytes(maxSize, maxUnit);
+    const coveredStorageBytes = toBytes(coveredSize, coveredUnit);
+    const newStorageBytes = toBytes(newSize, newUnit);
+    // Initialize updatedStorageBytes with a default value
+    let updatedStorageBytes;
+    if (operationType === 'added') {
+        updatedStorageBytes = coveredStorageBytes + newStorageBytes;
+    }
+    else if (operationType === 'deleted') {
+        // Prevent subtraction if covered storage is zero
+        if (coveredStorageBytes > 0) {
+            updatedStorageBytes = coveredStorageBytes - newStorageBytes;
+        }
+        else {
+            updatedStorageBytes = 0; // Prevent negative storage
+        }
+    }
+    else {
+        throw new Error('Invalid operation type');
+    }
+    // Round updated storage bytes to avoid floating-point precision issues
+    updatedStorageBytes = roundToPrecision(updatedStorageBytes);
+    // Check if the updated storage would exceed the maximum allowed
+    if (updatedStorageBytes > maxStorageBytes) {
+        return false; // Exceeds max storage
+    }
+    // Convert back to the max storage unit for consistency
+    const updatedStorage = updatedStorageBytes / unitToBytes[maxUnit];
+    return {
+        updatedCoveredStorageSize: roundToPrecision(updatedStorage), // Round the final result for consistency
+        updatedCoveredStorageUnit: maxUnit
+    };
+};
+exports.calculateStorage = calculateStorage;

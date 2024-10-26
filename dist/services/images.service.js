@@ -13,9 +13,11 @@ exports.deleteImagesData = exports.getImagesDataByFolderId = exports.getImagesDa
 const images_model_1 = require("../models/images.model");
 const mongodb_1 = require("mongodb");
 const uploadImagesData = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
         const newData = new images_model_1.Images(data);
         yield newData.save();
+        return (_a = newData === null || newData === void 0 ? void 0 : newData._id) === null || _a === void 0 ? void 0 : _a.toString(); // Return the ID of the saved data
     }
     catch (err) {
         throw err;

@@ -13,9 +13,11 @@ exports.deletePdfData = exports.getPdfDataByFolderId = exports.getPdfData = expo
 const pdf_model_1 = require("../models/pdf.model");
 const mongodb_1 = require("mongodb");
 const uploadPdfData = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
         const newData = new pdf_model_1.Pdf(data);
-        yield newData.save();
+        const savedData = yield newData.save();
+        return (_a = savedData._id) === null || _a === void 0 ? void 0 : _a.toString();
     }
     catch (err) {
         throw err;

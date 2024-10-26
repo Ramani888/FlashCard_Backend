@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteFromS3 = exports.uploadToS3 = void 0;
+exports.getImageMetadataFromUrl = exports.deleteFromS3 = exports.uploadToS3 = void 0;
 const multer_1 = __importDefault(require("multer"));
 const aws_sdk_1 = require("aws-sdk"); // Using aws-sdk v2 for s3.upload() and deleteObject()
 const dotenv_1 = __importDefault(require("dotenv"));
@@ -67,6 +67,41 @@ const deleteFromS3 = (fileUrl, bucketName) => __awaiter(void 0, void 0, void 0, 
     }
 });
 exports.deleteFromS3 = deleteFromS3;
+const parseS3Url = (url) => {
+    const match = url.match(/^https:\/\/([^.]+)\.s3\.amazonaws\.com\/(.+)$/);
+    if (match) {
+        return {
+            bucketName: match[1],
+            key: decodeURIComponent(match[2]) // Decode URI components for special characters
+        };
+    }
+    console.error('Invalid S3 URL format.');
+    return null;
+};
+const getImageMetadataFromUrl = (url) => __awaiter(void 0, void 0, void 0, function* () {
+    const parsed = parseS3Url(url);
+    if (!parsed) {
+        throw new Error('Invalid S3 URL');
+    }
+    const { bucketName, key } = parsed;
+    try {
+        const headData = yield s3.headObject({
+            Bucket: bucketName,
+            Key: key,
+        }).promise();
+        return {
+            imageType: headData.ContentType,
+            imageSize: headData.ContentLength,
+            lastModified: headData.LastModified,
+            etag: headData.ETag
+        };
+    }
+    catch (error) {
+        console.error('Error fetching image metadata:', error);
+        throw new Error('Could not retrieve image metadata');
+    }
+});
+exports.getImageMetadataFromUrl = getImageMetadataFromUrl;
 const extractKeyFromObjectUrl = (fileUrl, bucketName) => {
     try {
         const url = new url_1.URL(fileUrl);
