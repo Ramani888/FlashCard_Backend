@@ -24,8 +24,11 @@ export const login = async (req: AuthorizedRequest, res: Response) => {
         }
 
         const SECRET_KEY: any = env.SECRET_KEY;
-        const token = jwt.sign({ userId: existingUser?._id?.toString(), username: existingUser?.userName }, SECRET_KEY, { expiresIn: '30d' });
-
+        const token = jwt.sign(
+            { userId: existingUser?._id?.toString(), username: existingUser?.userName },
+            SECRET_KEY,
+            { expiresIn: '5m' } // expires in 5 minutes
+        );
         return res.status(StatusCodes.OK).send({ user: {...existingUser, token}, success: true, message: LoginApiSource.post.login.messages.success });
 
     } catch (err) {
