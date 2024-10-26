@@ -2,7 +2,7 @@ import { AuthorizedRequest } from "../types/user";
 import { StatusCodes } from "http-status-codes";
 import { Response } from 'express';
 import { createTempUser, createUser, getTempUserByEmail, getUserByEmail, updateTempUser } from "../services/signUp.service";
-import { generateOTP } from "../utils/helpers/general";
+import { encryptPassword, generateOTP } from "../utils/helpers/general";
 import { SignUpApiSource } from "../utils/constants/signUp";
 import sendMail from "../utils/helpers/sendMail";
 import { createUserCreditData, createUserCreditLogsData, createUserStorageData, createUserStorageLogsData } from "../services/user.service";
@@ -21,10 +21,13 @@ export const signUp = async (req: AuthorizedRequest, res: Response) => {
         // Check if the temp user already exists
         const existingTempUser = await getTempUserByEmail(bodyData?.email);
 
+        //Encrypt Password
+        const newPassword = await encryptPassword(bodyData?.password)
+
         if (existingTempUser) {
-            await updateTempUser(bodyData, Number(otp))
+            await updateTempUser({...bodyData, password: newPassword}, Number(otp))
         } else {
-            await createTempUser(bodyData, Number(otp));
+            await createTempUser({...bodyData, password: newPassword}, Number(otp));
         }
 
         const Template = `

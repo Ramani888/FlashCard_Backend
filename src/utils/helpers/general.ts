@@ -1,6 +1,4 @@
-// export const generateOTP = () => {
-//     return Math.floor(100000 + Math.random() * 900000).toString();
-// }
+import bcrypt from 'bcryptjs';
 
 export const generateOTP = () => {
     return Math.floor(1000 + Math.random() * 9000).toString();
@@ -99,4 +97,26 @@ export const calculateStorage = (
         updatedCoveredStorageSize: roundToPrecision(updatedStorage), // Round the final result for consistency
         updatedCoveredStorageUnit: maxUnit
     };
+};
+
+export const encryptPassword = (password: string) => {
+    return new Promise((resolve) => {
+      bcrypt.genSalt(5, function (err, salt) {
+      bcrypt.hash(password, salt, function (err, hash) {
+          return resolve(hash);
+      });
+      });
+    });
+};
+
+export const comparePassword = (storedPassword: string, validatePassword: string): Promise<boolean> => {
+    if (storedPassword === validatePassword) {
+        return Promise.resolve(true);
+    }
+    return new Promise((resolve, reject) => {
+      bcrypt.compare(storedPassword, validatePassword, (err: Error | null, res: boolean) => {
+        if (err) return reject(err);
+        return res ? resolve(res) : reject(new Error('Passwords do not match.'));
+      });
+    });
 };
