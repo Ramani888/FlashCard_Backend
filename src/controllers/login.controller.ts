@@ -4,6 +4,8 @@ import { Response } from 'express';
 import { getUserByEmail } from "../services/signUp.service";
 import { LoginApiSource } from "../utils/constants/login";
 import { comparePassword } from "../utils/helpers/general";
+import jwt from 'jsonwebtoken';
+const env = process.env;
 
 export const login = async (req: AuthorizedRequest, res: Response) => {
     const { email, password } = req.body;
@@ -21,7 +23,10 @@ export const login = async (req: AuthorizedRequest, res: Response) => {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: LoginApiSource.post.login.messages.invalidPassword });
         }
 
-        return res.status(StatusCodes.OK).send({ user: existingUser, success: true, message: LoginApiSource.post.login.messages.success });
+        const SECRET_KEY: any = env.SECRET_KEY;
+        const token = jwt.sign({ userId: existingUser?._id?.toString(), username: existingUser?.userName }, SECRET_KEY, { expiresIn: '30d' });
+
+        return res.status(StatusCodes.OK).send({ user: {...existingUser, token}, success: true, message: LoginApiSource.post.login.messages.success });
 
     } catch (err) {
         console.error(err);

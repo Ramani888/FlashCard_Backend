@@ -15,7 +15,7 @@ const user_model_1 = require("../models/user.model");
 const getUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (user_model_1.User === null || user_model_1.User === void 0 ? void 0 : user_model_1.User.findOne({ email: email }));
-        return result;
+        return result === null || result === void 0 ? void 0 : result.toObject();
     }
     catch (err) {
         throw err;

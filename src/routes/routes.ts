@@ -41,6 +41,7 @@ import { getAskQuestionAnswer } from "../controllers/Ai.controller";
 import { UserApiSource } from "../utils/constants/user";
 import { updateUserCreditValidation } from "../utils/validates/user.validate";
 import { updateUserCredit } from "../controllers/user.controller";
+import { authenticateToken } from "../utils/helpers/general";
 
 enum RouteSource {
     Body,
@@ -65,84 +66,84 @@ router.put(SignUpApiSource.put.resendOtp.path, validateBody(resendOtpValidation,
 router.post(LoginApiSource.post.login.path, validateBody(loginValidation), login)
 
 //Set
-router.post(SetApiSource.post.createSet.path, validateBody(createSetValidation), insertSet)
-router.put(SetApiSource.put.updateSet.path, validateBody(updateSetValidation), updateSet)
-router.delete(SetApiSource.delete.deleteSet.path, validateBody(deleteSetValidation, RouteSource?.Query), deleteSet)
-router.get(SetApiSource.get.getSet.path, validateBody(getSetValidation, RouteSource?.Query), getSet)
-router.get(SetApiSource.get.getSetByFolderId.path, validateBody(getSetByFolderValidation, RouteSource?.Query), getSetByfolderId)
+router.post(SetApiSource.post.createSet.path, authenticateToken, validateBody(createSetValidation), insertSet)
+router.put(SetApiSource.put.updateSet.path, authenticateToken, validateBody(updateSetValidation), updateSet)
+router.delete(SetApiSource.delete.deleteSet.path, authenticateToken, validateBody(deleteSetValidation, RouteSource?.Query), deleteSet)
+router.get(SetApiSource.get.getSet.path, authenticateToken, validateBody(getSetValidation, RouteSource?.Query), getSet)
+router.get(SetApiSource.get.getSetByFolderId.path, authenticateToken, validateBody(getSetByFolderValidation, RouteSource?.Query), getSetByfolderId)
 
 //Folder
-router.post(FolderApiSource.post.createFolder.path, validateBody(createfolderValidation), createFolder)
-router.put(FolderApiSource.put.updateFolder.path, validateBody(updateFolderValidation), updateFolder)
-router.delete(FolderApiSource.delete.deleteFolder.path, validateBody(deleteFolderValidation, RouteSource?.Query), deleteFolder)
-router.get(FolderApiSource.get.getFolder.path, validateBody(getFolderValidation, RouteSource?.Query), getFolder)
-router.put(FolderApiSource.put.assignFolder.path, validateBody(assignFolderValidation, RouteSource?.Query), assignFolder)
+router.post(FolderApiSource.post.createFolder.path, authenticateToken, validateBody(createfolderValidation), createFolder)
+router.put(FolderApiSource.put.updateFolder.path, authenticateToken, validateBody(updateFolderValidation), updateFolder)
+router.delete(FolderApiSource.delete.deleteFolder.path, authenticateToken, validateBody(deleteFolderValidation, RouteSource?.Query), deleteFolder)
+router.get(FolderApiSource.get.getFolder.path, authenticateToken, validateBody(getFolderValidation, RouteSource?.Query), getFolder)
+router.put(FolderApiSource.put.assignFolder.path, authenticateToken, validateBody(assignFolderValidation, RouteSource?.Query), assignFolder)
 
 //Card
-router.post(CardApiSource.post.createCard.path, validateBody(createCardValidation), createCard)
-router.put(CardApiSource.put.updateCard.path, validateBody(updateCardValidation), updateCard)
-router.get(CardApiSource.get.getCard.path, validateBody(getCardValidation, RouteSource?.Query), getCard)
-router.delete(CardApiSource.delete.deleteCard.path, validateBody(deleteCardValidation, RouteSource?.Query), deleteCard)
-router.put(CardApiSource.put.blurAllCard.path, validateBody(blurAllCardValidation, RouteSource.Query), blurAllCard)
-router.put(CardApiSource.put.moveCard.path, validateBody(moveCardValidation, RouteSource.Query), moveCard)
+router.post(CardApiSource.post.createCard.path, authenticateToken, validateBody(createCardValidation), createCard)
+router.put(CardApiSource.put.updateCard.path, authenticateToken, validateBody(updateCardValidation), updateCard)
+router.get(CardApiSource.get.getCard.path, authenticateToken, validateBody(getCardValidation, RouteSource?.Query), getCard)
+router.delete(CardApiSource.delete.deleteCard.path, authenticateToken, validateBody(deleteCardValidation, RouteSource?.Query), deleteCard)
+router.put(CardApiSource.put.blurAllCard.path, authenticateToken, validateBody(blurAllCardValidation, RouteSource.Query), blurAllCard)
+router.put(CardApiSource.put.moveCard.path, authenticateToken, validateBody(moveCardValidation, RouteSource.Query), moveCard)
 
 //Notes
-router.post(NotesApiSource.post.createNotes.path, validateBody(createNotesValidation), createNotes)
-router.put(NotesApiSource.put.updateNotes.path, validateBody(updateNotesValidation), updateNotes)
-router.delete(NotesApiSource.delete.deleteNotes.path, validateBody(deleteNotesValidation, RouteSource.Query), deleteNotes)
-router.get(NotesApiSource.get.getNotes.path, validateBody(getNotesValidation, RouteSource.Query), getNotes)
+router.post(NotesApiSource.post.createNotes.path, authenticateToken, authenticateToken, validateBody(createNotesValidation), createNotes)
+router.put(NotesApiSource.put.updateNotes.path, authenticateToken, validateBody(updateNotesValidation), updateNotes)
+router.delete(NotesApiSource.delete.deleteNotes.path, authenticateToken, validateBody(deleteNotesValidation, RouteSource.Query), deleteNotes)
+router.get(NotesApiSource.get.getNotes.path, authenticateToken, validateBody(getNotesValidation, RouteSource.Query), getNotes)
 
 //Contacts
-router.get(ContactsApiSource.get.getUsers.path, validateBody(getUsersValidation, RouteSource.Query), getUsers)
-router.post(ContactsApiSource.post.addContacts.path, validateBody(addContactsValidation), addContact)
-router.get(ContactsApiSource.get.getContacts.path, validateBody(getContactsValidation, RouteSource.Query), getContacts)
-router.delete(ContactsApiSource.delete.deleteContacts.path, validateBody(deleteContactsValidation, RouteSource.Query), deleteContacts)
+router.get(ContactsApiSource.get.getUsers.path, authenticateToken, validateBody(getUsersValidation, RouteSource.Query), getUsers)
+router.post(ContactsApiSource.post.addContacts.path, authenticateToken, validateBody(addContactsValidation), addContact)
+router.get(ContactsApiSource.get.getContacts.path, authenticateToken, validateBody(getContactsValidation, RouteSource.Query), getContacts)
+router.delete(ContactsApiSource.delete.deleteContacts.path, authenticateToken, validateBody(deleteContactsValidation, RouteSource.Query), deleteContacts)
 
 router.post('/upload', upload.single('image'), uploadImage)
 
 //ImagesFolder
-router.post(ImagesFolderApiSource.post.createFolder.path, validateBody(createImagesFolderValidation), createImagesFolder)
-router.put(ImagesFolderApiSource.put.updateFolder.path, validateBody(updateImagesFolderValidation), updateImagesFolder)
-router.get(ImagesFolderApiSource.get.getFolder.path, validateBody(getImagesFolderValidation, RouteSource.Query), getImagesFolder)
-router.delete(ImagesFolderApiSource.delete.deleteFolder.path, validateBody(deleteImagesFolderValidation, RouteSource.Query), deleteImagesFolder)
+router.post(ImagesFolderApiSource.post.createFolder.path, authenticateToken, validateBody(createImagesFolderValidation), createImagesFolder)
+router.put(ImagesFolderApiSource.put.updateFolder.path, authenticateToken, validateBody(updateImagesFolderValidation), updateImagesFolder)
+router.get(ImagesFolderApiSource.get.getFolder.path, authenticateToken, validateBody(getImagesFolderValidation, RouteSource.Query), getImagesFolder)
+router.delete(ImagesFolderApiSource.delete.deleteFolder.path, authenticateToken, validateBody(deleteImagesFolderValidation, RouteSource.Query), deleteImagesFolder)
 
 //PdfFolder
-router.post(PdfFolderApiSource.post.createFolder.path, validateBody(createPdfFolderValidation), createPdfFolder)
-router.put(PdfFolderApiSource.put.updateFolder.path, validateBody(updatePdfFolderValidation), updatePdfFolder)
-router.get(PdfFolderApiSource.get.getFolder.path, validateBody(getPdfFolderValidation, RouteSource.Query), getPdfFolder)
-router.delete(PdfFolderApiSource.delete.deleteFolder.path, validateBody(deletePdfFolderValidation, RouteSource.Query), deletePdfFolder)
+router.post(PdfFolderApiSource.post.createFolder.path, authenticateToken, validateBody(createPdfFolderValidation), createPdfFolder)
+router.put(PdfFolderApiSource.put.updateFolder.path, authenticateToken, validateBody(updatePdfFolderValidation), updatePdfFolder)
+router.get(PdfFolderApiSource.get.getFolder.path, authenticateToken, validateBody(getPdfFolderValidation, RouteSource.Query), getPdfFolder)
+router.delete(PdfFolderApiSource.delete.deleteFolder.path, authenticateToken, validateBody(deletePdfFolderValidation, RouteSource.Query), deletePdfFolder)
 
 //Upload Images
-router.post(ImagesApiSource.post.uploadImage.path, upload.single('image'), validateBody(uploadImageValidation), uploadImages)
-router.put(ImagesApiSource.put.updateImage.path, upload.single('image'), validateBody(updateImageValidation), updateImages)
-router.get(ImagesApiSource.get.getImages.path, validateBody(getImageValidation, RouteSource.Query), getImages)
-router.get(ImagesApiSource.get.getImagesByFolderId.path, validateBody(getImageByFolderIdValidation, RouteSource.Query), getImagesByFolderId)
-router.delete(ImagesApiSource.delete.deleteImage.path, validateBody(deleteImageValidation, RouteSource.Query), deleteImages)
-router.put(ImagesApiSource.put.assignImageFolder.path, validateBody(assignImageFolderValidation, RouteSource.Query), assignImageFolder)
+router.post(ImagesApiSource.post.uploadImage.path, authenticateToken, upload.single('image'), validateBody(uploadImageValidation), uploadImages)
+router.put(ImagesApiSource.put.updateImage.path, authenticateToken, upload.single('image'), validateBody(updateImageValidation), updateImages)
+router.get(ImagesApiSource.get.getImages.path, authenticateToken, validateBody(getImageValidation, RouteSource.Query), getImages)
+router.get(ImagesApiSource.get.getImagesByFolderId.path, authenticateToken, validateBody(getImageByFolderIdValidation, RouteSource.Query), getImagesByFolderId)
+router.delete(ImagesApiSource.delete.deleteImage.path, authenticateToken, validateBody(deleteImageValidation, RouteSource.Query), deleteImages)
+router.put(ImagesApiSource.put.assignImageFolder.path, authenticateToken, validateBody(assignImageFolderValidation, RouteSource.Query), assignImageFolder)
 
 //Upload Pdf
-router.post(PdfApiSource.post.uploadPdf.path, upload.single('pdf'), validateBody(uploadPdfValidation), uploadPdf)
-router.put(PdfApiSource.put.updatePdf.path, upload.single('pdf'), validateBody(updatePdfValidation), updatePdf)
-router.get(PdfApiSource.get.getPdf.path, validateBody(getPdfValidation, RouteSource.Query), getPdf)
-router.get(PdfApiSource.get.getPdfByFolderId.path, validateBody(getPdfByFolderIdValidation, RouteSource.Query), getPdfByFolderId)
-router.delete(PdfApiSource.delete.deletePdf.path, validateBody(deletePdfValidation, RouteSource.Query), deletePdf)
-router.put(PdfApiSource.put.assignPdfFolder.path, validateBody(assignPdfFolderValidation, RouteSource.Query), assignPdfFolder)
+router.post(PdfApiSource.post.uploadPdf.path, authenticateToken, upload.single('pdf'), validateBody(uploadPdfValidation), uploadPdf)
+router.put(PdfApiSource.put.updatePdf.path, authenticateToken, upload.single('pdf'), validateBody(updatePdfValidation), updatePdf)
+router.get(PdfApiSource.get.getPdf.path, authenticateToken, validateBody(getPdfValidation, RouteSource.Query), getPdf)
+router.get(PdfApiSource.get.getPdfByFolderId.path, authenticateToken, validateBody(getPdfByFolderIdValidation, RouteSource.Query), getPdfByFolderId)
+router.delete(PdfApiSource.delete.deletePdf.path, authenticateToken, validateBody(deletePdfValidation, RouteSource.Query), deletePdf)
+router.put(PdfApiSource.put.assignPdfFolder.path, authenticateToken, validateBody(assignPdfFolderValidation, RouteSource.Query), assignPdfFolder)
 
 //Profile
-router.put(ProfileApiSource.put.updateProfilePicture.path, upload.single('picture'), validateBody(updateProfilePictureValidation), updateProfilePicture)
+router.put(ProfileApiSource.put.updateProfilePicture.path, authenticateToken, upload.single('picture'), validateBody(updateProfilePictureValidation), updateProfilePicture)
 router.put(ProfileApiSource.put.updatePassword.path, validateBody(updatePasswordValidation), updatePassword)
 router.put(ProfileApiSource.put.updatePasswordVerifyOtp.path, validateBody(updatePasswordVerifyOtpValidation), updatePasswordVerifyOtp)
-router.post(ProfileApiSource.post.createSupport.path, upload.single('image'), validateBody(createSupportValidation), createSupport)
-router.get(ProfileApiSource.get.getSubscription.path, getSubscription)
+router.post(ProfileApiSource.post.createSupport.path, authenticateToken, upload.single('image'), validateBody(createSupportValidation), createSupport)
+router.get(ProfileApiSource.get.getSubscription.path, authenticateToken, getSubscription)
 
 //Mediator
-router.get(MediatorApiSource.get.getMediatorSet.path, validateBody(getMediatorSetValidation, RouteSource.Query), getMediatorSet)
-router.put(MediatorApiSource.put.updateMediatorSet.path, validateBody(updateMediatorSetValidation, RouteSource.Query), updateMediatorSet)
-router.put(MediatorApiSource.put.updateMediatorCard.path, validateBody(updateMediatorCardValidation, RouteSource.Query), updateMediatorCard)
+router.get(MediatorApiSource.get.getMediatorSet.path, authenticateToken, validateBody(getMediatorSetValidation, RouteSource.Query), getMediatorSet)
+router.put(MediatorApiSource.put.updateMediatorSet.path, authenticateToken, validateBody(updateMediatorSetValidation, RouteSource.Query), updateMediatorSet)
+router.put(MediatorApiSource.put.updateMediatorCard.path, authenticateToken, validateBody(updateMediatorCardValidation, RouteSource.Query), updateMediatorCard)
 
 //Chat GPT AI
-router.post(AiApiSource.post.askQuestion.path, validateBody(askQuestionValidation), getAskQuestionAnswer)
+router.post(AiApiSource.post.askQuestion.path, authenticateToken, validateBody(askQuestionValidation), getAskQuestionAnswer)
 
 //User Credit
-router.put(UserApiSource.put.updateCredit.path, validateBody(updateUserCreditValidation), updateUserCredit)
+router.put(UserApiSource.put.updateCredit.path, authenticateToken, validateBody(updateUserCreditValidation), updateUserCredit)
 export default router;

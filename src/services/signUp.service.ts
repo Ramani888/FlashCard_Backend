@@ -5,7 +5,7 @@ import { IUser } from "../types/user";
 export const getUserByEmail = async (email: string) => {
     try {
         const result = await User?.findOne({ email: email });
-        return result;
+        return result?.toObject();
     } catch (err) {
         throw err;
     }
