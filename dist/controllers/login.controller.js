@@ -13,6 +13,7 @@ exports.login = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const signUp_service_1 = require("../services/signUp.service");
 const login_1 = require("../utils/constants/login");
+const general_1 = require("../utils/helpers/general");
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email, password } = req.body;
     try {
@@ -20,7 +21,10 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const existingUser = yield (0, signUp_service_1.getUserByEmail)(email);
         if (!existingUser)
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: login_1.LoginApiSource.post.login.messages.invalidEmail });
-        if ((existingUser === null || existingUser === void 0 ? void 0 : existingUser.password) !== password) {
+        const isPasswordValid = yield new Promise((resolve) => (0, general_1.comparePassword)(password, String(existingUser === null || existingUser === void 0 ? void 0 : existingUser.password))
+            .then((result) => resolve(result))
+            .catch((error) => resolve(false)));
+        if (!isPasswordValid) {
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: login_1.LoginApiSource.post.login.messages.invalidPassword });
         }
         return res.status(http_status_codes_1.StatusCodes.OK).send({ user: existingUser, success: true, message: login_1.LoginApiSource.post.login.messages.success });

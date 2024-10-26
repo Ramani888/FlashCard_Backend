@@ -31,11 +31,13 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const otp = (0, general_1.generateOTP)();
         // Check if the temp user already exists
         const existingTempUser = yield (0, signUp_service_1.getTempUserByEmail)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.email);
+        //Encrypt Password
+        const newPassword = yield (0, general_1.encryptPassword)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.password);
         if (existingTempUser) {
-            yield (0, signUp_service_1.updateTempUser)(bodyData, Number(otp));
+            yield (0, signUp_service_1.updateTempUser)(Object.assign(Object.assign({}, bodyData), { password: newPassword }), Number(otp));
         }
         else {
-            yield (0, signUp_service_1.createTempUser)(bodyData, Number(otp));
+            yield (0, signUp_service_1.createTempUser)(Object.assign(Object.assign({}, bodyData), { password: newPassword }), Number(otp));
         }
         const Template = `
             <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">

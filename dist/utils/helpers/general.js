@@ -1,9 +1,10 @@
 "use strict";
-// export const generateOTP = () => {
-//     return Math.floor(100000 + Math.random() * 900000).toString();
-// }
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.calculateStorage = exports.calculateFileSizeInMB = exports.getIssueSentence = exports.generateOTP = void 0;
+exports.comparePassword = exports.encryptPassword = exports.calculateStorage = exports.calculateFileSizeInMB = exports.getIssueSentence = exports.generateOTP = void 0;
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const generateOTP = () => {
     return Math.floor(1000 + Math.random() * 9000).toString();
 };
@@ -82,3 +83,26 @@ const calculateStorage = (maxSize, maxUnit, coveredSize, coveredUnit, newSize, n
     };
 };
 exports.calculateStorage = calculateStorage;
+const encryptPassword = (password) => {
+    return new Promise((resolve) => {
+        bcryptjs_1.default.genSalt(5, function (err, salt) {
+            bcryptjs_1.default.hash(password, salt, function (err, hash) {
+                return resolve(hash);
+            });
+        });
+    });
+};
+exports.encryptPassword = encryptPassword;
+const comparePassword = (storedPassword, validatePassword) => {
+    if (storedPassword === validatePassword) {
+        return Promise.resolve(true);
+    }
+    return new Promise((resolve, reject) => {
+        bcryptjs_1.default.compare(storedPassword, validatePassword, (err, res) => {
+            if (err)
+                return reject(err);
+            return res ? resolve(res) : reject(new Error('Passwords do not match.'));
+        });
+    });
+};
+exports.comparePassword = comparePassword;
