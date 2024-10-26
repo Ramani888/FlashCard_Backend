@@ -5,7 +5,8 @@ import { ObjectId } from 'mongodb';
 export const uploadPdfData = async (data: IPdf) => {
     try {
         const newData = new Pdf(data);
-        await newData.save();
+        const savedData = await newData.save();
+        return savedData._id?.toString();
     } catch (err) {
         throw err;
     }

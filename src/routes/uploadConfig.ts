@@ -60,6 +60,46 @@ export const deleteFromS3 = async (fileUrl: string, bucketName: string): Promise
   }
 };
 
+const parseS3Url = (url: string): { bucketName: string; key: string } | null => {
+  const match = url.match(/^https:\/\/([^.]+)\.s3\.amazonaws\.com\/(.+)$/);
+
+  if (match) {
+      return {
+          bucketName: match[1],
+          key: decodeURIComponent(match[2]) // Decode URI components for special characters
+      };
+  }
+
+  console.error('Invalid S3 URL format.');
+  return null;
+};
+
+export const getImageMetadataFromUrl = async (url: string) => {
+  const parsed = parseS3Url(url);
+  if (!parsed) {
+      throw new Error('Invalid S3 URL');
+  }
+
+  const { bucketName, key } = parsed;
+
+  try {
+      const headData = await s3.headObject({
+          Bucket: bucketName,
+          Key: key,
+      }).promise();
+
+      return {
+          imageType: headData.ContentType,
+          imageSize: headData.ContentLength,
+          lastModified: headData.LastModified,
+          etag: headData.ETag
+      };
+  } catch (error) {
+      console.error('Error fetching image metadata:', error);
+      throw new Error('Could not retrieve image metadata');
+  }
+};
+
 const extractKeyFromObjectUrl = (fileUrl: string, bucketName: string): string => {
   try {
     const url = new URL(fileUrl);

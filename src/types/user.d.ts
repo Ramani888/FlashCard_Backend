@@ -42,3 +42,22 @@ export interface IUserCreditLogs {
   type: string;
   note?: string;
 }
+
+export interface IUserStorage {
+  _id?: ObjectId;
+  userId: string;
+  storage: number;
+  unit: string;
+  coveredStorage: number;
+  coveredStorageUnit: string;
+}
+
+export interface IUserStorageLogs {
+  _id?: ObjectId;
+  userId: string;
+  documentId?: string;
+  storage: number;
+  unit: string;
+  type: string;
+  note?: string;
+}

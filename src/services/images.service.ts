@@ -6,6 +6,7 @@ export const uploadImagesData = async (data: IImages) => {
     try {
         const newData = new Images(data);
         await newData.save();
+        return newData?._id?.toString(); // Return the ID of the saved data
     } catch (err) {
         throw err;
     }

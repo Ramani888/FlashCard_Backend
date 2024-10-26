@@ -5,7 +5,8 @@ import { createTempUser, createUser, getTempUserByEmail, getUserByEmail, updateT
 import { generateOTP } from "../utils/helpers/general";
 import { SignUpApiSource } from "../utils/constants/signUp";
 import sendMail from "../utils/helpers/sendMail";
-import { createUserCreditData, createUserCreditLogsData } from "../services/user.service";
+import { createUserCreditData, createUserCreditLogsData, createUserStorageData, createUserStorageLogsData } from "../services/user.service";
+import { FREE_TIER } from "../utils/constants/general";
 
 export const signUp = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
@@ -54,9 +55,13 @@ export const verifyOtp = async (req: AuthorizedRequest, res: Response) => {
         const newUserId = await createUser(tempUser);
 
         //Create New User Credit
-        await createUserCreditData({ userId: newUserId?.toString(), credit: 3 });
-        await createUserCreditLogsData({ userId: newUserId?.toString(), creditBalance: 3, type: 'credited', note: 'When create new acount.' });
+        await createUserCreditData({ userId: newUserId?.toString(), credit: FREE_TIER?.credit });
+        await createUserCreditLogsData({ userId: newUserId?.toString(), creditBalance: FREE_TIER?.credit, type: 'credited', note: 'When create new account.' });
         res.status(StatusCodes.OK).send({ success: true, message: SignUpApiSource.post.verifyOtp.userSuccessMsg});
+
+        //Create New User Storage
+        await createUserStorageData({ userId: newUserId?.toString(), storage: FREE_TIER?.storage, unit: FREE_TIER?.storageUnit, coveredStorage: 0, coveredStorageUnit: FREE_TIER?.storageUnit });
+        await createUserStorageLogsData({ userId: newUserId?.toString(), storage: FREE_TIER?.storage, unit: FREE_TIER?.storageUnit, type: 'added', note: 'When create new account.' });
     } catch (err) {
         console.error(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
