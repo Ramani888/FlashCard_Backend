@@ -18,3 +18,7 @@ export const createSupportValidation = {
     supportType: 'required|string',
     supportMessage: 'required|string'
 }
+
+export const getProfileValidation = {
+    userId: 'required|string',
+}

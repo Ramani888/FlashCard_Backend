@@ -30,8 +30,8 @@ import { PdfApiSource } from "../utils/constants/pdf";
 import { assignPdfFolderValidation, deletePdfValidation, getPdfByFolderIdValidation, getPdfValidation, updatePdfValidation, uploadPdfValidation } from "../utils/validates/pdf.validation";
 import { assignPdfFolder, deletePdf, getPdf, getPdfByFolderId, updatePdf, uploadPdf } from "../controllers/pdf.controller";
 import { ProfileApiSource } from "../utils/constants/profile";
-import { createSupportValidation, updatePasswordValidation, updatePasswordVerifyOtpValidation, updateProfilePictureValidation } from "../utils/validates/profile.validate";
-import { createSupport, getSubscription, updatePassword, updatePasswordVerifyOtp, updateProfilePicture } from "../controllers/profile.controller";
+import { createSupportValidation, getProfileValidation, updatePasswordValidation, updatePasswordVerifyOtpValidation, updateProfilePictureValidation } from "../utils/validates/profile.validate";
+import { createSupport, getProfile, getSubscription, updatePassword, updatePasswordVerifyOtp, updateProfilePicture } from "../controllers/profile.controller";
 import { MediatorApiSource } from "../utils/constants/mediator";
 import { getMediatorSetValidation, updateMediatorCardValidation, updateMediatorSetValidation } from "../utils/validates/mediator.validate";
 import { getMediatorSet, updateMediatorCard, updateMediatorSet } from "../controllers/mediator.controller";
@@ -135,6 +135,7 @@ router.put(ProfileApiSource.put.updatePassword.path, validateBody(updatePassword
 router.put(ProfileApiSource.put.updatePasswordVerifyOtp.path, validateBody(updatePasswordVerifyOtpValidation), updatePasswordVerifyOtp)
 router.post(ProfileApiSource.post.createSupport.path, authenticateToken, upload.single('image'), validateBody(createSupportValidation), createSupport)
 router.get(ProfileApiSource.get.getSubscription.path, authenticateToken, getSubscription)
+router.get(ProfileApiSource.get.getProfile.path, authenticateToken, validateBody(getProfileValidation, RouteSource.Query), getProfile)
 
 //Mediator
 router.get(MediatorApiSource.get.getMediatorSet.path, authenticateToken, validateBody(getMediatorSetValidation, RouteSource.Query), getMediatorSet)

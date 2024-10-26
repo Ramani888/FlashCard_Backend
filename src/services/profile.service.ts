@@ -1,6 +1,8 @@
 import { Support } from "../models/support.model";
 import { Tier } from "../models/tier.model";
 import { User } from "../models/user.model";
+import { UserCredit } from "../models/userCredit.model";
+import { UserStorage } from "../models/userStorage.model";
 import { ISupport, IUser } from "../types/user";
 import { ObjectId } from 'mongodb';
 
@@ -53,6 +55,19 @@ export const createSupportData = async (data: ISupport) => {
     try {
         const newData = new Support(data);
         await newData.save();
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const getProfileData = async (userId: string) => {
+    try {
+        const userCreditData = await UserCredit.findOne({ userId: userId });
+        const userStorageData = await UserStorage.findOne({ userId: userId });
+        return {
+            userCreditData: userCreditData?.toObject(),
+            userStorageData: userStorageData?.toObject()
+        }
     } catch (err) {
         throw err;
     }

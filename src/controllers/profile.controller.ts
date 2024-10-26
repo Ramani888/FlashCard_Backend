@@ -4,7 +4,7 @@ import { Response } from 'express';
 import { FLASHCARD_IMAGES_V1_BUCKET_NAME, FLASHCARD_PDF_V1_BUCKET_NAME, FLASHCARD_SUPPORT_V1_BUCKET_NAME } from "../utils/constants/general";
 import { deleteFromS3, uploadToS3 } from "../routes/uploadConfig";
 import { ProfileApiSource } from "../utils/constants/profile";
-import { createSupportData, getSubscriptionData, getUserById, updatePasswordData, updateProfilePictureData } from "../services/profile.service";
+import { createSupportData, getProfileData, getSubscriptionData, getUserById, updatePasswordData, updateProfilePictureData } from "../services/profile.service";
 import { getTempUserByEmail, getUserByEmail, updateTempUserPassword } from "../services/signUp.service";
 import { generateOTP, getIssueSentence } from "../utils/helpers/general";
 import { NotesApiSource } from "../utils/constants/notes";
@@ -40,6 +40,17 @@ export const getSubscription = async (req: AuthorizedRequest, res: Response) => 
     } catch (err) {
         console.error(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const getProfile = async (req: AuthorizedRequest, res: Response) => {
+    const { userId } = req?.query;
+    try {
+        const data = await getProfileData(userId);
+        res.status(StatusCodes.OK).send(data);
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });    
     }
 }
 
