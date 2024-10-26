@@ -8,7 +8,8 @@ exports.ProfileApiSource = {
         updatePasswordVerifyOtp: { path: '/profile/verifyOtp', message: 'Password Update Successfully.' }
     },
     get: {
-        getSubscription: { path: '/profile/subscription', message: 'Profile subscription data get successfully.' }
+        getSubscription: { path: '/profile/subscription', message: 'Profile subscription data get successfully.' },
+        getProfile: { path: '/profile', message: 'Profile Get Successfully.' }
     },
     post: {
         createSupport: { path: '/profile/support', message: 'Your issue has been successfully submitted.' }

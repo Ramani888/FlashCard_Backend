@@ -9,10 +9,12 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createSupportData = exports.updatePasswordData = exports.getSubscriptionData = exports.getUserById = exports.updateProfilePictureData = void 0;
+exports.getProfileData = exports.createSupportData = exports.updatePasswordData = exports.getSubscriptionData = exports.getUserById = exports.updateProfilePictureData = void 0;
 const support_model_1 = require("../models/support.model");
 const tier_model_1 = require("../models/tier.model");
 const user_model_1 = require("../models/user.model");
+const userCredit_model_1 = require("../models/userCredit.model");
+const userStorage_model_1 = require("../models/userStorage.model");
 const mongodb_1 = require("mongodb");
 const updateProfilePictureData = (updateData) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
@@ -70,3 +72,17 @@ const createSupportData = (data) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.createSupportData = createSupportData;
+const getProfileData = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const userCreditData = yield userCredit_model_1.UserCredit.findOne({ userId: userId });
+        const userStorageData = yield userStorage_model_1.UserStorage.findOne({ userId: userId });
+        return {
+            userCreditData: userCreditData === null || userCreditData === void 0 ? void 0 : userCreditData.toObject(),
+            userStorageData: userStorageData === null || userStorageData === void 0 ? void 0 : userStorageData.toObject()
+        };
+    }
+    catch (err) {
+        throw err;
+    }
+});
+exports.getProfileData = getProfileData;

@@ -125,6 +125,7 @@ router.put(profile_1.ProfileApiSource.put.updatePassword.path, (0, bodyValidate_
 router.put(profile_1.ProfileApiSource.put.updatePasswordVerifyOtp.path, (0, bodyValidate_middleware_1.validateBody)(profile_validate_1.updatePasswordVerifyOtpValidation), profile_controller_1.updatePasswordVerifyOtp);
 router.post(profile_1.ProfileApiSource.post.createSupport.path, general_1.authenticateToken, uploadConfig_1.default.single('image'), (0, bodyValidate_middleware_1.validateBody)(profile_validate_1.createSupportValidation), profile_controller_1.createSupport);
 router.get(profile_1.ProfileApiSource.get.getSubscription.path, general_1.authenticateToken, profile_controller_1.getSubscription);
+router.get(profile_1.ProfileApiSource.get.getProfile.path, general_1.authenticateToken, (0, bodyValidate_middleware_1.validateBody)(profile_validate_1.getProfileValidation, RouteSource.Query), profile_controller_1.getProfile);
 //Mediator
 router.get(mediator_1.MediatorApiSource.get.getMediatorSet.path, general_1.authenticateToken, (0, bodyValidate_middleware_1.validateBody)(mediator_validate_1.getMediatorSetValidation, RouteSource.Query), mediator_controller_1.getMediatorSet);
 router.put(mediator_1.MediatorApiSource.put.updateMediatorSet.path, general_1.authenticateToken, (0, bodyValidate_middleware_1.validateBody)(mediator_validate_1.updateMediatorSetValidation, RouteSource.Query), mediator_controller_1.updateMediatorSet);

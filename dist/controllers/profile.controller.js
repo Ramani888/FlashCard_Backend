@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createSupport = exports.updatePasswordVerifyOtp = exports.updatePassword = exports.getSubscription = exports.updateProfilePicture = void 0;
+exports.createSupport = exports.updatePasswordVerifyOtp = exports.updatePassword = exports.getProfile = exports.getSubscription = exports.updateProfilePicture = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const general_1 = require("../utils/constants/general");
 const uploadConfig_1 = require("../routes/uploadConfig");
@@ -55,6 +55,18 @@ const getSubscription = (req, res) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.getSubscription = getSubscription;
+const getProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req === null || req === void 0 ? void 0 : req.query;
+    try {
+        const data = yield (0, profile_service_1.getProfileData)(userId);
+        res.status(http_status_codes_1.StatusCodes.OK).send(data);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+});
+exports.getProfile = getProfile;
 const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bodyData = req.body;
     try {

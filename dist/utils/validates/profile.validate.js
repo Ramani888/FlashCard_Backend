@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createSupportValidation = exports.updatePasswordVerifyOtpValidation = exports.updatePasswordValidation = exports.updateProfilePictureValidation = void 0;
+exports.getProfileValidation = exports.createSupportValidation = exports.updatePasswordVerifyOtpValidation = exports.updatePasswordValidation = exports.updateProfilePictureValidation = void 0;
 exports.updateProfilePictureValidation = {
     _id: 'required|string',
 };
@@ -17,4 +17,7 @@ exports.createSupportValidation = {
     userId: 'required|string',
     supportType: 'required|string',
     supportMessage: 'required|string'
+};
+exports.getProfileValidation = {
+    userId: 'required|string',
 };
