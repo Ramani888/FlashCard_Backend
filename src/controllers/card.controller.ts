@@ -1,7 +1,7 @@
 import { AuthorizedRequest } from "../types/user";
 import { StatusCodes } from "http-status-codes";
 import { Response } from 'express';
-import { blurAllCardData, createCardData, deleteCardData, getCardByCardId, getCardBySetId, getCardData, getCardTypeData, getCardWithLargestPosition, updateCardData } from "../services/card.service";
+import { blurAllCardData, createCardData, deleteCardData, getAllCardData, getCardByCardId, getCardBySetId, getCardData, getCardTypeData, getCardWithLargestPosition, updateCardData } from "../services/card.service";
 import { CardApiSource } from "../utils/constants/card";
 
 export const getCardType = async (req: AuthorizedRequest, res: Response) => {
@@ -96,6 +96,16 @@ export const moveCard = async (req: AuthorizedRequest, res: Response) => {
             await updateCardData(updatedCardData);
         }
         res.status(StatusCodes.OK).send({ success: true, message: CardApiSource.put.moveCard.message });
+    } catch (err) {
+        console.error(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const getAllCard = async (req: AuthorizedRequest, res: Response) => {
+    try {
+        const data = await getAllCardData();
+        res.status(StatusCodes.OK).send(data);
     } catch (err) {
         console.error(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });

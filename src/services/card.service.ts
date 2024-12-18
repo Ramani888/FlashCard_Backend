@@ -99,3 +99,52 @@ export const getCardWithLargestPosition = async (userId: string, setId: string) 
       throw error;
     }
 }
+
+export const getAllCardData = async () => {
+    try {
+        const result = await Card.aggregate([
+            {
+                $addFields: {
+                    setIdObjectId: { $toObjectId: '$setId' }, // Convert setId string to ObjectId
+                    userIdObjectId: { $toObjectId: '$userId' }, // Convert userId string to ObjectId
+                },
+            },
+            {
+                $lookup: {
+                    from: 'Set', // The name of the Set collection
+                    localField: 'setIdObjectId', // The converted ObjectId field
+                    foreignField: '_id', // The field in the Set collection
+                    as: 'setData', // The resulting field
+                },
+            },
+            {
+                $lookup: {
+                    from: 'User', // The name of the User collection
+                    localField: 'userIdObjectId', // The converted ObjectId field
+                    foreignField: '_id', // The field in the User collection
+                    as: 'userData', // The resulting field
+                },
+            },
+            {
+                $addFields: {
+                    setData: { $arrayElemAt: ['$setData', 0] }, // Extract the first element (if any)
+                    userData: { $arrayElemAt: ['$userData', 0] }, // Extract the first element (if any)
+                },
+            },
+            {
+                $project: {
+                    setIdObjectId: 0, // Remove temporary fields from the result
+                    userIdObjectId: 0,
+                },
+            },
+            {
+                $sort: {
+                    createdAt: -1, // Sort by createdAt field in descending order
+                },
+            },
+        ]);
+        return result;
+    } catch (err) {
+        throw err;
+    }
+};

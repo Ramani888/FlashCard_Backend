@@ -1,6 +1,6 @@
 import express from "express";
 import { getDemoRequest, uploadImage } from "../controllers/demo.controller";
-import { blurAllCard, createCard, deleteCard, getCard, getCardType, moveCard, updateCard } from "../controllers/card.controller";
+import { blurAllCard, createCard, deleteCard, getAllCard, getCard, getCardType, moveCard, updateCard } from "../controllers/card.controller";
 import { deleteSet, getSet, getSetByfolderId, insertSet, updateSet } from "../controllers/set.controller";
 import { validateBody } from "../middlewares/bodyValidate.middleware";
 import { createSetValidation, deleteSetValidation, getSetByFolderValidation, getSetValidation, updateSetValidation } from "../utils/validates/set.validate";
@@ -86,6 +86,7 @@ router.get(CardApiSource.get.getCard.path, authenticateToken, validateBody(getCa
 router.delete(CardApiSource.delete.deleteCard.path, authenticateToken, validateBody(deleteCardValidation, RouteSource?.Query), deleteCard)
 router.put(CardApiSource.put.blurAllCard.path, authenticateToken, validateBody(blurAllCardValidation, RouteSource.Query), blurAllCard)
 router.put(CardApiSource.put.moveCard.path, authenticateToken, validateBody(moveCardValidation, RouteSource.Query), moveCard)
+router.get(CardApiSource.get.getAllCard.path, authenticateToken, getAllCard)
 
 //Notes
 router.post(NotesApiSource.post.createNotes.path, authenticateToken, authenticateToken, validateBody(createNotesValidation), createNotes)
