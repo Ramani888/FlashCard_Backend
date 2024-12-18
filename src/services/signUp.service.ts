@@ -62,6 +62,7 @@ export const createUser = async (data: IUser) => {
             userName: data?.userName,
             email: data?.email,
             password: data?.password,
+            picture: data?.picture
         }
         const newData = new User(userData);
         const savedUser = await newData.save(); // Save the user and get the saved data

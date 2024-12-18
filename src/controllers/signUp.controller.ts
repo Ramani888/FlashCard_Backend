@@ -62,7 +62,8 @@ export const verifyOtp = async (req: AuthorizedRequest, res: Response) => {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid OTP.' });
         }
 
-        const newUserId = await createUser(tempUser);
+        const defaultPicture = `https://flashcard-images-v1.s3.us-east-1.amazonaws.com/Profile.png`;
+        const newUserId = await createUser({...tempUser, picture: defaultPicture});
 
         //Create New User Credit
         await createUserCreditData({ userId: newUserId?.toString(), credit: FREE_TIER?.credit });

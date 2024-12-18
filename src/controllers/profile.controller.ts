@@ -113,10 +113,10 @@ export const createSupport = async (req: AuthorizedRequest, res: Response) => {
         if (req.file) {
             const imageUrl = await uploadToS3(req.file, FLASHCARD_SUPPORT_V1_BUCKET_NAME);
             await createSupportData({...bodyData, image: imageUrl})
-            await sendMail('ramanidivyesh888@gmail.com', 'SUPPORT', emailTemplate, imageUrl); //Roadtojesusministry@gmail.com
+            await sendMail('roadtojesusministry@gmail.com', 'SUPPORT', emailTemplate, imageUrl); //Roadtojesusministry@gmail.com
         } else {
             await createSupportData({...bodyData})
-            await sendMail('ramanidivyesh888@gmail.com', 'SUPPORT', emailTemplate); //Roadtojesusministry@gmail.com
+            await sendMail('roadtojesusministry@gmail.com', 'SUPPORT', emailTemplate); //Roadtojesusministry@gmail.com
         }
         
         res.status(StatusCodes.OK).send({ success: true, message: ProfileApiSource.post.createSupport.message });
