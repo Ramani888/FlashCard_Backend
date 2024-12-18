@@ -15,6 +15,7 @@ exports.CardApiSource = {
     },
     get: {
         getCard: { path: '/card', message: 'Card get Successfully.' },
-        getCardType: { path: '/card/type', message: 'Card Type Get Successfully.' }
+        getCardType: { path: '/card/type', message: 'Card Type Get Successfully.' },
+        getAllCard: { path: '/card/all', message: 'Card get Successfully.' }
     }
 };

@@ -84,6 +84,7 @@ router.get(card_1.CardApiSource.get.getCard.path, general_1.authenticateToken, (
 router.delete(card_1.CardApiSource.delete.deleteCard.path, general_1.authenticateToken, (0, bodyValidate_middleware_1.validateBody)(card_validate_1.deleteCardValidation, RouteSource === null || RouteSource === void 0 ? void 0 : RouteSource.Query), card_controller_1.deleteCard);
 router.put(card_1.CardApiSource.put.blurAllCard.path, general_1.authenticateToken, (0, bodyValidate_middleware_1.validateBody)(card_validate_1.blurAllCardValidation, RouteSource.Query), card_controller_1.blurAllCard);
 router.put(card_1.CardApiSource.put.moveCard.path, general_1.authenticateToken, (0, bodyValidate_middleware_1.validateBody)(card_validate_1.moveCardValidation, RouteSource.Query), card_controller_1.moveCard);
+router.get(card_1.CardApiSource.get.getAllCard.path, general_1.authenticateToken, card_controller_1.getAllCard);
 //Notes
 router.post(notes_1.NotesApiSource.post.createNotes.path, general_1.authenticateToken, general_1.authenticateToken, (0, bodyValidate_middleware_1.validateBody)(notes_validate_1.createNotesValidation), notes_controller_1.createNotes);
 router.put(notes_1.NotesApiSource.put.updateNotes.path, general_1.authenticateToken, (0, bodyValidate_middleware_1.validateBody)(notes_validate_1.updateNotesValidation), notes_controller_1.updateNotes);

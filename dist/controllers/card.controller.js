@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.moveCard = exports.blurAllCard = exports.deleteCard = exports.getCard = exports.updateCard = exports.createCard = exports.getCardType = void 0;
+exports.getAllCard = exports.moveCard = exports.blurAllCard = exports.deleteCard = exports.getCard = exports.updateCard = exports.createCard = exports.getCardType = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const card_service_1 = require("../services/card.service");
 const card_1 = require("../utils/constants/card");
@@ -111,3 +111,14 @@ const moveCard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.moveCard = moveCard;
+const getAllCard = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const data = yield (0, card_service_1.getAllCardData)();
+        res.status(http_status_codes_1.StatusCodes.OK).send(data);
+    }
+    catch (err) {
+        console.error(err);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+});
+exports.getAllCard = getAllCard;

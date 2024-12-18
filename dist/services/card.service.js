@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getCardWithLargestPosition = exports.blurAllCardData = exports.deleteCardData = exports.getCardBySetId = exports.getCardByCardId = exports.getCardData = exports.updateCardData = exports.createCardData = exports.getCardTypeData = void 0;
+exports.getAllCardData = exports.getCardWithLargestPosition = exports.blurAllCardData = exports.deleteCardData = exports.getCardBySetId = exports.getCardByCardId = exports.getCardData = exports.updateCardData = exports.createCardData = exports.getCardTypeData = void 0;
 const card_model_1 = require("../models/card.model");
 const cardType_model_1 = require("../models/cardType.model");
 const mongodb_1 = require("mongodb");
@@ -119,3 +119,53 @@ const getCardWithLargestPosition = (userId, setId) => __awaiter(void 0, void 0, 
     }
 });
 exports.getCardWithLargestPosition = getCardWithLargestPosition;
+const getAllCardData = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield card_model_1.Card.aggregate([
+            {
+                $addFields: {
+                    setIdObjectId: { $toObjectId: '$setId' }, // Convert setId string to ObjectId
+                    userIdObjectId: { $toObjectId: '$userId' }, // Convert userId string to ObjectId
+                },
+            },
+            {
+                $lookup: {
+                    from: 'Set', // The name of the Set collection
+                    localField: 'setIdObjectId', // The converted ObjectId field
+                    foreignField: '_id', // The field in the Set collection
+                    as: 'setData', // The resulting field
+                },
+            },
+            {
+                $lookup: {
+                    from: 'User', // The name of the User collection
+                    localField: 'userIdObjectId', // The converted ObjectId field
+                    foreignField: '_id', // The field in the User collection
+                    as: 'userData', // The resulting field
+                },
+            },
+            {
+                $addFields: {
+                    setData: { $arrayElemAt: ['$setData', 0] }, // Extract the first element (if any)
+                    userData: { $arrayElemAt: ['$userData', 0] }, // Extract the first element (if any)
+                },
+            },
+            {
+                $project: {
+                    setIdObjectId: 0, // Remove temporary fields from the result
+                    userIdObjectId: 0,
+                },
+            },
+            {
+                $sort: {
+                    createdAt: -1, // Sort by createdAt field in descending order
+                },
+            },
+        ]);
+        return result;
+    }
+    catch (err) {
+        throw err;
+    }
+});
+exports.getAllCardData = getAllCardData;
