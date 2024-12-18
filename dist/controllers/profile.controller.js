@@ -125,11 +125,11 @@ const createSupport = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         if (req.file) {
             const imageUrl = yield (0, uploadConfig_1.uploadToS3)(req.file, general_1.FLASHCARD_SUPPORT_V1_BUCKET_NAME);
             yield (0, profile_service_1.createSupportData)(Object.assign(Object.assign({}, bodyData), { image: imageUrl }));
-            yield (0, sendMail_1.default)('ramanidivyesh888@gmail.com', 'SUPPORT', emailTemplate, imageUrl); //Roadtojesusministry@gmail.com
+            yield (0, sendMail_1.default)('roadtojesusministry@gmail.com', 'SUPPORT', emailTemplate, imageUrl); //Roadtojesusministry@gmail.com
         }
         else {
             yield (0, profile_service_1.createSupportData)(Object.assign({}, bodyData));
-            yield (0, sendMail_1.default)('ramanidivyesh888@gmail.com', 'SUPPORT', emailTemplate); //Roadtojesusministry@gmail.com
+            yield (0, sendMail_1.default)('roadtojesusministry@gmail.com', 'SUPPORT', emailTemplate); //Roadtojesusministry@gmail.com
         }
         res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: profile_1.ProfileApiSource.post.createSupport.message });
     }

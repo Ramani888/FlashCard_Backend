@@ -69,7 +69,8 @@ const verifyOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         else if (Number(tempUser === null || tempUser === void 0 ? void 0 : tempUser.otp) !== Number(otp)) {
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'Invalid OTP.' });
         }
-        const newUserId = yield (0, signUp_service_1.createUser)(tempUser);
+        const defaultPicture = `https://flashcard-images-v1.s3.us-east-1.amazonaws.com/Profile.png`;
+        const newUserId = yield (0, signUp_service_1.createUser)(Object.assign(Object.assign({}, tempUser), { picture: defaultPicture }));
         //Create New User Credit
         yield (0, user_service_1.createUserCreditData)({ userId: newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString(), credit: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.credit });
         yield (0, user_service_1.createUserCreditLogsData)({ userId: newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString(), creditBalance: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.credit, type: 'credited', note: 'When create new account.' });

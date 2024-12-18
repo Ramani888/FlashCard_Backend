@@ -34,7 +34,8 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: login_1.LoginApiSource.post.login.messages.invalidPassword });
         }
         const SECRET_KEY = env.SECRET_KEY;
-        const token = jsonwebtoken_1.default.sign({ userId: (_a = existingUser === null || existingUser === void 0 ? void 0 : existingUser._id) === null || _a === void 0 ? void 0 : _a.toString(), username: existingUser === null || existingUser === void 0 ? void 0 : existingUser.userName }, SECRET_KEY, { expiresIn: '30d' });
+        const token = jsonwebtoken_1.default.sign({ userId: (_a = existingUser === null || existingUser === void 0 ? void 0 : existingUser._id) === null || _a === void 0 ? void 0 : _a.toString(), username: existingUser === null || existingUser === void 0 ? void 0 : existingUser.userName }, SECRET_KEY, { expiresIn: '30d' } // expires in 5 minutes
+        );
         return res.status(http_status_codes_1.StatusCodes.OK).send({ user: Object.assign(Object.assign({}, existingUser), { token }), success: true, message: login_1.LoginApiSource.post.login.messages.success });
     }
     catch (err) {

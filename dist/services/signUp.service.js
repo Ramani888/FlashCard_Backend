@@ -69,6 +69,7 @@ const createUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
             userName: data === null || data === void 0 ? void 0 : data.userName,
             email: data === null || data === void 0 ? void 0 : data.email,
             password: data === null || data === void 0 ? void 0 : data.password,
+            picture: data === null || data === void 0 ? void 0 : data.picture
         };
         const newData = new user_model_1.User(userData);
         const savedUser = yield newData.save(); // Save the user and get the saved data
