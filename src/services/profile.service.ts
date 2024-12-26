@@ -3,6 +3,7 @@ import { Tier } from "../models/tier.model";
 import { User } from "../models/user.model";
 import { UserCredit } from "../models/userCredit.model";
 import { UserStorage } from "../models/userStorage.model";
+import { UserSubscription } from "../models/userSubscription.model";
 import { ISupport, IUser } from "../types/user";
 import { ObjectId } from 'mongodb';
 
@@ -64,9 +65,11 @@ export const getProfileData = async (userId: string) => {
     try {
         const userCreditData = await UserCredit.findOne({ userId: userId });
         const userStorageData = await UserStorage.findOne({ userId: userId });
+        const userSubscriptionData = await UserSubscription.findOne({ userId: userId });
         return {
             userCreditData: userCreditData?.toObject(),
-            userStorageData: userStorageData?.toObject()
+            userStorageData: userStorageData?.toObject(),
+            userSubscriptionData: userSubscriptionData?.toObject(),
         }
     } catch (err) {
         throw err;
