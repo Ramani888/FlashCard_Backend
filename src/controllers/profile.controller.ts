@@ -36,12 +36,14 @@ export const updateProfilePicture = async (req: AuthorizedRequest, res: Response
 export const getSubscription = async (req: AuthorizedRequest, res: Response) => {
     try {
         const data = await getSubscriptionData();
-        res.status(StatusCodes.OK).send(data);
+        const productIds = data?.map((item: any) => item?.productId).filter(Boolean);
+
+        res.status(StatusCodes.OK).send({ data: data, productIds: productIds });
     } catch (err) {
         console.error(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
     }
-}
+};
 
 export const getProfile = async (req: AuthorizedRequest, res: Response) => {
     const { userId } = req?.query;

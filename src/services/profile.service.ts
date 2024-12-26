@@ -66,10 +66,12 @@ export const getProfileData = async (userId: string) => {
         const userCreditData = await UserCredit.findOne({ userId: userId });
         const userStorageData = await UserStorage.findOne({ userId: userId });
         const userSubscriptionData = await UserSubscription.findOne({ userId: userId });
+        const userTierData = await Tier.findOne({ _id: new ObjectId(userSubscriptionData?.tierId?.toString()) })
         return {
             userCreditData: userCreditData?.toObject(),
             userStorageData: userStorageData?.toObject(),
             userSubscriptionData: userSubscriptionData?.toObject(),
+            userTierData: userTierData?.toObject()
         }
     } catch (err) {
         throw err;

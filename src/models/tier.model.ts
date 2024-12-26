@@ -33,6 +33,9 @@ const TierSchema = new Schema({
     },
     points: {
         type: Array<String>
+    },
+    productId: {
+        type: String
     }
 }, {timestamps: true})
 
