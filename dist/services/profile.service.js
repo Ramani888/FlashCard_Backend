@@ -15,6 +15,7 @@ const tier_model_1 = require("../models/tier.model");
 const user_model_1 = require("../models/user.model");
 const userCredit_model_1 = require("../models/userCredit.model");
 const userStorage_model_1 = require("../models/userStorage.model");
+const userSubscription_model_1 = require("../models/userSubscription.model");
 const mongodb_1 = require("mongodb");
 const updateProfilePictureData = (updateData) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
@@ -76,9 +77,11 @@ const getProfileData = (userId) => __awaiter(void 0, void 0, void 0, function* (
     try {
         const userCreditData = yield userCredit_model_1.UserCredit.findOne({ userId: userId });
         const userStorageData = yield userStorage_model_1.UserStorage.findOne({ userId: userId });
+        const userSubscriptionData = yield userSubscription_model_1.UserSubscription.findOne({ userId: userId });
         return {
             userCreditData: userCreditData === null || userCreditData === void 0 ? void 0 : userCreditData.toObject(),
-            userStorageData: userStorageData === null || userStorageData === void 0 ? void 0 : userStorageData.toObject()
+            userStorageData: userStorageData === null || userStorageData === void 0 ? void 0 : userStorageData.toObject(),
+            userSubscriptionData: userSubscriptionData === null || userSubscriptionData === void 0 ? void 0 : userSubscriptionData.toObject(),
         };
     }
     catch (err) {

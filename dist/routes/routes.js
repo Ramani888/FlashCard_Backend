@@ -2,7 +2,7 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var _a, _b;
+var _a, _b, _c, _d, _e, _f;
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const demo_controller_1 = require("../controllers/demo.controller");
@@ -48,6 +48,9 @@ const user_1 = require("../utils/constants/user");
 const user_validate_1 = require("../utils/validates/user.validate");
 const user_controller_1 = require("../controllers/user.controller");
 const general_1 = require("../utils/helpers/general");
+const subscription_1 = require("../utils/constants/subscription");
+const subscription_validate_1 = require("../utils/validates/subscription.validate");
+const subscription_controller_1 = require("../controllers/subscription.controller");
 var RouteSource;
 (function (RouteSource) {
     RouteSource[RouteSource["Body"] = 0] = "Body";
@@ -135,4 +138,7 @@ router.put(mediator_1.MediatorApiSource.put.updateMediatorCard.path, general_1.a
 router.post(AI_1.AiApiSource.post.askQuestion.path, general_1.authenticateToken, (0, bodyValidate_middleware_1.validateBody)(Ai_validate_1.askQuestionValidation), Ai_controller_1.getAskQuestionAnswer);
 //User Credit
 router.put(user_1.UserApiSource.put.updateCredit.path, general_1.authenticateToken, (0, bodyValidate_middleware_1.validateBody)(user_validate_1.updateUserCreditValidation), user_controller_1.updateUserCredit);
+//Subscription
+router.post((_d = (_c = subscription_1.SubscriptionApiSource === null || subscription_1.SubscriptionApiSource === void 0 ? void 0 : subscription_1.SubscriptionApiSource.post) === null || _c === void 0 ? void 0 : _c.createSubscription) === null || _d === void 0 ? void 0 : _d.path, general_1.authenticateToken, (0, bodyValidate_middleware_1.validateBody)(subscription_validate_1.createSubscriptionValidation), subscription_controller_1.createSubscription);
+router.put((_f = (_e = subscription_1.SubscriptionApiSource === null || subscription_1.SubscriptionApiSource === void 0 ? void 0 : subscription_1.SubscriptionApiSource.put) === null || _e === void 0 ? void 0 : _e.updateSubscription) === null || _f === void 0 ? void 0 : _f.path, general_1.authenticateToken, (0, bodyValidate_middleware_1.validateBody)(subscription_validate_1.updateSubscriptionValidation), subscription_controller_1.updateSubscription);
 exports.default = router;

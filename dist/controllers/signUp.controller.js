@@ -20,6 +20,9 @@ const signUp_1 = require("../utils/constants/signUp");
 const sendMail_1 = __importDefault(require("../utils/helpers/sendMail"));
 const user_service_1 = require("../services/user.service");
 const general_2 = require("../utils/constants/general");
+const subscription_service_1 = require("../services/subscription.service");
+const subscription_1 = require("../utils/constants/subscription");
+const date_1 = require("../utils/helpers/date");
 const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bodyData = req.body;
     try {
@@ -69,8 +72,7 @@ const verifyOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         else if (Number(tempUser === null || tempUser === void 0 ? void 0 : tempUser.otp) !== Number(otp)) {
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'Invalid OTP.' });
         }
-        const defaultPicture = `https://flashcard-images-v1.s3.us-east-1.amazonaws.com/Profile.png`;
-        const newUserId = yield (0, signUp_service_1.createUser)(Object.assign(Object.assign({}, tempUser), { picture: defaultPicture }));
+        const newUserId = yield (0, signUp_service_1.createUser)(Object.assign(Object.assign({}, tempUser), { picture: signUp_1.DEFAULT_PICTURE }));
         //Create New User Credit
         yield (0, user_service_1.createUserCreditData)({ userId: newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString(), credit: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.credit });
         yield (0, user_service_1.createUserCreditLogsData)({ userId: newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString(), creditBalance: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.credit, type: 'credited', note: 'When create new account.' });
@@ -78,10 +80,23 @@ const verifyOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         //Create New User Storage
         yield (0, user_service_1.createUserStorageData)({ userId: newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString(), storage: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.storage, unit: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.storageUnit, coveredStorage: 0, coveredStorageUnit: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.storageUnit });
         yield (0, user_service_1.createUserStorageLogsData)({ userId: newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString(), storage: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.storage, unit: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.storageUnit, type: 'added', note: 'When create new account.' });
+        //Subscribed New User For Free Tier
+        const subscribedData = {
+            tierId: subscription_1.FREE_TIER_ID,
+            userId: newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString(),
+            startDate: new Date(),
+            endDate: (0, date_1.getOneMonthAfterDate)(new Date())
+        };
+        yield (0, subscription_service_1.createSubscriptionData)(subscribedData);
     }
     catch (err) {
         console.error(err);
-        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+        if (err.message === subscription_1.USER_ALREADY_SUBSCRIBED) {
+            res.status(http_status_codes_1.StatusCodes.CONFLICT).send({ error: subscription_1.USER_ALREADY_SUBSCRIBED });
+        }
+        else {
+            res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+        }
     }
 });
 exports.verifyOtp = verifyOtp;

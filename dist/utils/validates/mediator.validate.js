@@ -7,7 +7,7 @@ exports.getMediatorSetValidation = {
 exports.updateMediatorSetValidation = {
     userId: 'required|string',
     setId: 'required|string',
-    folderId: 'required|string'
+    folderId: 'string'
 };
 exports.updateMediatorCardValidation = {
     userId: 'required|string',
