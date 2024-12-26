@@ -3,10 +3,13 @@ import { StatusCodes } from "http-status-codes";
 import { Response } from 'express';
 import { createTempUser, createUser, getTempUserByEmail, getUserByEmail, updateTempUser } from "../services/signUp.service";
 import { encryptPassword, generateOTP } from "../utils/helpers/general";
-import { SignUpApiSource } from "../utils/constants/signUp";
+import { DEFAULT_PICTURE, SignUpApiSource } from "../utils/constants/signUp";
 import sendMail from "../utils/helpers/sendMail";
 import { createUserCreditData, createUserCreditLogsData, createUserStorageData, createUserStorageLogsData } from "../services/user.service";
 import { FREE_TIER } from "../utils/constants/general";
+import { createSubscriptionData } from "../services/subscription.service";
+import { FREE_TIER_ID, USER_ALREADY_SUBSCRIBED } from "../utils/constants/subscription";
+import { getOneMonthAfterDate } from "../utils/helpers/date";
 
 export const signUp = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
@@ -62,8 +65,7 @@ export const verifyOtp = async (req: AuthorizedRequest, res: Response) => {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid OTP.' });
         }
 
-        const defaultPicture = `https://flashcard-images-v1.s3.us-east-1.amazonaws.com/Profile.png`;
-        const newUserId = await createUser({...tempUser, picture: defaultPicture});
+        const newUserId = await createUser({...tempUser, picture: DEFAULT_PICTURE});
 
         //Create New User Credit
         await createUserCreditData({ userId: newUserId?.toString(), credit: FREE_TIER?.credit });
@@ -73,9 +75,22 @@ export const verifyOtp = async (req: AuthorizedRequest, res: Response) => {
         //Create New User Storage
         await createUserStorageData({ userId: newUserId?.toString(), storage: FREE_TIER?.storage, unit: FREE_TIER?.storageUnit, coveredStorage: 0, coveredStorageUnit: FREE_TIER?.storageUnit });
         await createUserStorageLogsData({ userId: newUserId?.toString(), storage: FREE_TIER?.storage, unit: FREE_TIER?.storageUnit, type: 'added', note: 'When create new account.' });
-    } catch (err) {
+
+        //Subscribed New User For Free Tier
+        const subscribedData = {
+            tierId: FREE_TIER_ID,
+            userId: newUserId?.toString(),
+            startDate: new Date(),
+            endDate: getOneMonthAfterDate(new Date())
+        }
+        await createSubscriptionData(subscribedData);
+    } catch (err: any) {
         console.error(err);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+        if (err.message === USER_ALREADY_SUBSCRIBED) {
+            res.status(StatusCodes.CONFLICT).send({ error: USER_ALREADY_SUBSCRIBED });
+        } else {
+            res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+        }
     }
 }
 

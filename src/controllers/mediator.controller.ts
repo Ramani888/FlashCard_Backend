@@ -29,7 +29,7 @@ export const updateMediatorSet = async (req: AuthorizedRequest, res: Response) =
             isPrivate: setData?.isPrivate ?? false,
             color: setData?.color ?? '',
             userId: userId,
-            folderId: folderId,
+            ...(folderId && { folderId }),
             isHighlight: setData?.isHighlight ?? false
         }
         const newSetId = await insertSetData(newSetData);
@@ -43,7 +43,7 @@ export const updateMediatorSet = async (req: AuthorizedRequest, res: Response) =
                 top: item?.top,
                 bottom: item?.bottom,
                 note: item?.note ?? '',
-                folderId: folderId,
+                ...(folderId && { folderId }),
                 setId: newSetId?.toString(),
                 userId: userId,
                 isBlur: item?.isBlur,

@@ -7,3 +7,5 @@ export const SignUpApiSource = {
         resendOtp: { path: '/signUp/resendOtp', message: 'Otp Send Successfully.' }
     }
 }
+
+export const DEFAULT_PICTURE = `https://flashcard-images-v1.s3.us-east-1.amazonaws.com/Profile.png`;

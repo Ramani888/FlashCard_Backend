@@ -5,7 +5,7 @@ export const getMediatorSetValidation = {
 export const updateMediatorSetValidation = {
     userId: 'required|string',
     setId: 'required|string',
-    folderId: 'required|string'
+    folderId: 'string'
 };
 
 export const updateMediatorCardValidation = {
