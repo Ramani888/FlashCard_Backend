@@ -47,7 +47,8 @@ exports.updateProfilePicture = updateProfilePicture;
 const getSubscription = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const data = yield (0, profile_service_1.getSubscriptionData)();
-        res.status(http_status_codes_1.StatusCodes.OK).send(data);
+        const productIds = data === null || data === void 0 ? void 0 : data.map((item) => item === null || item === void 0 ? void 0 : item.productId).filter(Boolean);
+        res.status(http_status_codes_1.StatusCodes.OK).send({ data: data, productIds: productIds });
     }
     catch (err) {
         console.error(err);
