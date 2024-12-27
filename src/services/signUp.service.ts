@@ -14,7 +14,7 @@ export const getUserByEmail = async (email: string) => {
 export const getTempUserByEmail = async (email: string) => {
     try {
         const result = await TempUser?.findOne({ email: email });
-        return result;
+        return result?.toObject();
     } catch (err) {
         throw err;
     }
