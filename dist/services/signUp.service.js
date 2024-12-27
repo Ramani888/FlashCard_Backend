@@ -25,7 +25,7 @@ exports.getUserByEmail = getUserByEmail;
 const getTempUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (tempUser_model_1.TempUser === null || tempUser_model_1.TempUser === void 0 ? void 0 : tempUser_model_1.TempUser.findOne({ email: email }));
-        return result;
+        return result === null || result === void 0 ? void 0 : result.toObject();
     }
     catch (err) {
         throw err;
