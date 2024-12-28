@@ -17,7 +17,7 @@ const createSubscriptionData = (data) => __awaiter(void 0, void 0, void 0, funct
     var _a;
     try {
         const result = yield userSubscription_model_1.UserSubscription.find({ userId: (_a = data === null || data === void 0 ? void 0 : data.userId) === null || _a === void 0 ? void 0 : _a.toString() });
-        if (result.length > 0) {
+        if ((result === null || result === void 0 ? void 0 : result.length) > 0) {
             throw new Error(subscription_1.USER_ALREADY_SUBSCRIBED);
         }
         const newData = new userSubscription_model_1.UserSubscription(data);

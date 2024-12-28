@@ -7,7 +7,7 @@ export const createSubscriptionData = async (data: ISubscription) => {
     try {
         const result = await UserSubscription.find({ userId: data?.userId?.toString() });
         
-        if (result.length > 0) {
+        if (result?.length > 0) {
             throw new Error(USER_ALREADY_SUBSCRIBED);
         }
         
