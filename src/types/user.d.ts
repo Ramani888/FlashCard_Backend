@@ -20,6 +20,7 @@ export interface IUser {
   userName?: string;
   password?: string;
   picture?: string;
+  isPrivacy?: boolean;
 }
 
 export interface ISupport {

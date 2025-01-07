@@ -1,7 +1,8 @@
 export const signUpValidation = {
     email: 'required|email',
     userName: 'required|string',
-    password: 'required|string'
+    password: 'required|string',
+    isPrivacy: 'required|boolean'
 };
 
 export const verifyOtpValidation = {

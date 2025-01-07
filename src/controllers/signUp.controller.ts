@@ -28,9 +28,9 @@ export const signUp = async (req: AuthorizedRequest, res: Response) => {
         const newPassword = await encryptPassword(bodyData?.password)
 
         if (existingTempUser) {
-            await updateTempUser({...bodyData, password: newPassword}, Number(otp))
+            await updateTempUser({...bodyData, password: newPassword}, Number(otp), Date.now())
         } else {
-            await createTempUser({...bodyData, password: newPassword}, Number(otp));
+            await createTempUser({...bodyData, password: newPassword}, Number(otp), Date.now());
         }
 
         const Template = `
@@ -63,6 +63,8 @@ export const verifyOtp = async (req: AuthorizedRequest, res: Response) => {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Email Not Found.' });
         } else if (Number(tempUser?.otp) !== Number(otp)) {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid OTP.' });
+        } else if (Date.now() - tempUser?.otpTimeOut > 60000) {
+            return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Your OTP has expired. Please resend it.' });
         }
 
         const newUserId = await createUser({...tempUser, picture: DEFAULT_PICTURE});
@@ -108,7 +110,7 @@ export const resendOtp = async (req: AuthorizedRequest, res: Response) => {
         const existingTempUser = await getTempUserByEmail(email);
 
         if (existingTempUser) {
-            await updateTempUser({email: email}, Number(otp))
+            await updateTempUser({email: email}, Number(otp), Date.now())
         } else {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User not found.' });
         }

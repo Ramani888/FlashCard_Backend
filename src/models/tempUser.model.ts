@@ -18,6 +18,14 @@ const TempUserSchema = new Schema({
     otp: {
         type: Number,
         required: true
+    },
+    isPrivacy: {
+        type: Boolean,
+        required: true
+    },
+    otpTimeOut: {
+        type: Number,
+        required: true
     }
 }, {timestamps: true})
 
