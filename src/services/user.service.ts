@@ -84,3 +84,16 @@ export const updateUserStorageData = async (updateData: IUserStorage) => {
         throw error;
     }
 }
+
+export const updateUserStorageLimitData = async (updateData: IUserStorage) => {
+    try {
+        const result = await UserStorage.findOneAndUpdate(
+            { userId: updateData?.userId },
+            { $set: { storage: updateData?.storage, unit: updateData?.unit } },
+            { new: true, upsert: false }
+        )
+        return result;
+    } catch (error) {
+        throw error;
+    }    
+}

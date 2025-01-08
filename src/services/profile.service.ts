@@ -77,3 +77,13 @@ export const getProfileData = async (userId: string) => {
         throw err;
     }
 }
+
+export const getTierDataById = async (_id: string) => {
+    try {
+        const objectId = new ObjectId(_id?.toString());
+        const result = await Tier.findOne({ _id: objectId });
+        return result?.toObject();
+    } catch (err) {
+        throw err;
+    }
+}

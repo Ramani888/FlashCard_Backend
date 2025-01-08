@@ -14,3 +14,10 @@ export const updateSubscriptionValidation = {
     startDate: 'required|date',
     endDate: 'date'
 };
+
+export const cancelSubscriptionValidation = {
+    packageName: 'required|string',
+    subscriptionId: 'required|string',
+    purchaseToken: 'required|string',
+    userId: 'required|string'
+};

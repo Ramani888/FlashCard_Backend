@@ -20,9 +20,9 @@ export const getTempUserByEmail = async (email: string) => {
     }
 }
 
-export const createTempUser = async (data: IUser, otp: number) => {
+export const createTempUser = async (data: IUser, otp: number, otpTimeOut: number) => {
     try {
-        const newData = new TempUser({...data, otp: otp});
+        const newData = new TempUser({...data, otp: otp, otpTimeOut: otpTimeOut});
         await newData.save();
         return;
     } catch (err) {
@@ -30,11 +30,11 @@ export const createTempUser = async (data: IUser, otp: number) => {
     }
 }
 
-export const updateTempUser = async (data: IUser, otp: number) => {
+export const updateTempUser = async (data: IUser, otp: number, otpTimeOut: number) => {
     try {
         const result = await TempUser.findOneAndUpdate(
             { email: data?.email },
-            { $set: { otp: otp }},
+            { $set: { otp: otp, otpTimeOut: otpTimeOut }},
             { new: true, upsert: false }
         );
         return result;
@@ -62,7 +62,8 @@ export const createUser = async (data: IUser) => {
             userName: data?.userName,
             email: data?.email,
             password: data?.password,
-            picture: data?.picture
+            picture: data?.picture,
+            isPrivacy: data?.isPrivacy
         }
         const newData = new User(userData);
         const savedUser = await newData.save(); // Save the user and get the saved data

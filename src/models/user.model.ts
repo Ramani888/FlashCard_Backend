@@ -18,6 +18,10 @@ const UserSchema = new Schema({
     picture: {
         type: String,
     },
+    isPrivacy: {
+        type: Boolean,
+        required: true
+    }
 }, {timestamps: true})
 
 const dbConnection = mongoose.connection.useDb(env.MONGODB_DATABASE ?? '');
