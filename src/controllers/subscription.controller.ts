@@ -7,6 +7,9 @@ import { getOneMonthAfterDate } from "../utils/helpers/date";
 import { getTierDataById } from "../services/profile.service";
 import { createUserCreditLogsData, createUserStorageLogsData, getUserCreditData, updateUserCreditData, updateUserStorageLimitData } from "../services/user.service";
 import { google } from 'googleapis';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export const createSubscription = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
