@@ -43,6 +43,10 @@ const UserSchema = new mongoose_1.Schema({
     picture: {
         type: String,
     },
+    isPrivacy: {
+        type: Boolean,
+        required: true
+    }
 }, { timestamps: true });
 const dbConnection = mongoose_1.default.connection.useDb((_a = env.MONGODB_DATABASE) !== null && _a !== void 0 ? _a : '');
 exports.User = dbConnection.model('User', UserSchema, 'User');

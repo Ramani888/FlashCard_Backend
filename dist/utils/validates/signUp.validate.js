@@ -4,7 +4,8 @@ exports.resendOtpValidation = exports.verifyOtpValidation = exports.signUpValida
 exports.signUpValidation = {
     email: 'required|email',
     userName: 'required|string',
-    password: 'required|string'
+    password: 'required|string',
+    isPrivacy: 'required|boolean'
 };
 exports.verifyOtpValidation = {
     email: 'required|email',

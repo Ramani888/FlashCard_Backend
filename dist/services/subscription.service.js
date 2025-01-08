@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateSubscriptionData = exports.createSubscriptionData = void 0;
+exports.getSubscriptionDataByuserId = exports.updateSubscriptionData = exports.createSubscriptionData = void 0;
 const userSubscription_model_1 = require("../models/userSubscription.model");
 const mongodb_1 = require("mongodb");
 const subscription_1 = require("../utils/constants/subscription");
@@ -43,3 +43,13 @@ const updateSubscriptionData = (updateData) => __awaiter(void 0, void 0, void 0,
     }
 });
 exports.updateSubscriptionData = updateSubscriptionData;
+const getSubscriptionDataByuserId = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield (userSubscription_model_1.UserSubscription === null || userSubscription_model_1.UserSubscription === void 0 ? void 0 : userSubscription_model_1.UserSubscription.findOne({ userId: userId }));
+        return result === null || result === void 0 ? void 0 : result.toObject();
+    }
+    catch (err) {
+        throw err;
+    }
+});
+exports.getSubscriptionDataByuserId = getSubscriptionDataByuserId;

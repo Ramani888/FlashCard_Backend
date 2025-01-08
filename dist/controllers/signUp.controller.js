@@ -37,10 +37,10 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         //Encrypt Password
         const newPassword = yield (0, general_1.encryptPassword)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.password);
         if (existingTempUser) {
-            yield (0, signUp_service_1.updateTempUser)(Object.assign(Object.assign({}, bodyData), { password: newPassword }), Number(otp));
+            yield (0, signUp_service_1.updateTempUser)(Object.assign(Object.assign({}, bodyData), { password: newPassword }), Number(otp), Date.now());
         }
         else {
-            yield (0, signUp_service_1.createTempUser)(Object.assign(Object.assign({}, bodyData), { password: newPassword }), Number(otp));
+            yield (0, signUp_service_1.createTempUser)(Object.assign(Object.assign({}, bodyData), { password: newPassword }), Number(otp), Date.now());
         }
         const Template = `
             <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
@@ -71,6 +71,9 @@ const verifyOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         }
         else if (Number(tempUser === null || tempUser === void 0 ? void 0 : tempUser.otp) !== Number(otp)) {
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'Invalid OTP.' });
+        }
+        else if (Date.now() - (tempUser === null || tempUser === void 0 ? void 0 : tempUser.otpTimeOut) > 60000) {
+            return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'Your OTP has expired. Please resend it.' });
         }
         const newUserId = yield (0, signUp_service_1.createUser)(Object.assign(Object.assign({}, tempUser), { picture: signUp_1.DEFAULT_PICTURE }));
         //Create New User Credit
@@ -112,7 +115,7 @@ const resendOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         // Check if the temp user already exists
         const existingTempUser = yield (0, signUp_service_1.getTempUserByEmail)(email);
         if (existingTempUser) {
-            yield (0, signUp_service_1.updateTempUser)({ email: email }, Number(otp));
+            yield (0, signUp_service_1.updateTempUser)({ email: email }, Number(otp), Date.now());
         }
         else {
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'User not found.' });

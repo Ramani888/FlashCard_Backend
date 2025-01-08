@@ -32,9 +32,9 @@ const getTempUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.getTempUserByEmail = getTempUserByEmail;
-const createTempUser = (data, otp) => __awaiter(void 0, void 0, void 0, function* () {
+const createTempUser = (data, otp, otpTimeOut) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const newData = new tempUser_model_1.TempUser(Object.assign(Object.assign({}, data), { otp: otp }));
+        const newData = new tempUser_model_1.TempUser(Object.assign(Object.assign({}, data), { otp: otp, otpTimeOut: otpTimeOut }));
         yield newData.save();
         return;
     }
@@ -43,9 +43,9 @@ const createTempUser = (data, otp) => __awaiter(void 0, void 0, void 0, function
     }
 });
 exports.createTempUser = createTempUser;
-const updateTempUser = (data, otp) => __awaiter(void 0, void 0, void 0, function* () {
+const updateTempUser = (data, otp, otpTimeOut) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield tempUser_model_1.TempUser.findOneAndUpdate({ email: data === null || data === void 0 ? void 0 : data.email }, { $set: { otp: otp } }, { new: true, upsert: false });
+        const result = yield tempUser_model_1.TempUser.findOneAndUpdate({ email: data === null || data === void 0 ? void 0 : data.email }, { $set: { otp: otp, otpTimeOut: otpTimeOut } }, { new: true, upsert: false });
         return result;
     }
     catch (err) {
@@ -69,7 +69,8 @@ const createUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
             userName: data === null || data === void 0 ? void 0 : data.userName,
             email: data === null || data === void 0 ? void 0 : data.email,
             password: data === null || data === void 0 ? void 0 : data.password,
-            picture: data === null || data === void 0 ? void 0 : data.picture
+            picture: data === null || data === void 0 ? void 0 : data.picture,
+            isPrivacy: data === null || data === void 0 ? void 0 : data.isPrivacy
         };
         const newData = new user_model_1.User(userData);
         const savedUser = yield newData.save(); // Save the user and get the saved data

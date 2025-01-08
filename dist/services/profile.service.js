@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getProfileData = exports.createSupportData = exports.updatePasswordData = exports.getSubscriptionData = exports.getUserById = exports.updateProfilePictureData = void 0;
+exports.getTierDataById = exports.getProfileData = exports.createSupportData = exports.updatePasswordData = exports.getSubscriptionData = exports.getUserById = exports.updateProfilePictureData = void 0;
 const support_model_1 = require("../models/support.model");
 const tier_model_1 = require("../models/tier.model");
 const user_model_1 = require("../models/user.model");
@@ -92,3 +92,14 @@ const getProfileData = (userId) => __awaiter(void 0, void 0, void 0, function* (
     }
 });
 exports.getProfileData = getProfileData;
+const getTierDataById = (_id) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const objectId = new mongodb_1.ObjectId(_id === null || _id === void 0 ? void 0 : _id.toString());
+        const result = yield tier_model_1.Tier.findOne({ _id: objectId });
+        return result === null || result === void 0 ? void 0 : result.toObject();
+    }
+    catch (err) {
+        throw err;
+    }
+});
+exports.getTierDataById = getTierDataById;

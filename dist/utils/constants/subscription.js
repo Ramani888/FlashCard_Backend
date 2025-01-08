@@ -3,10 +3,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.FREE_TIER_ID = exports.USER_ALREADY_SUBSCRIBED = exports.SubscriptionApiSource = void 0;
 exports.SubscriptionApiSource = {
     post: {
-        createSubscription: { path: '/subscription', message: 'Subscription Created Successfully.' }
+        createSubscription: { path: '/subscription', message: 'Subscription Created Successfully.' },
     },
     put: {
-        updateSubscription: { path: '/subscription', message: 'Subscription Updated Successfully.' }
+        updateSubscription: { path: '/subscription', message: 'Subscription Updated Successfully.' },
+        cancelSubscription: { path: '/cancel/subscription', message: 'Subscription Cancelled Successfully.' }
     }
 };
 exports.USER_ALREADY_SUBSCRIBED = 'User is already subscribed.';

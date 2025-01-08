@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserStorageData = exports.getUserStorageData = exports.createUserStorageLogsData = exports.createUserStorageData = exports.createUserCreditLogsData = exports.createUserCreditData = exports.getUserCreditData = exports.updateUserCreditData = void 0;
+exports.updateUserStorageLimitData = exports.updateUserStorageData = exports.getUserStorageData = exports.createUserStorageLogsData = exports.createUserStorageData = exports.createUserCreditLogsData = exports.createUserCreditData = exports.getUserCreditData = exports.updateUserCreditData = void 0;
 const userCredit_model_1 = require("../models/userCredit.model");
 const userCreditLogs_model_1 = require("../models/userCreditLogs.model");
 const userStorage_model_1 = require("../models/userStorage.model");
@@ -94,3 +94,13 @@ const updateUserStorageData = (updateData) => __awaiter(void 0, void 0, void 0, 
     }
 });
 exports.updateUserStorageData = updateUserStorageData;
+const updateUserStorageLimitData = (updateData) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield userStorage_model_1.UserStorage.findOneAndUpdate({ userId: updateData === null || updateData === void 0 ? void 0 : updateData.userId }, { $set: { storage: updateData === null || updateData === void 0 ? void 0 : updateData.storage, unit: updateData === null || updateData === void 0 ? void 0 : updateData.unit } }, { new: true, upsert: false });
+        return result;
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.updateUserStorageLimitData = updateUserStorageLimitData;

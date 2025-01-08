@@ -2,7 +2,7 @@
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
-var _a, _b, _c, _d, _e, _f;
+var _a, _b, _c, _d, _e, _f, _g, _h;
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const demo_controller_1 = require("../controllers/demo.controller");
@@ -141,4 +141,5 @@ router.put(user_1.UserApiSource.put.updateCredit.path, general_1.authenticateTok
 //Subscription
 router.post((_d = (_c = subscription_1.SubscriptionApiSource === null || subscription_1.SubscriptionApiSource === void 0 ? void 0 : subscription_1.SubscriptionApiSource.post) === null || _c === void 0 ? void 0 : _c.createSubscription) === null || _d === void 0 ? void 0 : _d.path, general_1.authenticateToken, (0, bodyValidate_middleware_1.validateBody)(subscription_validate_1.createSubscriptionValidation), subscription_controller_1.createSubscription);
 router.put((_f = (_e = subscription_1.SubscriptionApiSource === null || subscription_1.SubscriptionApiSource === void 0 ? void 0 : subscription_1.SubscriptionApiSource.put) === null || _e === void 0 ? void 0 : _e.updateSubscription) === null || _f === void 0 ? void 0 : _f.path, general_1.authenticateToken, (0, bodyValidate_middleware_1.validateBody)(subscription_validate_1.updateSubscriptionValidation), subscription_controller_1.updateSubscription);
+router.put((_h = (_g = subscription_1.SubscriptionApiSource === null || subscription_1.SubscriptionApiSource === void 0 ? void 0 : subscription_1.SubscriptionApiSource.put) === null || _g === void 0 ? void 0 : _g.cancelSubscription) === null || _h === void 0 ? void 0 : _h.path, general_1.authenticateToken, (0, bodyValidate_middleware_1.validateBody)(subscription_validate_1.cancelSubscriptionValidation), subscription_controller_1.cancelSubscription);
 exports.default = router;

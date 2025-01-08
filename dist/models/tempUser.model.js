@@ -43,6 +43,14 @@ const TempUserSchema = new mongoose_1.Schema({
     otp: {
         type: Number,
         required: true
+    },
+    isPrivacy: {
+        type: Boolean,
+        required: true
+    },
+    otpTimeOut: {
+        type: Number,
+        required: true
     }
 }, { timestamps: true });
 const dbConnection = mongoose_1.default.connection.useDb((_a = env.MONGODB_DATABASE) !== null && _a !== void 0 ? _a : '');
