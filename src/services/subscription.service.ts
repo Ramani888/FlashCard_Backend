@@ -30,3 +30,12 @@ export const updateSubscriptionData = async (updateData: ISubscription) => {
         throw err;
     }
 }
+
+export const getSubscriptionDataByuserId = async (userId: string) => {
+    try {
+        const result = await UserSubscription?.findOne({ userId: userId });
+        return result?.toObject();
+    } catch (err) {
+        throw err;
+    }
+}

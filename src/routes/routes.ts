@@ -43,8 +43,8 @@ import { updateUserCreditValidation } from "../utils/validates/user.validate";
 import { updateUserCredit } from "../controllers/user.controller";
 import { authenticateToken } from "../utils/helpers/general";
 import { SubscriptionApiSource } from "../utils/constants/subscription";
-import { createSubscriptionValidation, updateSubscriptionValidation } from "../utils/validates/subscription.validate";
-import { createSubscription, updateSubscription } from "../controllers/subscription.controller";
+import { cancelSubscriptionValidation, createSubscriptionValidation, updateSubscriptionValidation } from "../utils/validates/subscription.validate";
+import { cancelSubscription, createSubscription, updateSubscription } from "../controllers/subscription.controller";
 
 enum RouteSource {
     Body,
@@ -155,4 +155,5 @@ router.put(UserApiSource.put.updateCredit.path, authenticateToken, validateBody(
 //Subscription
 router.post(SubscriptionApiSource?.post?.createSubscription?.path, authenticateToken, validateBody(createSubscriptionValidation), createSubscription)
 router.put(SubscriptionApiSource?.put?.updateSubscription?.path, authenticateToken, validateBody(updateSubscriptionValidation), updateSubscription)
+router.put(SubscriptionApiSource?.put?.cancelSubscription?.path, authenticateToken, validateBody(cancelSubscriptionValidation), cancelSubscription)
 export default router;

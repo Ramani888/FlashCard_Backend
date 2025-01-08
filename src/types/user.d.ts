@@ -49,8 +49,8 @@ export interface IUserStorage {
   userId: string;
   storage: number;
   unit: string;
-  coveredStorage: number;
-  coveredStorageUnit: string;
+  coveredStorage?: number;
+  coveredStorageUnit?: string;
 }
 
 export interface IUserStorageLogs {
