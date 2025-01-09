@@ -45,7 +45,7 @@ const createTempUser = (data, otp, otpTimeOut) => __awaiter(void 0, void 0, void
 exports.createTempUser = createTempUser;
 const updateTempUser = (data, otp, otpTimeOut) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield tempUser_model_1.TempUser.findOneAndUpdate({ email: data === null || data === void 0 ? void 0 : data.email }, { $set: { otp: otp, otpTimeOut: otpTimeOut } }, { new: true, upsert: false });
+        const result = yield tempUser_model_1.TempUser.findOneAndUpdate({ email: data === null || data === void 0 ? void 0 : data.email }, { $set: { otp: otp, otpTimeOut: otpTimeOut, isPrivacy: data === null || data === void 0 ? void 0 : data.isPrivacy } }, { new: true, upsert: false });
         return result;
     }
     catch (err) {
