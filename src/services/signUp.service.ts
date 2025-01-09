@@ -34,7 +34,7 @@ export const updateTempUser = async (data: IUser, otp: number, otpTimeOut: numbe
     try {
         const result = await TempUser.findOneAndUpdate(
             { email: data?.email },
-            { $set: { otp: otp, otpTimeOut: otpTimeOut }},
+            { $set: { otp: otp, otpTimeOut: otpTimeOut, isPrivacy: data?.isPrivacy }},
             { new: true, upsert: false }
         );
         return result;
