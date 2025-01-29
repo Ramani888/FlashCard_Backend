@@ -121,7 +121,14 @@ const getCardWithLargestPosition = (userId, setId) => __awaiter(void 0, void 0, 
 exports.getCardWithLargestPosition = getCardWithLargestPosition;
 const getAllCardData = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const twentyFourHoursAgo = new Date();
+        twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
         const result = yield card_model_1.Card.aggregate([
+            {
+                $match: {
+                    updatedAt: { $gte: twentyFourHoursAgo } // Filter only cards updated in the last 24 hours
+                }
+            },
             {
                 $addFields: {
                     setIdObjectId: { $toObjectId: '$setId' }, // Convert setId string to ObjectId
