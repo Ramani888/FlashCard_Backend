@@ -102,7 +102,14 @@ export const getCardWithLargestPosition = async (userId: string, setId: string) 
 
 export const getAllCardData = async () => {
     try {
+        const twentyFourHoursAgo = new Date();
+        twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
         const result = await Card.aggregate([
+            {
+                $match: {
+                    updatedAt: { $gte: twentyFourHoursAgo } // Filter only cards updated in the last 24 hours
+                }
+            },
             {
                 $addFields: {
                     setIdObjectId: { $toObjectId: '$setId' }, // Convert setId string to ObjectId
