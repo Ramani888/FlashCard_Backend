@@ -10,8 +10,11 @@ const env = process.env;
 export const login = async (req: AuthorizedRequest, res: Response) => {
     const { email, password } = req.body;
     try {
+        //Email Convert Into Lowercase
+        const LC_Email = email?.toLowerCase();
+
         // Check if the user already exists
-        const existingUser = await getUserByEmail(email);
+        const existingUser = await getUserByEmail(LC_Email);
         if (!existingUser) return res.status(StatusCodes.BAD_REQUEST).json({ message: LoginApiSource.post.login.messages.invalidEmail });
 
         const isPasswordValid = await new Promise((resolve) =>

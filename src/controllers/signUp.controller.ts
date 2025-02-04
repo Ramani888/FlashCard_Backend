@@ -14,23 +14,26 @@ import { getOneMonthAfterDate } from "../utils/helpers/date";
 export const signUp = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
     try {
+        //Email Convert Into Lowercase
+        const email = bodyData?.email?.toLowerCase();
+
         // Check if the user already exists
-        const existingUser = await getUserByEmail(bodyData?.email);
+        const existingUser = await getUserByEmail(email);
         if (existingUser) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User already exists.' });
 
         // Generate OTP
         const otp = generateOTP();
 
         // Check if the temp user already exists
-        const existingTempUser = await getTempUserByEmail(bodyData?.email);
+        const existingTempUser = await getTempUserByEmail(email);
 
         //Encrypt Password
         const newPassword = await encryptPassword(bodyData?.password)
 
         if (existingTempUser) {
-            await updateTempUser({...bodyData, password: newPassword}, Number(otp), Date.now())
+            await updateTempUser({...bodyData, email: email, password: newPassword}, Number(otp), Date.now())
         } else {
-            await createTempUser({...bodyData, password: newPassword}, Number(otp), Date.now());
+            await createTempUser({...bodyData, email: email, password: newPassword}, Number(otp), Date.now());
         }
 
         const Template = `
@@ -41,7 +44,7 @@ export const signUp = async (req: AuthorizedRequest, res: Response) => {
         `
 
         // Send Mail
-        await sendMail(bodyData?.email, 'OTP Verification', Template);
+        await sendMail(email, 'OTP Verification', Template);
 
         res.status(StatusCodes.OK).send({ success: true, message: SignUpApiSource.post.signUp.message});        
     } catch (err) {
@@ -53,11 +56,14 @@ export const signUp = async (req: AuthorizedRequest, res: Response) => {
 export const verifyOtp = async (req: AuthorizedRequest, res: Response) => {
     const { email, otp } = req.body;
     try {
+        //Email Convert Into Lowercase
+        const LC_Email = email?.toLowerCase();
+
         // Check if the user already exists
-        const existingUser = await getUserByEmail(email);
+        const existingUser = await getUserByEmail(LC_Email);
         if (existingUser) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User already exists.' });
 
-        const tempUser = await getTempUserByEmail(email);
+        const tempUser = await getTempUserByEmail(LC_Email);
 
         if (!tempUser) {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Email Not Found.' });
@@ -67,7 +73,7 @@ export const verifyOtp = async (req: AuthorizedRequest, res: Response) => {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Your OTP has expired. Please resend it.' });
         }
 
-        const newUserId = await createUser({...tempUser, picture: DEFAULT_PICTURE});
+        const newUserId = await createUser({...tempUser, email: tempUser?.email?.toLowerCase(), picture: DEFAULT_PICTURE});
 
         //Create New User Credit
         await createUserCreditData({ userId: newUserId?.toString(), credit: FREE_TIER?.credit });
@@ -99,18 +105,21 @@ export const verifyOtp = async (req: AuthorizedRequest, res: Response) => {
 export const resendOtp = async (req: AuthorizedRequest, res: Response) => {
     const { email } = req.query;
     try {
+        //Email Convert Into Lowercase
+        const LC_Email = email?.toLowerCase();
+
         // Check if the user already exists
-        const existingUser = await getUserByEmail(email);
+        const existingUser = await getUserByEmail(LC_Email);
         if (existingUser) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User already exists.' });
 
         // Generate OTP
         const otp = generateOTP();
 
         // Check if the temp user already exists
-        const existingTempUser = await getTempUserByEmail(email);
+        const existingTempUser = await getTempUserByEmail(LC_Email);
 
         if (existingTempUser) {
-            await updateTempUser({email: email}, Number(otp), Date.now())
+            await updateTempUser({email: LC_Email}, Number(otp), Date.now())
         } else {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User not found.' });
         }
@@ -123,7 +132,7 @@ export const resendOtp = async (req: AuthorizedRequest, res: Response) => {
         `
 
         // Send Mail
-        await sendMail(email, 'OTP Verification', Template);
+        await sendMail(LC_Email, 'OTP Verification', Template);
 
         res.status(StatusCodes.OK).send({ success: true, message: SignUpApiSource.put.resendOtp.message}); 
     } catch (err) {

@@ -4,7 +4,8 @@ import { IUser } from "../types/user";
 
 export const getUserByEmail = async (email: string) => {
     try {
-        const result = await User?.findOne({ email: email });
+        const updatedEmail = email?.toLowerCase();
+        const result = await User?.findOne({ email: updatedEmail });
         return result?.toObject();
     } catch (err) {
         throw err;
@@ -13,7 +14,8 @@ export const getUserByEmail = async (email: string) => {
 
 export const getTempUserByEmail = async (email: string) => {
     try {
-        const result = await TempUser?.findOne({ email: email });
+        const updatedEmail = email?.toLowerCase();
+        const result = await TempUser?.findOne({ email: updatedEmail });
         return result?.toObject();
     } catch (err) {
         throw err;
@@ -22,7 +24,8 @@ export const getTempUserByEmail = async (email: string) => {
 
 export const createTempUser = async (data: IUser, otp: number, otpTimeOut: number) => {
     try {
-        const newData = new TempUser({...data, otp: otp, otpTimeOut: otpTimeOut});
+        const email = data?.email?.toLowerCase();
+        const newData = new TempUser({...data, email: email, otp: otp, otpTimeOut: otpTimeOut});
         await newData.save();
         return;
     } catch (err) {
@@ -32,8 +35,9 @@ export const createTempUser = async (data: IUser, otp: number, otpTimeOut: numbe
 
 export const updateTempUser = async (data: IUser, otp: number, otpTimeOut: number) => {
     try {
+        const email = data?.email?.toLowerCase();
         const result = await TempUser.findOneAndUpdate(
-            { email: data?.email },
+            { email: email },
             { $set: { otp: otp, otpTimeOut: otpTimeOut, isPrivacy: data?.isPrivacy }},
             { new: true, upsert: false }
         );
@@ -45,8 +49,9 @@ export const updateTempUser = async (data: IUser, otp: number, otpTimeOut: numbe
 
 export const updateTempUserPassword = async (data: IUser, otp: number) => {
     try {
+        const email = data?.email?.toLowerCase();
         const result = await TempUser.findOneAndUpdate(
-            { email: data?.email },
+            { email: email },
             { $set: { otp: otp, password: data?.password }},
             { new: true, upsert: false }
         );
@@ -58,9 +63,10 @@ export const updateTempUserPassword = async (data: IUser, otp: number) => {
 
 export const createUser = async (data: IUser) => {
     try {
+        const email = data?.email?.toLowerCase();
         const userData = {
             userName: data?.userName,
-            email: data?.email,
+            email: email,
             password: data?.password,
             picture: data?.picture,
             isPrivacy: data?.isPrivacy
