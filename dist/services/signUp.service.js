@@ -14,7 +14,8 @@ const tempUser_model_1 = require("../models/tempUser.model");
 const user_model_1 = require("../models/user.model");
 const getUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (user_model_1.User === null || user_model_1.User === void 0 ? void 0 : user_model_1.User.findOne({ email: email }));
+        const updatedEmail = email === null || email === void 0 ? void 0 : email.toLowerCase();
+        const result = yield (user_model_1.User === null || user_model_1.User === void 0 ? void 0 : user_model_1.User.findOne({ email: updatedEmail }));
         return result === null || result === void 0 ? void 0 : result.toObject();
     }
     catch (err) {
@@ -24,7 +25,8 @@ const getUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* ()
 exports.getUserByEmail = getUserByEmail;
 const getTempUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (tempUser_model_1.TempUser === null || tempUser_model_1.TempUser === void 0 ? void 0 : tempUser_model_1.TempUser.findOne({ email: email }));
+        const updatedEmail = email === null || email === void 0 ? void 0 : email.toLowerCase();
+        const result = yield (tempUser_model_1.TempUser === null || tempUser_model_1.TempUser === void 0 ? void 0 : tempUser_model_1.TempUser.findOne({ email: updatedEmail }));
         return result === null || result === void 0 ? void 0 : result.toObject();
     }
     catch (err) {
@@ -33,8 +35,10 @@ const getTempUserByEmail = (email) => __awaiter(void 0, void 0, void 0, function
 });
 exports.getTempUserByEmail = getTempUserByEmail;
 const createTempUser = (data, otp, otpTimeOut) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
-        const newData = new tempUser_model_1.TempUser(Object.assign(Object.assign({}, data), { otp: otp, otpTimeOut: otpTimeOut }));
+        const email = (_a = data === null || data === void 0 ? void 0 : data.email) === null || _a === void 0 ? void 0 : _a.toLowerCase();
+        const newData = new tempUser_model_1.TempUser(Object.assign(Object.assign({}, data), { email: email, otp: otp, otpTimeOut: otpTimeOut }));
         yield newData.save();
         return;
     }
@@ -44,8 +48,10 @@ const createTempUser = (data, otp, otpTimeOut) => __awaiter(void 0, void 0, void
 });
 exports.createTempUser = createTempUser;
 const updateTempUser = (data, otp, otpTimeOut) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
-        const result = yield tempUser_model_1.TempUser.findOneAndUpdate({ email: data === null || data === void 0 ? void 0 : data.email }, { $set: { otp: otp, otpTimeOut: otpTimeOut, isPrivacy: data === null || data === void 0 ? void 0 : data.isPrivacy } }, { new: true, upsert: false });
+        const email = (_a = data === null || data === void 0 ? void 0 : data.email) === null || _a === void 0 ? void 0 : _a.toLowerCase();
+        const result = yield tempUser_model_1.TempUser.findOneAndUpdate({ email: email }, { $set: { otp: otp, otpTimeOut: otpTimeOut, isPrivacy: data === null || data === void 0 ? void 0 : data.isPrivacy } }, { new: true, upsert: false });
         return result;
     }
     catch (err) {
@@ -54,8 +60,10 @@ const updateTempUser = (data, otp, otpTimeOut) => __awaiter(void 0, void 0, void
 });
 exports.updateTempUser = updateTempUser;
 const updateTempUserPassword = (data, otp) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
-        const result = yield tempUser_model_1.TempUser.findOneAndUpdate({ email: data === null || data === void 0 ? void 0 : data.email }, { $set: { otp: otp, password: data === null || data === void 0 ? void 0 : data.password } }, { new: true, upsert: false });
+        const email = (_a = data === null || data === void 0 ? void 0 : data.email) === null || _a === void 0 ? void 0 : _a.toLowerCase();
+        const result = yield tempUser_model_1.TempUser.findOneAndUpdate({ email: email }, { $set: { otp: otp, password: data === null || data === void 0 ? void 0 : data.password } }, { new: true, upsert: false });
         return result;
     }
     catch (err) {
@@ -64,10 +72,12 @@ const updateTempUserPassword = (data, otp) => __awaiter(void 0, void 0, void 0, 
 });
 exports.updateTempUserPassword = updateTempUserPassword;
 const createUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
+        const email = (_a = data === null || data === void 0 ? void 0 : data.email) === null || _a === void 0 ? void 0 : _a.toLowerCase();
         const userData = {
             userName: data === null || data === void 0 ? void 0 : data.userName,
-            email: data === null || data === void 0 ? void 0 : data.email,
+            email: email,
             password: data === null || data === void 0 ? void 0 : data.password,
             picture: data === null || data === void 0 ? void 0 : data.picture,
             isPrivacy: data === null || data === void 0 ? void 0 : data.isPrivacy

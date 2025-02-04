@@ -24,23 +24,26 @@ const subscription_service_1 = require("../services/subscription.service");
 const subscription_1 = require("../utils/constants/subscription");
 const date_1 = require("../utils/helpers/date");
 const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const bodyData = req.body;
     try {
+        //Email Convert Into Lowercase
+        const email = (_a = bodyData === null || bodyData === void 0 ? void 0 : bodyData.email) === null || _a === void 0 ? void 0 : _a.toLowerCase();
         // Check if the user already exists
-        const existingUser = yield (0, signUp_service_1.getUserByEmail)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.email);
+        const existingUser = yield (0, signUp_service_1.getUserByEmail)(email);
         if (existingUser)
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'User already exists.' });
         // Generate OTP
         const otp = (0, general_1.generateOTP)();
         // Check if the temp user already exists
-        const existingTempUser = yield (0, signUp_service_1.getTempUserByEmail)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.email);
+        const existingTempUser = yield (0, signUp_service_1.getTempUserByEmail)(email);
         //Encrypt Password
         const newPassword = yield (0, general_1.encryptPassword)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.password);
         if (existingTempUser) {
-            yield (0, signUp_service_1.updateTempUser)(Object.assign(Object.assign({}, bodyData), { password: newPassword }), Number(otp), Date.now());
+            yield (0, signUp_service_1.updateTempUser)(Object.assign(Object.assign({}, bodyData), { email: email, password: newPassword }), Number(otp), Date.now());
         }
         else {
-            yield (0, signUp_service_1.createTempUser)(Object.assign(Object.assign({}, bodyData), { password: newPassword }), Number(otp), Date.now());
+            yield (0, signUp_service_1.createTempUser)(Object.assign(Object.assign({}, bodyData), { email: email, password: newPassword }), Number(otp), Date.now());
         }
         const Template = `
             <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
@@ -49,7 +52,7 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             </div>
         `;
         // Send Mail
-        yield (0, sendMail_1.default)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.email, 'OTP Verification', Template);
+        yield (0, sendMail_1.default)(email, 'OTP Verification', Template);
         res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: signUp_1.SignUpApiSource.post.signUp.message });
     }
     catch (err) {
@@ -59,13 +62,16 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.signUp = signUp;
 const verifyOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const { email, otp } = req.body;
     try {
+        //Email Convert Into Lowercase
+        const LC_Email = email === null || email === void 0 ? void 0 : email.toLowerCase();
         // Check if the user already exists
-        const existingUser = yield (0, signUp_service_1.getUserByEmail)(email);
+        const existingUser = yield (0, signUp_service_1.getUserByEmail)(LC_Email);
         if (existingUser)
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'User already exists.' });
-        const tempUser = yield (0, signUp_service_1.getTempUserByEmail)(email);
+        const tempUser = yield (0, signUp_service_1.getTempUserByEmail)(LC_Email);
         if (!tempUser) {
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'Email Not Found.' });
         }
@@ -75,7 +81,7 @@ const verifyOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         else if (Date.now() - (tempUser === null || tempUser === void 0 ? void 0 : tempUser.otpTimeOut) > 60000) {
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'Your OTP has expired. Please resend it.' });
         }
-        const newUserId = yield (0, signUp_service_1.createUser)(Object.assign(Object.assign({}, tempUser), { picture: signUp_1.DEFAULT_PICTURE }));
+        const newUserId = yield (0, signUp_service_1.createUser)(Object.assign(Object.assign({}, tempUser), { email: (_a = tempUser === null || tempUser === void 0 ? void 0 : tempUser.email) === null || _a === void 0 ? void 0 : _a.toLowerCase(), picture: signUp_1.DEFAULT_PICTURE }));
         //Create New User Credit
         yield (0, user_service_1.createUserCreditData)({ userId: newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString(), credit: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.credit });
         yield (0, user_service_1.createUserCreditLogsData)({ userId: newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString(), creditBalance: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.credit, type: 'credited', note: 'When create new account.' });
@@ -106,16 +112,18 @@ exports.verifyOtp = verifyOtp;
 const resendOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { email } = req.query;
     try {
+        //Email Convert Into Lowercase
+        const LC_Email = email === null || email === void 0 ? void 0 : email.toLowerCase();
         // Check if the user already exists
-        const existingUser = yield (0, signUp_service_1.getUserByEmail)(email);
+        const existingUser = yield (0, signUp_service_1.getUserByEmail)(LC_Email);
         if (existingUser)
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'User already exists.' });
         // Generate OTP
         const otp = (0, general_1.generateOTP)();
         // Check if the temp user already exists
-        const existingTempUser = yield (0, signUp_service_1.getTempUserByEmail)(email);
+        const existingTempUser = yield (0, signUp_service_1.getTempUserByEmail)(LC_Email);
         if (existingTempUser) {
-            yield (0, signUp_service_1.updateTempUser)({ email: email }, Number(otp), Date.now());
+            yield (0, signUp_service_1.updateTempUser)({ email: LC_Email }, Number(otp), Date.now());
         }
         else {
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'User not found.' });
@@ -127,7 +135,7 @@ const resendOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             </div>
         `;
         // Send Mail
-        yield (0, sendMail_1.default)(email, 'OTP Verification', Template);
+        yield (0, sendMail_1.default)(LC_Email, 'OTP Verification', Template);
         res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: signUp_1.SignUpApiSource.put.resendOtp.message });
     }
     catch (err) {

@@ -23,8 +23,10 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const { email, password } = req.body;
     try {
+        //Email Convert Into Lowercase
+        const LC_Email = email === null || email === void 0 ? void 0 : email.toLowerCase();
         // Check if the user already exists
-        const existingUser = yield (0, signUp_service_1.getUserByEmail)(email);
+        const existingUser = yield (0, signUp_service_1.getUserByEmail)(LC_Email);
         if (!existingUser)
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: login_1.LoginApiSource.post.login.messages.invalidEmail });
         const isPasswordValid = yield new Promise((resolve) => (0, general_1.comparePassword)(password, String(existingUser === null || existingUser === void 0 ? void 0 : existingUser.password))
