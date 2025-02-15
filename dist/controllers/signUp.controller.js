@@ -23,6 +23,8 @@ const general_2 = require("../utils/constants/general");
 const subscription_service_1 = require("../services/subscription.service");
 const subscription_1 = require("../utils/constants/subscription");
 const date_1 = require("../utils/helpers/date");
+const CreateAccountTemplate_1 = require("../utils/emailTemplate/CreateAccountTemplate");
+const otpTemplate_1 = require("../utils/emailTemplate/otpTemplate");
 const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     const bodyData = req.body;
@@ -45,14 +47,9 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         else {
             yield (0, signUp_service_1.createTempUser)(Object.assign(Object.assign({}, bodyData), { email: email, password: newPassword }), Number(otp), Date.now());
         }
-        const Template = `
-            <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
-                <p>Your OTP Code</p>
-                <p>Your OTP is <strong>${otp}</strong></p>
-            </div>
-        `;
+        const otpTemplate = (0, otpTemplate_1.getOtpTemplate)(Number(otp));
         // Send Mail
-        yield (0, sendMail_1.default)(email, 'OTP Verification', Template);
+        yield (0, sendMail_1.default)(email, 'OTP Verification', otpTemplate);
         res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: signUp_1.SignUpApiSource.post.signUp.message });
     }
     catch (err) {
@@ -97,6 +94,9 @@ const verifyOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             endDate: (0, date_1.getOneMonthAfterDate)(new Date())
         };
         yield (0, subscription_service_1.createSubscriptionData)(subscribedData);
+        //Send mail for account created
+        const accountCreatedTemplate = (0, CreateAccountTemplate_1.getCreateAccountTemplate)(tempUser === null || tempUser === void 0 ? void 0 : tempUser.userName);
+        yield (0, sendMail_1.default)(tempUser === null || tempUser === void 0 ? void 0 : tempUser.email, 'Account Created', accountCreatedTemplate);
     }
     catch (err) {
         console.error(err);
@@ -128,14 +128,15 @@ const resendOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         else {
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'User not found.' });
         }
-        const Template = `
-            <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
-                <p>Your OTP Code</p>
-                <p>Your OTP is <strong>${otp}</strong></p>
-            </div>
-        `;
+        // const Template = `
+        //     <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+        //         <p>Your OTP Code</p>
+        //         <p>Your OTP is <strong>${otp}</strong></p>
+        //     </div>
+        // `
+        const otpTemplate = (0, otpTemplate_1.getOtpTemplate)(Number(otp));
         // Send Mail
-        yield (0, sendMail_1.default)(LC_Email, 'OTP Verification', Template);
+        yield (0, sendMail_1.default)(LC_Email, 'OTP Verification', otpTemplate);
         res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: signUp_1.SignUpApiSource.put.resendOtp.message });
     }
     catch (err) {

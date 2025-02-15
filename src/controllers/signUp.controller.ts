@@ -10,8 +10,8 @@ import { FREE_TIER } from "../utils/constants/general";
 import { createSubscriptionData } from "../services/subscription.service";
 import { FREE_TIER_ID, USER_ALREADY_SUBSCRIBED } from "../utils/constants/subscription";
 import { getOneMonthAfterDate } from "../utils/helpers/date";
-import { getOtpTemplate } from "../utils/emailTemplate/otpTemplate";
 import { getCreateAccountTemplate } from "../utils/emailTemplate/CreateAccountTemplate";
+import { getOtpTemplate } from "../utils/emailTemplate/otpTemplate";
 
 export const signUp = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;

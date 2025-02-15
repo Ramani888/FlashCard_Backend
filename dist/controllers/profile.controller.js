@@ -22,6 +22,7 @@ const signUp_service_1 = require("../services/signUp.service");
 const general_2 = require("../utils/helpers/general");
 const sendMail_1 = __importDefault(require("../utils/helpers/sendMail"));
 const support_1 = require("../utils/emailTemplate/support");
+const SupportTemplate_1 = require("../utils/emailTemplate/SupportTemplate");
 const updateProfilePicture = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bodyData = req.body;
     try {
@@ -123,6 +124,7 @@ const createSupport = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         // const sentenceData = getIssueSentence(bodyData?.supportType);
         const userData = yield (0, profile_service_1.getUserById)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.userId);
         const emailTemplate = (0, support_1.getSupportEmailTemplate)(String(userData === null || userData === void 0 ? void 0 : userData.email), String(userData === null || userData === void 0 ? void 0 : userData.userName), bodyData === null || bodyData === void 0 ? void 0 : bodyData.supportMessage);
+        const supportTemplate = (0, SupportTemplate_1.getSupportTemplate)();
         if (req.file) {
             const imageUrl = yield (0, uploadConfig_1.uploadToS3)(req.file, general_1.FLASHCARD_SUPPORT_V1_BUCKET_NAME);
             yield (0, profile_service_1.createSupportData)(Object.assign(Object.assign({}, bodyData), { image: imageUrl }));
@@ -132,6 +134,7 @@ const createSupport = (req, res) => __awaiter(void 0, void 0, void 0, function* 
             yield (0, profile_service_1.createSupportData)(Object.assign({}, bodyData));
             yield (0, sendMail_1.default)('roadtojesusministry@gmail.com', 'SUPPORT', emailTemplate); //Roadtojesusministry@gmail.com
         }
+        yield (0, sendMail_1.default)(String(userData === null || userData === void 0 ? void 0 : userData.email), 'SUPPORT', supportTemplate);
         res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: profile_1.ProfileApiSource.post.createSupport.message });
     }
     catch (err) {
