@@ -10,6 +10,8 @@ import { FREE_TIER } from "../utils/constants/general";
 import { createSubscriptionData } from "../services/subscription.service";
 import { FREE_TIER_ID, USER_ALREADY_SUBSCRIBED } from "../utils/constants/subscription";
 import { getOneMonthAfterDate } from "../utils/helpers/date";
+import { getOtpTemplate } from "../utils/emailTemplate/otpTemplate";
+import { getCreateAccountTemplate } from "../utils/emailTemplate/CreateAccountTemplate";
 
 export const signUp = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
@@ -36,15 +38,10 @@ export const signUp = async (req: AuthorizedRequest, res: Response) => {
             await createTempUser({...bodyData, email: email, password: newPassword}, Number(otp), Date.now());
         }
 
-        const Template = `
-            <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
-                <p>Your OTP Code</p>
-                <p>Your OTP is <strong>${otp}</strong></p>
-            </div>
-        `
+        const otpTemplate = getOtpTemplate(Number(otp));
 
         // Send Mail
-        await sendMail(email, 'OTP Verification', Template);
+        await sendMail(email, 'OTP Verification', otpTemplate);
 
         res.status(StatusCodes.OK).send({ success: true, message: SignUpApiSource.post.signUp.message});        
     } catch (err) {
@@ -92,6 +89,10 @@ export const verifyOtp = async (req: AuthorizedRequest, res: Response) => {
             endDate: getOneMonthAfterDate(new Date())
         }
         await createSubscriptionData(subscribedData);
+
+        //Send mail for account created
+        const accountCreatedTemplate = getCreateAccountTemplate(tempUser?.userName);
+        await sendMail(tempUser?.email, 'Account Created', accountCreatedTemplate);
     } catch (err: any) {
         console.error(err);
         if (err.message === USER_ALREADY_SUBSCRIBED) {
@@ -124,15 +125,17 @@ export const resendOtp = async (req: AuthorizedRequest, res: Response) => {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User not found.' });
         }
 
-        const Template = `
-            <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
-                <p>Your OTP Code</p>
-                <p>Your OTP is <strong>${otp}</strong></p>
-            </div>
-        `
+        // const Template = `
+        //     <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+        //         <p>Your OTP Code</p>
+        //         <p>Your OTP is <strong>${otp}</strong></p>
+        //     </div>
+        // `
+
+        const otpTemplate = getOtpTemplate(Number(otp));
 
         // Send Mail
-        await sendMail(LC_Email, 'OTP Verification', Template);
+        await sendMail(LC_Email, 'OTP Verification', otpTemplate);
 
         res.status(StatusCodes.OK).send({ success: true, message: SignUpApiSource.put.resendOtp.message}); 
     } catch (err) {

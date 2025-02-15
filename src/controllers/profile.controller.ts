@@ -10,6 +10,9 @@ import { generateOTP, getIssueSentence } from "../utils/helpers/general";
 import { NotesApiSource } from "../utils/constants/notes";
 import sendMail from "../utils/helpers/sendMail";
 import { getSupportEmailTemplate } from "../utils/emailTemplate/support";
+import fs from 'fs/promises';
+import path from 'path';
+import { getSupportTemplate } from "../utils/emailTemplate/SupportTemplate";
 
 export const updateProfilePicture = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
@@ -112,6 +115,7 @@ export const createSupport = async (req: AuthorizedRequest, res: Response) => {
         const userData = await getUserById(bodyData?.userId)
 
         const emailTemplate = getSupportEmailTemplate(String(userData?.email), String(userData?.userName), bodyData?.supportMessage);
+        const supportTemplate = getSupportTemplate();
         if (req.file) {
             const imageUrl = await uploadToS3(req.file, FLASHCARD_SUPPORT_V1_BUCKET_NAME);
             await createSupportData({...bodyData, image: imageUrl})
@@ -120,6 +124,7 @@ export const createSupport = async (req: AuthorizedRequest, res: Response) => {
             await createSupportData({...bodyData})
             await sendMail('roadtojesusministry@gmail.com', 'SUPPORT', emailTemplate); //Roadtojesusministry@gmail.com
         }
+        await sendMail(String(userData?.email), 'SUPPORT', supportTemplate);
         
         res.status(StatusCodes.OK).send({ success: true, message: ProfileApiSource.post.createSupport.message });
     } catch (err) {
