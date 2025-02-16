@@ -17,12 +17,14 @@ const sendMail = (to, subject, htmlTemplate, imageUrl) => __awaiter(void 0, void
     const transporter = nodemailer_1.default.createTransport({
         service: 'gmail',
         auth: {
-            user: 'divyeshr@zeusint.com',
-            pass: 'xpqn mysr vrkg aifj'
+            // user: 'divyeshr@zeusint.com',
+            // pass: 'xpqn mysr vrkg aifj'
+            user: 'Biblestudykitapp@gmail.com',
+            pass: 'jtlo jveb dilx fhlx'
         }
     });
     const mailOptions = {
-        from: 'divyeshr@zeusint.com',
+        from: 'Biblestudykitapp@gmail.com',
         to,
         subject,
         html: htmlTemplate
