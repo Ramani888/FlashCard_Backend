@@ -4,13 +4,16 @@ const sendMail = async (to: string, subject: string, htmlTemplate: any, imageUrl
     const transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'divyeshr@zeusint.com',
-            pass: 'xpqn mysr vrkg aifj'
+            // user: 'divyeshr@zeusint.com',
+            // pass: 'xpqn mysr vrkg aifj'
+
+            user: 'Biblestudykitapp@gmail.com',
+            pass: 'jtlo jveb dilx fhlx'
         }
     });
 
     const mailOptions: { [key: string]: any } = {
-        from: 'divyeshr@zeusint.com',
+        from: 'Biblestudykitapp@gmail.com',
         to,
         subject,
         html: htmlTemplate
