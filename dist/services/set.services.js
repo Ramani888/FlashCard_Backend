@@ -77,7 +77,18 @@ const getSetData = (userId, search) => __awaiter(void 0, void 0, void 0, functio
             },
             {
                 $addFields: {
-                    folderIdObject: { $toObjectId: "$folderId" }, // Convert folderId to ObjectId
+                    folderIdObject: {
+                        $cond: [
+                            {
+                                $and: [
+                                    { $ne: [{ $ifNull: ["$folderId", ""] }, ""] },
+                                    { $eq: [{ $strLenCP: { $ifNull: ["$folderId", ""] } }, 24] }
+                                ]
+                            },
+                            { $toObjectId: "$folderId" },
+                            null
+                        ]
+                    }
                 }
             },
             {
@@ -90,26 +101,26 @@ const getSetData = (userId, search) => __awaiter(void 0, void 0, void 0, functio
             },
             {
                 $unwind: {
-                    path: "$folderData", // Unwind to make folderData a single object
-                    preserveNullAndEmptyArrays: true // Keep the original document if no match is found
+                    path: "$folderData",
+                    preserveNullAndEmptyArrays: true
                 }
             },
             {
                 $addFields: {
-                    setIdString: { $toString: "$_id" } // Convert ObjectId to string for matching
+                    setIdString: { $toString: "$_id" }
                 }
             },
             {
                 $lookup: {
-                    from: "Card", // Assuming 'Card' collection stores cards linked to sets
-                    localField: "setIdString", // Use the string version of _id to find matching cards
-                    foreignField: "setId", // Assuming 'setId' in the Card collection is a string
-                    as: "cards" // Name the array with cards found
+                    from: "Card",
+                    localField: "setIdString",
+                    foreignField: "setId",
+                    as: "cards"
                 }
             },
             {
                 $addFields: {
-                    cardCount: { $size: "$cards" } // Get the count of cards per set
+                    cardCount: { $size: "$cards" }
                 }
             },
             {
@@ -123,8 +134,8 @@ const getSetData = (userId, search) => __awaiter(void 0, void 0, void 0, functio
                     "createdAt": 1,
                     "updatedAt": 1,
                     "isHighlight": 1,
-                    "folderName": "$folderData.name", // Correctly reference folderData to get folderName
-                    "cardCount": 1 // Include card count in the final projection
+                    "folderName": "$folderData.name",
+                    "cardCount": 1
                 }
             }
         ]);
