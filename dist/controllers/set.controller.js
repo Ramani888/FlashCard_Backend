@@ -13,6 +13,7 @@ exports.getSetByfolderId = exports.getSet = exports.deleteSet = exports.updateSe
 const http_status_codes_1 = require("http-status-codes");
 const set_services_1 = require("../services/set.services");
 const set_1 = require("../utils/constants/set");
+const card_service_1 = require("../services/card.service");
 const insertSet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bodyData = req.body;
     try {
@@ -29,6 +30,13 @@ const updateSet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bodyData = req.body;
     try {
         yield (0, set_services_1.updateSetData)(bodyData);
+        // Get all set cards
+        const cards = yield (0, card_service_1.getCardBySetId)(bodyData === null || bodyData === void 0 ? void 0 : bodyData._id);
+        cards === null || cards === void 0 ? void 0 : cards.forEach((card) => __awaiter(void 0, void 0, void 0, function* () {
+            var _a, _b;
+            const data = Object.assign(Object.assign({}, card), { folderId: (_a = bodyData === null || bodyData === void 0 ? void 0 : bodyData.folderId) !== null && _a !== void 0 ? _a : '', note: (_b = card === null || card === void 0 ? void 0 : card.note) !== null && _b !== void 0 ? _b : '' });
+            yield (0, card_service_1.updateCardData)(data);
+        }));
         res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: set_1.SetApiSource.put.updateSet.message });
     }
     catch (err) {

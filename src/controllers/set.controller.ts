@@ -3,6 +3,7 @@ import { StatusCodes } from "http-status-codes";
 import { Response } from 'express';
 import { deleteSetData, getSetData, getSetDataByfolderId, insertSetData, updateSetData } from "../services/set.services";
 import { SetApiSource } from "../utils/constants/set";
+import { getCardBySetId, updateCardData } from "../services/card.service";
 
 export const insertSet = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
@@ -19,6 +20,18 @@ export const updateSet = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
     try {
         await updateSetData(bodyData);
+
+        // Get all set cards
+        const cards = await getCardBySetId(bodyData?._id);
+        cards?.forEach(async (card) => {
+            const data = {
+                ...card,
+                folderId: bodyData?.folderId ?? '',
+                note: card?.note ?? ''
+            }
+            await updateCardData(data);
+        });
+
         res.status(StatusCodes.OK).send({ success: true, message: SetApiSource.put.updateSet.message });
     } catch (err) {
         console.error(err);

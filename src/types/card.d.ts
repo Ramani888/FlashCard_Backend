@@ -3,8 +3,8 @@ export interface ICard {
     top: string;
     bottom: string;
     note?: string;
-    setId: string;
-    folderId: string;
+    setId?: string;
+    folderId?: string;
     userId: string;
     isBlur?: boolean;
     position: number;
