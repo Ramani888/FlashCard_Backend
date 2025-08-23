@@ -32,6 +32,10 @@ const CardSchema = new Schema({
     position: {
         type: Number,
         required: true
+    },
+    defaultAdded: {
+        type: Boolean,
+        default: false
     }
 }, {timestamps: true})
 

@@ -21,6 +21,14 @@ export const createCardData = async (data: ICard) => {
     }
 }
 
+export const insertManyCardData = async (data: ICard[]) => {
+    try {
+        await Card.insertMany(data);
+    } catch (err) {
+        throw err;
+    }
+}
+
 export const updateCardData = async (updateData: ICard) => {
     try {
         const objectId = new ObjectId(updateData?._id?.toString());

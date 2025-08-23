@@ -1,5 +1,10 @@
 export const UserApiSource = {
     put: {
         updateCredit: { path: '/credit',  message: 'AI Credit Updated Successfully.' }
+    },
+    post: {
+        addDefaultSetsAndCards: { path: '/addDefaultSetsAndCards', message: 'Default Sets and Cards Added Successfully.' }
     }
 }
+
+export const defaultUserId = '66e737daf9aa4eac9897d37d';

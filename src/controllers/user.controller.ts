@@ -2,7 +2,7 @@ import { AuthorizedRequest } from "../types/user";
 import { StatusCodes } from "http-status-codes";
 import { Response } from 'express';
 import { UserApiSource } from "../utils/constants/user";
-import { createUserCreditLogsData, getUserCreditData, updateUserCreditData } from "../services/user.service";
+import { createUserCreditLogsData, createUserDefaultCards, getUserCreditData, updateUserCreditData } from "../services/user.service";
 
 export const updateUserCredit = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
@@ -19,6 +19,17 @@ export const updateUserCredit = async (req: AuthorizedRequest, res: Response) =>
         }
         await updateUserCreditData({userId: userId, credit: Number(creditCount) });
         res.status(StatusCodes.OK).send({ success: true, message: UserApiSource.put.updateCredit.message});
+    } catch (err) {
+        console.log(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const addDefaultSetsAndCards = async (req: AuthorizedRequest, res: Response) => {
+    const { userId } = req.query;
+    try {
+        await createUserDefaultCards(userId);
+        res.status(StatusCodes.OK).send({ success: true, message: UserApiSource.post.addDefaultSetsAndCards.message });
     } catch (err) {
         console.log(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });

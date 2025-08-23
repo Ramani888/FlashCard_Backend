@@ -1,6 +1,7 @@
 import { Set } from "../models/set.models";
 import { ISet } from "../types/set";
 import { ObjectId } from 'mongodb';
+import { defaultUserId } from "../utils/constants/user";
 
 export const insertSetData = async (data: ISet) => {
     try {
@@ -250,6 +251,15 @@ export const getSetBySetId = async (setId: string) => {
         const objectId = new ObjectId(setId?.toString());
         const result = await Set.findOne({ _id: objectId });
         return result?.toObject();
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const getDefaultSetData = async () => {
+    try {
+        const result = await Set.find({ userId: defaultUserId, isPrivate: false });
+        return result;
     } catch (err) {
         throw err;
     }

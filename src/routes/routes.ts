@@ -39,8 +39,8 @@ import { AiApiSource } from "../utils/constants/AI";
 import { askQuestionValidation } from "../utils/validates/Ai.validate";
 import { getAskQuestionAnswer } from "../controllers/Ai.controller";
 import { UserApiSource } from "../utils/constants/user";
-import { updateUserCreditValidation } from "../utils/validates/user.validate";
-import { updateUserCredit } from "../controllers/user.controller";
+import { addDefaultSetsAndCardsValidation, updateUserCreditValidation } from "../utils/validates/user.validate";
+import { addDefaultSetsAndCards, updateUserCredit } from "../controllers/user.controller";
 import { authenticateToken } from "../utils/helpers/general";
 import { SubscriptionApiSource } from "../utils/constants/subscription";
 import { cancelSubscriptionValidation, createSubscriptionValidation, updateSubscriptionValidation } from "../utils/validates/subscription.validate";
@@ -157,4 +157,7 @@ router.put(UserApiSource.put.updateCredit.path, authenticateToken, validateBody(
 router.post(SubscriptionApiSource?.post?.createSubscription?.path, authenticateToken, validateBody(createSubscriptionValidation), createSubscription)
 router.put(SubscriptionApiSource?.put?.updateSubscription?.path, authenticateToken, validateBody(updateSubscriptionValidation), updateSubscription)
 router.put(SubscriptionApiSource?.put?.cancelSubscription?.path, authenticateToken, validateBody(cancelSubscriptionValidation), cancelSubscription)
+
+//Add Default Sets And Cards
+router.post(UserApiSource.post.addDefaultSetsAndCards.path, validateBody(addDefaultSetsAndCardsValidation, RouteSource?.Query), addDefaultSetsAndCards)
 export default router;

@@ -5,7 +5,7 @@ import { createTempUser, createUser, getTempUserByEmail, getUserByEmail, updateT
 import { encryptPassword, generateOTP } from "../utils/helpers/general";
 import { DEFAULT_PICTURE, SignUpApiSource } from "../utils/constants/signUp";
 import sendMail from "../utils/helpers/sendMail";
-import { createUserCreditData, createUserCreditLogsData, createUserStorageData, createUserStorageLogsData } from "../services/user.service";
+import { createUserCreditData, createUserCreditLogsData, createUserDefaultCards, createUserStorageData, createUserStorageLogsData } from "../services/user.service";
 import { FREE_TIER } from "../utils/constants/general";
 import { createSubscriptionData } from "../services/subscription.service";
 import { FREE_TIER_ID, USER_ALREADY_SUBSCRIBED } from "../utils/constants/subscription";
@@ -80,6 +80,9 @@ export const verifyOtp = async (req: AuthorizedRequest, res: Response) => {
         //Create New User Storage
         await createUserStorageData({ userId: newUserId?.toString(), storage: FREE_TIER?.storage, unit: FREE_TIER?.storageUnit, coveredStorage: 0, coveredStorageUnit: FREE_TIER?.storageUnit });
         await createUserStorageLogsData({ userId: newUserId?.toString(), storage: FREE_TIER?.storage, unit: FREE_TIER?.storageUnit, type: 'added', note: 'When create new account.' });
+
+        //Create New User For Default Cards
+        await createUserDefaultCards(newUserId?.toString());
 
         //Subscribed New User For Free Tier
         const subscribedData = {

@@ -4,6 +4,8 @@ import { UserStorage } from "../models/userStorage.model";
 import { UserStorageLogs } from "../models/userStorageLogs.model";
 import { IUserCredit, IUserCreditLogs, IUserStorage, IUserStorageLogs } from "../types/user";
 import { ObjectId } from 'mongodb';
+import { getDefaultSetData, insertSetData } from "./set.services";
+import { getCardData, insertManyCardData } from "./card.service";
 
 export const updateUserCreditData = async (updateData: IUserCredit) => {
     try {
@@ -96,4 +98,50 @@ export const updateUserStorageLimitData = async (updateData: IUserStorage) => {
     } catch (error) {
         throw error;
     }    
+}
+
+export const createUserDefaultCards = async (newUserId: string) => {
+    try {
+        const defaultSetData = await getDefaultSetData();
+
+        console.log('defaultSetData', defaultSetData?.length);
+
+
+        for (const set of defaultSetData) {
+            const setData = {
+                name: set.name,
+                isPrivate: set.isPrivate,
+                color: set.color,
+                userId: newUserId,
+                isHighlight: set.isHighlight,
+                folderId: '',
+                defaultAdded: true
+            }
+
+            const newSetId = await insertSetData(setData);
+
+            const cardData = await getCardData(set?._id?.toString() || '', set?.userId?.toString() || '');
+            console.log('cardData', cardData?.length);
+            const newCardData = cardData.map(card => ({
+                top: card.top,
+                bottom: card.bottom,
+                isBlur: card.isBlur,
+                position: card.position,
+                userId: newUserId,
+                setId: newSetId.toString(),
+                folderId: '',
+                defaultAdded: true,
+                note: card.note === null ? '' : card.note
+            }));
+
+            if (newCardData?.length > 0) {
+                await insertManyCardData(newCardData);
+            }
+
+        }
+
+        return;
+    } catch (error) {
+        throw error;
+    }
 }

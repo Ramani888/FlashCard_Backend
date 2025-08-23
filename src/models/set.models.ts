@@ -25,6 +25,10 @@ const SetSchema = new Schema({
     isHighlight: {
         type: Boolean,
         required: true
+    },
+    defaultAdded: {
+        type: Boolean,
+        default: false
     }
 }, {timestamps: true})
 
