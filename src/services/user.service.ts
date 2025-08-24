@@ -104,9 +104,6 @@ export const createUserDefaultCards = async (newUserId: string) => {
     try {
         const defaultSetData = await getDefaultSetData();
 
-        console.log('defaultSetData', defaultSetData?.length);
-
-
         for (const set of defaultSetData) {
             const setData = {
                 name: set.name,
@@ -121,7 +118,6 @@ export const createUserDefaultCards = async (newUserId: string) => {
             const newSetId = await insertSetData(setData);
 
             const cardData = await getCardData(set?._id?.toString() || '', set?.userId?.toString() || '');
-            console.log('cardData', cardData?.length);
             const newCardData = cardData.map(card => ({
                 top: card.top,
                 bottom: card.bottom,
