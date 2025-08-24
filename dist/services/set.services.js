@@ -9,9 +9,10 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getSetBySetId = exports.getSetDataByfolderId = exports.getSetData = exports.deleteSetData = exports.updateSetData = exports.insertSetData = void 0;
+exports.getDefaultSetData = exports.getSetBySetId = exports.getSetDataByfolderId = exports.getSetData = exports.deleteSetData = exports.updateSetData = exports.insertSetData = void 0;
 const set_models_1 = require("../models/set.models");
 const mongodb_1 = require("mongodb");
+const user_1 = require("../utils/constants/user");
 const insertSetData = (data) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newData = new set_models_1.Set(data);
@@ -134,6 +135,7 @@ const getSetData = (userId, search) => __awaiter(void 0, void 0, void 0, functio
                     "createdAt": 1,
                     "updatedAt": 1,
                     "isHighlight": 1,
+                    "defaultAdded": 1,
                     "folderName": "$folderData.name",
                     "cardCount": 1
                 }
@@ -245,6 +247,7 @@ const getSetDataByfolderId = (folderId, userId, search) => __awaiter(void 0, voi
                     "createdAt": 1,
                     "updatedAt": 1,
                     "isHighlight": 1,
+                    "defaultAdded": 1,
                     "folderName": "$folderData.name", // Extract folderName from folderData
                     "cardCount": 1 // Include card count in the final projection
                 }
@@ -268,3 +271,13 @@ const getSetBySetId = (setId) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getSetBySetId = getSetBySetId;
+const getDefaultSetData = () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield set_models_1.Set.find({ userId: user_1.defaultUserId, isPrivate: false });
+        return result;
+    }
+    catch (err) {
+        throw err;
+    }
+});
+exports.getDefaultSetData = getDefaultSetData;

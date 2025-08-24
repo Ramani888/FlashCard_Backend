@@ -86,6 +86,8 @@ const verifyOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         //Create New User Storage
         yield (0, user_service_1.createUserStorageData)({ userId: newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString(), storage: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.storage, unit: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.storageUnit, coveredStorage: 0, coveredStorageUnit: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.storageUnit });
         yield (0, user_service_1.createUserStorageLogsData)({ userId: newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString(), storage: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.storage, unit: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.storageUnit, type: 'added', note: 'When create new account.' });
+        //Create New User For Default Cards
+        yield (0, user_service_1.createUserDefaultCards)(newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString());
         //Subscribed New User For Free Tier
         const subscribedData = {
             tierId: subscription_1.FREE_TIER_ID,

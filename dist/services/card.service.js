@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllCardData = exports.getCardWithLargestPosition = exports.blurAllCardData = exports.deleteCardData = exports.getCardBySetId = exports.getCardByCardId = exports.getCardData = exports.updateCardData = exports.createCardData = exports.getCardTypeData = void 0;
+exports.getAllCardData = exports.getCardWithLargestPosition = exports.blurAllCardData = exports.deleteCardData = exports.getCardBySetId = exports.getCardByCardId = exports.getCardData = exports.updateCardData = exports.insertManyCardData = exports.createCardData = exports.getCardTypeData = void 0;
 const card_model_1 = require("../models/card.model");
 const cardType_model_1 = require("../models/cardType.model");
 const mongodb_1 = require("mongodb");
@@ -33,6 +33,15 @@ const createCardData = (data) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.createCardData = createCardData;
+const insertManyCardData = (data) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        yield card_model_1.Card.insertMany(data);
+    }
+    catch (err) {
+        throw err;
+    }
+});
+exports.insertManyCardData = insertManyCardData;
 const updateCardData = (updateData) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {

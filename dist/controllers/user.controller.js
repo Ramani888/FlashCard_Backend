@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateUserCredit = void 0;
+exports.addDefaultSetsAndCards = exports.updateUserCredit = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const user_1 = require("../utils/constants/user");
 const user_service_1 = require("../services/user.service");
@@ -36,3 +36,15 @@ const updateUserCredit = (req, res) => __awaiter(void 0, void 0, void 0, functio
     }
 });
 exports.updateUserCredit = updateUserCredit;
+const addDefaultSetsAndCards = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { userId } = req.query;
+    try {
+        yield (0, user_service_1.createUserDefaultCards)(userId);
+        res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: user_1.UserApiSource.post.addDefaultSetsAndCards.message });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+});
+exports.addDefaultSetsAndCards = addDefaultSetsAndCards;

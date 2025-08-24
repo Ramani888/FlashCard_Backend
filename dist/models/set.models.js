@@ -50,6 +50,10 @@ const SetSchema = new mongoose_1.Schema({
     isHighlight: {
         type: Boolean,
         required: true
+    },
+    defaultAdded: {
+        type: Boolean,
+        default: false
     }
 }, { timestamps: true });
 const dbConnection = mongoose_1.default.connection.useDb((_a = env.MONGODB_DATABASE) !== null && _a !== void 0 ? _a : '');
