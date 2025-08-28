@@ -39,8 +39,8 @@ import { AiApiSource } from "../utils/constants/AI";
 import { askQuestionValidation } from "../utils/validates/Ai.validate";
 import { getAskQuestionAnswer } from "../controllers/Ai.controller";
 import { UserApiSource } from "../utils/constants/user";
-import { addDefaultSetsAndCardsValidation, updateUserCreditValidation } from "../utils/validates/user.validate";
-import { addDefaultSetsAndCards, updateUserCredit } from "../controllers/user.controller";
+import { addAutoTranslateSetsAndCardsValidation, addDefaultSetsAndCardsValidation, updateUserCreditValidation } from "../utils/validates/user.validate";
+import { addAutoTranslateSetsAndCards, addDefaultSetsAndCards, updateUserCredit } from "../controllers/user.controller";
 import { authenticateToken } from "../utils/helpers/general";
 import { SubscriptionApiSource } from "../utils/constants/subscription";
 import { cancelSubscriptionValidation, createSubscriptionValidation, updateSubscriptionValidation } from "../utils/validates/subscription.validate";
@@ -159,5 +159,9 @@ router.put(SubscriptionApiSource?.put?.updateSubscription?.path, authenticateTok
 router.put(SubscriptionApiSource?.put?.cancelSubscription?.path, authenticateToken, validateBody(cancelSubscriptionValidation), cancelSubscription)
 
 //Add Default Sets And Cards
-router.post(UserApiSource.post.addDefaultSetsAndCards.path, validateBody(addDefaultSetsAndCardsValidation, RouteSource?.Query), addDefaultSetsAndCards)
+router.post(UserApiSource.post.addDefaultSetsAndCards.path, authenticateToken, validateBody(addDefaultSetsAndCardsValidation, RouteSource?.Query), addDefaultSetsAndCards)
+
+//Add Auto Translate Sets And Cards
+// router.post(UserApiSource.post.addAutoTranslateSetsAndCards.path, authenticateToken, validateBody(addAutoTranslateSetsAndCardsValidation, RouteSource?.Query), addAutoTranslateSetsAndCards)
+
 export default router;

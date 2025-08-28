@@ -1,3 +1,5 @@
+import { language } from "googleapis/build/src/apis/language"
+
 export const updateUserCreditValidation = {
     userId: 'required|string',
     credit: 'required|numeric',
@@ -5,5 +7,10 @@ export const updateUserCreditValidation = {
 }
 
 export const addDefaultSetsAndCardsValidation = {
-    userId: 'required|string'
+    userId: 'required|string',
+    language: 'required|string'
+}
+
+export const addAutoTranslateSetsAndCardsValidation = {
+    language: 'required|string'
 }

@@ -8,3 +8,18 @@ export const FREE_TIER = {
     storage: 250,
     storageUnit: 'MB'
 }
+
+export enum LanguageCode {
+    En = "en",
+    Cn = "zh-CN",
+    Tl = "tl",
+    Fr = "fr",
+    De = "de",
+    Hi = "hi",
+    Id = "id",
+    It = "it",
+    Pl = "pl",
+    Pt = "pt",
+    Es = "es",
+    Sw = "sw"
+}

@@ -2,6 +2,8 @@ import { Card } from "../models/card.model";
 import { CardType } from "../models/cardType.model";
 import { ICard } from "../types/card";
 import { ObjectId } from 'mongodb';
+import mongoose from 'mongoose';
+import { getCardCollectionName, getSetCollectionName } from "../utils/helpers/general";
 
 export const getCardTypeData = async () => {
     try {
@@ -24,6 +26,18 @@ export const createCardData = async (data: ICard) => {
 export const insertManyCardData = async (data: ICard[]) => {
     try {
         await Card.insertMany(data);
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const insertCardDataIntoMultiLanguageCollection = async (data: ICard[], collectionName: string) => {
+    try {
+        const dbName = process.env.MONGODB_DATABASE || 'FlashCard';
+        const db = mongoose.connection.useDb(dbName);
+        const collection = db.collection(collectionName);
+        await collection.insertMany(data);
+        return;
     } catch (err) {
         throw err;
     }
@@ -58,6 +72,15 @@ export const getCardByCardId = async (cardId: string) => {
         const objectId = new ObjectId(cardId?.toString());
         const result = await Card.findOne({ _id: objectId });
         return result?.toObject();
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const getAutoCardByUserId = async (userId: string) => {
+    try {
+        const result = await Card.find({ userId: userId?.toString(), defaultAdded: true }).lean();
+        return result;
     } catch (err) {
         throw err;
     }
@@ -163,3 +186,17 @@ export const getAllCardData = async () => {
         throw err;
     }
 };
+
+export const getDefaultCardData = async (language: string, setId: string, userId: string) => {
+    try {
+        const cardName = getCardCollectionName(language);
+        const dbName = process.env.MONGODB_DATABASE || 'FlashCard';
+        const db = mongoose.connection.useDb(dbName);
+        const result = await db.collection(cardName).find({ setId: setId?.toString(), userId: userId?.toString() })
+            .sort({ position: 1 }).toArray();
+
+        return result;
+    } catch (err) {
+      throw err;
+    }
+}

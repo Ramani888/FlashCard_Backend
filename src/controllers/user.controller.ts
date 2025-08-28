@@ -2,7 +2,8 @@ import { AuthorizedRequest } from "../types/user";
 import { StatusCodes } from "http-status-codes";
 import { Response } from 'express';
 import { UserApiSource } from "../utils/constants/user";
-import { createUserCreditLogsData, createUserDefaultCards, getUserCreditData, updateUserCreditData } from "../services/user.service";
+import { addAutoTranslateSetsAndCardsData, createUserCreditLogsData, createUserDefaultCards, getUserCreditData, updateUserCreditData } from "../services/user.service";
+import { getAutoCardByUserId } from "../services/card.service";
 
 export const updateUserCredit = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
@@ -26,10 +27,25 @@ export const updateUserCredit = async (req: AuthorizedRequest, res: Response) =>
 }
 
 export const addDefaultSetsAndCards = async (req: AuthorizedRequest, res: Response) => {
-    const { userId } = req.query;
+    const { userId, language } = req.query;
     try {
-        await createUserDefaultCards(userId);
+        const data = await getAutoCardByUserId(userId);
+        if (data?.length > 0) {
+            return res.status(StatusCodes.OK).send({ success: true, message: "Sets and cards already added." });
+        }
+        await createUserDefaultCards(userId, language);
         res.status(StatusCodes.OK).send({ success: true, message: UserApiSource.post.addDefaultSetsAndCards.message });
+    } catch (err) {
+        console.log(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const addAutoTranslateSetsAndCards = async (req: AuthorizedRequest, res: Response) => {
+    const { language } = req.query;
+    try {
+        await addAutoTranslateSetsAndCardsData(language);
+        res.status(StatusCodes.OK).send({ success: true, message: UserApiSource.post.addAutoTranslateSetsAndCards.message });
     } catch (err) {
         console.log(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });

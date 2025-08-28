@@ -13,3 +13,18 @@ export const SetApiSource = {
         getSetByFolderId: { path: '/folder/set', message: 'Set get Successfully.'}
     }
 }
+
+export enum DefaultSetName {
+    En = "SetEn",
+    Cn = "SetCn",
+    Tl = "SetTl",
+    Fr = "SetFr",
+    De = "SetDe",
+    Hi = "SetHi",
+    Id = "SetId",
+    It = "SetIt",
+    Pl = "SetPl",
+    Pt = "SetPt",
+    Es = "SetEs",
+    Sw = "SetSw"
+}

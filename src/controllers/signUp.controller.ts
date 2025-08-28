@@ -12,6 +12,7 @@ import { FREE_TIER_ID, USER_ALREADY_SUBSCRIBED } from "../utils/constants/subscr
 import { getOneMonthAfterDate } from "../utils/helpers/date";
 import { getCreateAccountTemplate } from "../utils/emailTemplate/CreateAccountTemplate";
 import { getOtpTemplate } from "../utils/emailTemplate/otpTemplate";
+import { language } from "googleapis/build/src/apis/language";
 
 export const signUp = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
@@ -51,7 +52,7 @@ export const signUp = async (req: AuthorizedRequest, res: Response) => {
 }
 
 export const verifyOtp = async (req: AuthorizedRequest, res: Response) => {
-    const { email, otp } = req.body;
+    const { email, otp, language } = req.body;
     try {
         //Email Convert Into Lowercase
         const LC_Email = email?.toLowerCase();
@@ -82,7 +83,7 @@ export const verifyOtp = async (req: AuthorizedRequest, res: Response) => {
         await createUserStorageLogsData({ userId: newUserId?.toString(), storage: FREE_TIER?.storage, unit: FREE_TIER?.storageUnit, type: 'added', note: 'When create new account.' });
 
         //Create New User For Default Cards
-        await createUserDefaultCards(newUserId?.toString());
+        await createUserDefaultCards(newUserId?.toString(), language);
 
         //Subscribed New User For Free Tier
         const subscribedData = {

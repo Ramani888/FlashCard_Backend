@@ -2,12 +2,28 @@ import { Set } from "../models/set.models";
 import { ISet } from "../types/set";
 import { ObjectId } from 'mongodb';
 import { defaultUserId } from "../utils/constants/user";
+import mongoose from 'mongoose';
+import { LanguageCode } from "../utils/constants/general";
+import { DefaultSetName } from "../utils/constants/set";
+import { getSetCollectionName } from "../utils/helpers/general";
 
 export const insertSetData = async (data: ISet) => {
     try {
         const newData = new Set(data);
         const savedData = await newData.save(); // Save the new data
         return savedData?._id; // Return the _id of the saved document
+    } catch (err) {
+        throw err;
+    }
+}
+
+export const insertSetDataIntoMultiLanguageCollection = async (data: ISet, collectionName: string) => {
+    try {
+        const dbName = process.env.MONGODB_DATABASE || 'FlashCard';
+        const db = mongoose.connection.useDb(dbName);
+        const collection = db.collection(collectionName);
+        const result = await collection.insertOne(data);
+        return result.insertedId;
     } catch (err) {
         throw err;
     }
@@ -258,10 +274,14 @@ export const getSetBySetId = async (setId: string) => {
     }
 }
 
-export const getDefaultSetData = async () => {
+export const getDefaultSetData = async (language: string) => {
     try {
-        const result = await Set.find({ userId: defaultUserId, isPrivate: false });
+        const setName = getSetCollectionName(language);
+        const dbName = process.env.MONGODB_DATABASE || 'FlashCard';
+        const db = mongoose.connection.useDb(dbName);
+        const result = await db.collection(setName).find({ }).toArray();
         return result;
+
     } catch (err) {
         throw err;
     }

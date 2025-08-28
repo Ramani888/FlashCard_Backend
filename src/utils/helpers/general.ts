@@ -1,5 +1,8 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { LanguageCode } from '../constants/general';
+import { DefaultSetName } from '../constants/set';
+import { DefaultCardName } from '../constants/card';
 const env = process.env;
 
 export const generateOTP = () => {
@@ -139,4 +142,66 @@ export function authenticateToken(req: any, res: any, next: any) {
       req.user = user;
       next();
     });
+}
+
+export const getSetCollectionName = (language: string) => {
+    switch (language) {
+        case LanguageCode.En:
+            return DefaultSetName?.En
+        case LanguageCode.Cn:
+            return DefaultSetName?.Cn
+        case LanguageCode.Tl:
+            return DefaultSetName?.Tl
+        case LanguageCode.Fr:
+            return DefaultSetName?.Fr
+        case LanguageCode.De:
+            return DefaultSetName?.De
+        case LanguageCode.Hi:
+            return DefaultSetName?.Hi
+        case LanguageCode.Id:
+            return DefaultSetName?.Id
+        case LanguageCode.It:
+            return DefaultSetName?.It
+        case LanguageCode.Pl:
+            return DefaultSetName?.Pl
+        case LanguageCode.Pt:
+            return DefaultSetName?.Pt
+        case LanguageCode.Es:
+            return DefaultSetName?.Es
+        case LanguageCode.Sw:
+            return DefaultSetName?.Sw
+        default:
+            return DefaultSetName?.En
+    }
+}
+
+export const getCardCollectionName = (language: string) => {
+    switch (language) {
+        case LanguageCode.En:
+            return DefaultCardName?.En
+        case LanguageCode.Cn:
+            return DefaultCardName?.Cn
+        case LanguageCode.Tl:
+            return DefaultCardName?.Tl
+        case LanguageCode.Fr:
+            return DefaultCardName?.Fr
+        case LanguageCode.De:
+            return DefaultCardName?.De
+        case LanguageCode.Hi:
+            return DefaultCardName?.Hi
+        case LanguageCode.Id:
+            return DefaultCardName?.Id
+        case LanguageCode.It:
+            return DefaultCardName?.It
+        case LanguageCode.Pl:
+            return DefaultCardName?.Pl
+        case LanguageCode.Pt:
+            return DefaultCardName?.Pt
+        case LanguageCode.Es:
+            return DefaultCardName?.Es
+        case LanguageCode.Sw:
+            return DefaultCardName?.Sw
+        default:
+            return DefaultCardName?.En
+    }
 }

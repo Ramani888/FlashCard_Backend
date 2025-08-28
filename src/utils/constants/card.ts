@@ -16,3 +16,18 @@ export const CardApiSource = {
         getAllCard: { path: '/card/all', message: 'Card get Successfully.'}
     }
 }
+
+export enum DefaultCardName {
+    En = "CardEn",
+    Cn = "CardCn",
+    Tl = "CardTl",
+    Fr = "CardFr",
+    De = "CardDe",
+    Hi = "CardHi",
+    Id = "CardId",
+    It = "CardIt",
+    Pl = "CardPl",
+    Pt = "CardPt",
+    Es = "CardEs",
+    Sw = "CardSw"
+}
