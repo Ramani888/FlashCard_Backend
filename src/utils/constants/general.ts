@@ -11,7 +11,7 @@ export const FREE_TIER = {
 
 export enum LanguageCode {
     En = "en",
-    Cn = "zh-CN",
+    Cn = "zh",
     Tl = "tl",
     Fr = "fr",
     De = "de",
