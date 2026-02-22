@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addAutoTranslateSetsAndCards = exports.addDefaultSetsAndCards = exports.updateUserCredit = void 0;
+exports.deleteAccount = exports.addAutoTranslateSetsAndCards = exports.addDefaultSetsAndCards = exports.updateUserCredit = void 0;
 const http_status_codes_1 = require("http-status-codes");
 const user_1 = require("../utils/constants/user");
 const user_service_1 = require("../services/user.service");
@@ -65,3 +65,19 @@ const addAutoTranslateSetsAndCards = (req, res) => __awaiter(void 0, void 0, voi
     }
 });
 exports.addAutoTranslateSetsAndCards = addAutoTranslateSetsAndCards;
+const deleteAccount = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.userId;
+    try {
+        if (!userId) {
+            return res.status(http_status_codes_1.StatusCodes.UNAUTHORIZED).send({ error: 'User not authenticated.' });
+        }
+        yield (0, user_service_1.deleteUserAccount)(userId);
+        res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: user_1.UserApiSource.delete.deleteAccount.message });
+    }
+    catch (err) {
+        console.log(err);
+        res.status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+});
+exports.deleteAccount = deleteAccount;

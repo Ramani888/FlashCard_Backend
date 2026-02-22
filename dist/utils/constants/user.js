@@ -8,6 +8,9 @@ exports.UserApiSource = {
     post: {
         addDefaultSetsAndCards: { path: '/addDefaultSetsAndCards', message: 'Default Sets and Cards Added Successfully.' },
         addAutoTranslateSetsAndCards: { path: '/addAutoTranslateSetsAndCards', message: 'Auto Translate Sets and Cards Added Successfully.' }
+    },
+    delete: {
+        deleteAccount: { path: '/account', message: 'Account Deleted Successfully.' }
     }
 };
 exports.defaultUserId = '66e737daf9aa4eac9897d37d';

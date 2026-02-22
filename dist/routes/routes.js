@@ -144,6 +144,8 @@ router.put((_f = (_e = subscription_1.SubscriptionApiSource === null || subscrip
 router.put((_h = (_g = subscription_1.SubscriptionApiSource === null || subscription_1.SubscriptionApiSource === void 0 ? void 0 : subscription_1.SubscriptionApiSource.put) === null || _g === void 0 ? void 0 : _g.cancelSubscription) === null || _h === void 0 ? void 0 : _h.path, general_1.authenticateToken, (0, bodyValidate_middleware_1.validateBody)(subscription_validate_1.cancelSubscriptionValidation), subscription_controller_1.cancelSubscription);
 //Add Default Sets And Cards
 router.post(user_1.UserApiSource.post.addDefaultSetsAndCards.path, general_1.authenticateToken, (0, bodyValidate_middleware_1.validateBody)(user_validate_1.addDefaultSetsAndCardsValidation, RouteSource === null || RouteSource === void 0 ? void 0 : RouteSource.Query), user_controller_1.addDefaultSetsAndCards);
+//Delete Account
+router.delete(user_1.UserApiSource.delete.deleteAccount.path, general_1.authenticateToken, user_controller_1.deleteAccount);
 //Add Auto Translate Sets And Cards
 // router.post(UserApiSource.post.addAutoTranslateSetsAndCards.path, authenticateToken, validateBody(addAutoTranslateSetsAndCardsValidation, RouteSource?.Query), addAutoTranslateSetsAndCards)
 exports.default = router;

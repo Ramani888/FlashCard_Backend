@@ -9,15 +9,29 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addAutoTranslateSetsAndCardsData = exports.createUserDefaultCards = exports.updateUserStorageLimitData = exports.updateUserStorageData = exports.getUserStorageData = exports.createUserStorageLogsData = exports.createUserStorageData = exports.createUserCreditLogsData = exports.createUserCreditData = exports.getUserCreditData = exports.updateUserCreditData = void 0;
+exports.deleteUserAccount = exports.addAutoTranslateSetsAndCardsData = exports.createUserDefaultCards = exports.updateUserStorageLimitData = exports.updateUserStorageData = exports.getUserStorageData = exports.createUserStorageLogsData = exports.createUserStorageData = exports.createUserCreditLogsData = exports.createUserCreditData = exports.getUserCreditData = exports.updateUserCreditData = void 0;
 const userCredit_model_1 = require("../models/userCredit.model");
 const userCreditLogs_model_1 = require("../models/userCreditLogs.model");
 const userStorage_model_1 = require("../models/userStorage.model");
 const userStorageLogs_model_1 = require("../models/userStorageLogs.model");
+const user_model_1 = require("../models/user.model");
+const card_model_1 = require("../models/card.model");
+const set_models_1 = require("../models/set.models");
+const folder_model_1 = require("../models/folder.model");
+const imagesFolder_model_1 = require("../models/imagesFolder.model");
+const pdfFolder_model_1 = require("../models/pdfFolder.model");
+const images_model_1 = require("../models/images.model");
+const pdf_model_1 = require("../models/pdf.model");
+const notes_model_1 = require("../models/notes.model");
+const contacts_model_1 = require("../models/contacts.model");
+const support_model_1 = require("../models/support.model");
+const userSubscription_model_1 = require("../models/userSubscription.model");
 const set_services_1 = require("./set.services");
 const card_service_1 = require("./card.service");
 const google_translate_api_x_1 = require("google-translate-api-x");
 const general_1 = require("../utils/helpers/general");
+const uploadConfig_1 = require("../routes/uploadConfig");
+const general_2 = require("../utils/constants/general");
 const updateUserCreditData = (updateData) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield userCredit_model_1.UserCredit.findOneAndUpdate({ userId: updateData === null || updateData === void 0 ? void 0 : updateData.userId }, { $set: { credit: updateData === null || updateData === void 0 ? void 0 : updateData.credit } }, { new: true, upsert: false });
@@ -244,3 +258,84 @@ const addAutoTranslateSetsAndCardsData = (language) => __awaiter(void 0, void 0,
     }
 });
 exports.addAutoTranslateSetsAndCardsData = addAutoTranslateSetsAndCardsData;
+const deleteUserAccount = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // First, fetch all S3 file URLs that need to be deleted
+        const [userData, userImages, userPdfs, userSupports] = yield Promise.all([
+            user_model_1.User.findById(userId),
+            images_model_1.Images.find({ userId: userId }),
+            pdf_model_1.Pdf.find({ userId: userId }),
+            support_model_1.Support.find({ userId: userId })
+        ]);
+        // Collect all S3 URLs to delete
+        const s3DeletionPromises = [];
+        // Delete user's profile picture from S3
+        if (userData === null || userData === void 0 ? void 0 : userData.picture) {
+            s3DeletionPromises.push((0, uploadConfig_1.deleteFromS3)(userData.picture, general_2.FLASHCARD_IMAGES_V1_BUCKET_NAME)
+                .catch(err => console.error('Error deleting profile picture:', err)));
+        }
+        // Delete all user's images from S3
+        userImages.forEach(image => {
+            if (image.url) {
+                s3DeletionPromises.push((0, uploadConfig_1.deleteFromS3)(image.url, general_2.FLASHCARD_IMAGES_V1_BUCKET_NAME)
+                    .catch(err => console.error('Error deleting image:', err)));
+            }
+        });
+        // Delete all user's PDFs from S3
+        userPdfs.forEach(pdf => {
+            if (pdf.url) {
+                s3DeletionPromises.push((0, uploadConfig_1.deleteFromS3)(pdf.url, general_2.FLASHCARD_PDF_V1_BUCKET_NAME)
+                    .catch(err => console.error('Error deleting PDF:', err)));
+            }
+        });
+        // Delete all user's support images from S3
+        userSupports.forEach(support => {
+            if (support.image) {
+                s3DeletionPromises.push((0, uploadConfig_1.deleteFromS3)(support.image, general_2.FLASHCARD_SUPPORT_V1_BUCKET_NAME)
+                    .catch(err => console.error('Error deleting support image:', err)));
+            }
+        });
+        // Wait for all S3 deletions to complete
+        yield Promise.all(s3DeletionPromises);
+        // Now delete all user-related data from all database collections
+        yield Promise.all([
+            // Delete user's cards
+            card_model_1.Card.deleteMany({ userId: userId }),
+            // Delete user's sets
+            set_models_1.Set.deleteMany({ userId: userId }),
+            // Delete user's folders
+            folder_model_1.Folder.deleteMany({ userId: userId }),
+            // Delete user's image folders
+            imagesFolder_model_1.ImagesFolder.deleteMany({ userId: userId }),
+            // Delete user's pdf folders
+            pdfFolder_model_1.PdfFolder.deleteMany({ userId: userId }),
+            // Delete user's images
+            images_model_1.Images.deleteMany({ userId: userId }),
+            // Delete user's pdfs
+            pdf_model_1.Pdf.deleteMany({ userId: userId }),
+            // Delete user's notes
+            notes_model_1.Notes.deleteMany({ userId: userId }),
+            // Delete user's contacts (both as user and as contact)
+            contacts_model_1.Contacts.deleteMany({ $or: [{ userId: userId }, { contactUserId: userId }] }),
+            // Delete user's support tickets
+            support_model_1.Support.deleteMany({ userId: userId }),
+            // Delete user's subscription
+            userSubscription_model_1.UserSubscription.deleteMany({ userId: userId }),
+            // Delete user's credit data
+            userCredit_model_1.UserCredit.deleteMany({ userId: userId }),
+            // Delete user's credit logs
+            userCreditLogs_model_1.UserCreditLogs.deleteMany({ userId: userId }),
+            // Delete user's storage data
+            userStorage_model_1.UserStorage.deleteMany({ userId: userId }),
+            // Delete user's storage logs
+            userStorageLogs_model_1.UserStorageLogs.deleteMany({ userId: userId }),
+            // Finally, delete the user account
+            user_model_1.User.findByIdAndDelete(userId)
+        ]);
+        return;
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.deleteUserAccount = deleteUserAccount;
