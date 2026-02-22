@@ -8,11 +8,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDefaultSetData = exports.getSetBySetId = exports.getSetDataByfolderId = exports.getSetData = exports.deleteSetData = exports.updateSetData = exports.insertSetData = void 0;
+exports.getDefaultSetData = exports.getSetBySetId = exports.getSetDataByfolderId = exports.getSetData = exports.deleteSetData = exports.updateSetData = exports.insertSetDataIntoMultiLanguageCollection = exports.insertSetData = void 0;
 const set_models_1 = require("../models/set.models");
 const mongodb_1 = require("mongodb");
-const user_1 = require("../utils/constants/user");
+const mongoose_1 = __importDefault(require("mongoose"));
+const general_1 = require("../utils/helpers/general");
 const insertSetData = (data) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const newData = new set_models_1.Set(data);
@@ -24,6 +28,19 @@ const insertSetData = (data) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.insertSetData = insertSetData;
+const insertSetDataIntoMultiLanguageCollection = (data, collectionName) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const dbName = process.env.MONGODB_DATABASE || 'FlashCard';
+        const db = mongoose_1.default.connection.useDb(dbName);
+        const collection = db.collection(collectionName);
+        const result = yield collection.insertOne(data);
+        return result.insertedId;
+    }
+    catch (err) {
+        throw err;
+    }
+});
+exports.insertSetDataIntoMultiLanguageCollection = insertSetDataIntoMultiLanguageCollection;
 const updateSetData = (updateData) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
@@ -271,9 +288,12 @@ const getSetBySetId = (setId) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.getSetBySetId = getSetBySetId;
-const getDefaultSetData = () => __awaiter(void 0, void 0, void 0, function* () {
+const getDefaultSetData = (language) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield set_models_1.Set.find({ userId: user_1.defaultUserId, isPrivate: false });
+        const setName = (0, general_1.getSetCollectionName)(language);
+        const dbName = process.env.MONGODB_DATABASE || 'FlashCard';
+        const db = mongoose_1.default.connection.useDb(dbName);
+        const result = yield db.collection(setName).find({}).toArray();
         return result;
     }
     catch (err) {

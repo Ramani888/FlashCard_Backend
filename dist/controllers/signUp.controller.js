@@ -60,7 +60,7 @@ const signUp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 exports.signUp = signUp;
 const verifyOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
-    const { email, otp } = req.body;
+    const { email, otp, language } = req.body;
     try {
         //Email Convert Into Lowercase
         const LC_Email = email === null || email === void 0 ? void 0 : email.toLowerCase();
@@ -87,7 +87,7 @@ const verifyOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         yield (0, user_service_1.createUserStorageData)({ userId: newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString(), storage: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.storage, unit: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.storageUnit, coveredStorage: 0, coveredStorageUnit: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.storageUnit });
         yield (0, user_service_1.createUserStorageLogsData)({ userId: newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString(), storage: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.storage, unit: general_2.FREE_TIER === null || general_2.FREE_TIER === void 0 ? void 0 : general_2.FREE_TIER.storageUnit, type: 'added', note: 'When create new account.' });
         //Create New User For Default Cards
-        yield (0, user_service_1.createUserDefaultCards)(newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString());
+        yield (0, user_service_1.createUserDefaultCards)(newUserId === null || newUserId === void 0 ? void 0 : newUserId.toString(), language);
         //Subscribed New User For Free Tier
         const subscribedData = {
             tierId: subscription_1.FREE_TIER_ID,

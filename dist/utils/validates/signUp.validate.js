@@ -9,7 +9,8 @@ exports.signUpValidation = {
 };
 exports.verifyOtpValidation = {
     email: 'required|email',
-    otp: 'required|numeric'
+    otp: 'required|numeric',
+    language: 'required|string'
 };
 exports.resendOtpValidation = {
     email: 'required|email',

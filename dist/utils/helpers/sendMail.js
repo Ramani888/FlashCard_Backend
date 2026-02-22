@@ -15,24 +15,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const nodemailer_1 = __importDefault(require("nodemailer"));
 const sendMail = (to, subject, htmlTemplate, imageUrl) => __awaiter(void 0, void 0, void 0, function* () {
     const transporter = nodemailer_1.default.createTransport({
-        service: 'gmail',
+        host: 'mail.privateemail.com',
+        port: 587, // TLS
+        secure: false, // false for 587, true for 465
         auth: {
-            // user: 'divyeshr@zeusint.com',
-            // pass: 'xpqn mysr vrkg aifj'
-            user: 'Biblestudykitapp@gmail.com',
-            pass: 'jtlo jveb dilx fhlx'
+            user: 'support@biblestudycards.app',
+            pass: 'BibleApp1234$' // mailbox or app password
         }
     });
     const mailOptions = {
-        from: 'Biblestudykitapp@gmail.com',
+        from: '"Bible Study Cards" <support@biblestudycards.app>',
         to,
         subject,
         html: htmlTemplate
     };
-    // Add attachment only if imagePath is provided
     if (imageUrl) {
         mailOptions.attachments = [
             {
+                filename: 'image.jpg',
                 path: imageUrl
             }
         ];

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.SetApiSource = void 0;
+exports.DefaultSetName = exports.SetApiSource = void 0;
 exports.SetApiSource = {
     post: {
         createSet: { path: '/set', message: 'Set Created Successfully.' }
@@ -16,3 +16,18 @@ exports.SetApiSource = {
         getSetByFolderId: { path: '/folder/set', message: 'Set get Successfully.' }
     }
 };
+var DefaultSetName;
+(function (DefaultSetName) {
+    DefaultSetName["En"] = "SetEn";
+    DefaultSetName["Cn"] = "SetCn";
+    DefaultSetName["Tl"] = "SetTl";
+    DefaultSetName["Fr"] = "SetFr";
+    DefaultSetName["De"] = "SetDe";
+    DefaultSetName["Hi"] = "SetHi";
+    DefaultSetName["Id"] = "SetId";
+    DefaultSetName["It"] = "SetIt";
+    DefaultSetName["Pl"] = "SetPl";
+    DefaultSetName["Pt"] = "SetPt";
+    DefaultSetName["Es"] = "SetEs";
+    DefaultSetName["Sw"] = "SetSw";
+})(DefaultSetName || (exports.DefaultSetName = DefaultSetName = {}));

@@ -8,11 +8,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllCardData = exports.getCardWithLargestPosition = exports.blurAllCardData = exports.deleteCardData = exports.getCardBySetId = exports.getCardByCardId = exports.getCardData = exports.updateCardData = exports.insertManyCardData = exports.createCardData = exports.getCardTypeData = void 0;
+exports.getDefaultCardData = exports.getAllCardData = exports.getCardWithLargestPosition = exports.blurAllCardData = exports.deleteCardData = exports.getCardBySetId = exports.getAutoCardByUserId = exports.getCardByCardId = exports.getCardData = exports.updateCardData = exports.insertCardDataIntoMultiLanguageCollection = exports.insertManyCardData = exports.createCardData = exports.getCardTypeData = void 0;
 const card_model_1 = require("../models/card.model");
 const cardType_model_1 = require("../models/cardType.model");
 const mongodb_1 = require("mongodb");
+const mongoose_1 = __importDefault(require("mongoose"));
+const general_1 = require("../utils/helpers/general");
 const getCardTypeData = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield cardType_model_1.CardType.find();
@@ -42,6 +47,19 @@ const insertManyCardData = (data) => __awaiter(void 0, void 0, void 0, function*
     }
 });
 exports.insertManyCardData = insertManyCardData;
+const insertCardDataIntoMultiLanguageCollection = (data, collectionName) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const dbName = process.env.MONGODB_DATABASE || 'FlashCard';
+        const db = mongoose_1.default.connection.useDb(dbName);
+        const collection = db.collection(collectionName);
+        yield collection.insertMany(data);
+        return;
+    }
+    catch (err) {
+        throw err;
+    }
+});
+exports.insertCardDataIntoMultiLanguageCollection = insertCardDataIntoMultiLanguageCollection;
 const updateCardData = (updateData) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
     try {
@@ -79,6 +97,16 @@ const getCardByCardId = (cardId) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 exports.getCardByCardId = getCardByCardId;
+const getAutoCardByUserId = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield card_model_1.Card.find({ userId: userId === null || userId === void 0 ? void 0 : userId.toString(), defaultAdded: true }).lean();
+        return result;
+    }
+    catch (err) {
+        throw err;
+    }
+});
+exports.getAutoCardByUserId = getAutoCardByUserId;
 const getCardBySetId = (setId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield card_model_1.Card.find({ setId: setId === null || setId === void 0 ? void 0 : setId.toString() }).lean();
@@ -185,3 +213,17 @@ const getAllCardData = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getAllCardData = getAllCardData;
+const getDefaultCardData = (language, setId, userId) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const cardName = (0, general_1.getCardCollectionName)(language);
+        const dbName = process.env.MONGODB_DATABASE || 'FlashCard';
+        const db = mongoose_1.default.connection.useDb(dbName);
+        const result = yield db.collection(cardName).find({ setId: setId === null || setId === void 0 ? void 0 : setId.toString(), userId: userId === null || userId === void 0 ? void 0 : userId.toString() })
+            .sort({ position: 1 }).toArray();
+        return result;
+    }
+    catch (err) {
+        throw err;
+    }
+});
+exports.getDefaultCardData = getDefaultCardData;

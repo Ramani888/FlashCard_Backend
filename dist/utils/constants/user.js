@@ -6,7 +6,8 @@ exports.UserApiSource = {
         updateCredit: { path: '/credit', message: 'AI Credit Updated Successfully.' }
     },
     post: {
-        addDefaultSetsAndCards: { path: '/addDefaultSetsAndCards', message: 'Default Sets and Cards Added Successfully.' }
+        addDefaultSetsAndCards: { path: '/addDefaultSetsAndCards', message: 'Default Sets and Cards Added Successfully.' },
+        addAutoTranslateSetsAndCards: { path: '/addAutoTranslateSetsAndCards', message: 'Auto Translate Sets and Cards Added Successfully.' }
     }
 };
 exports.defaultUserId = '66e737daf9aa4eac9897d37d';

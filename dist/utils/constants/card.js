@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CardApiSource = void 0;
+exports.DefaultCardName = exports.CardApiSource = void 0;
 exports.CardApiSource = {
     post: {
         createCard: { path: '/card', message: 'Card Created Successfully.' }
@@ -19,3 +19,18 @@ exports.CardApiSource = {
         getAllCard: { path: '/card/all', message: 'Card get Successfully.' }
     }
 };
+var DefaultCardName;
+(function (DefaultCardName) {
+    DefaultCardName["En"] = "CardEn";
+    DefaultCardName["Cn"] = "CardCn";
+    DefaultCardName["Tl"] = "CardTl";
+    DefaultCardName["Fr"] = "CardFr";
+    DefaultCardName["De"] = "CardDe";
+    DefaultCardName["Hi"] = "CardHi";
+    DefaultCardName["Id"] = "CardId";
+    DefaultCardName["It"] = "CardIt";
+    DefaultCardName["Pl"] = "CardPl";
+    DefaultCardName["Pt"] = "CardPt";
+    DefaultCardName["Es"] = "CardEs";
+    DefaultCardName["Sw"] = "CardSw";
+})(DefaultCardName || (exports.DefaultCardName = DefaultCardName = {}));

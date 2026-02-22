@@ -3,10 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.comparePassword = exports.encryptPassword = exports.calculateStorage = exports.calculateFileSizeInMB = exports.getIssueSentence = exports.generateOTP = void 0;
+exports.getCardCollectionName = exports.getSetCollectionName = exports.comparePassword = exports.encryptPassword = exports.calculateStorage = exports.calculateFileSizeInMB = exports.getIssueSentence = exports.generateOTP = void 0;
 exports.authenticateToken = authenticateToken;
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const general_1 = require("../constants/general");
+const set_1 = require("../constants/set");
+const card_1 = require("../constants/card");
 const env = process.env;
 const generateOTP = () => {
     return Math.floor(1000 + Math.random() * 9000).toString();
@@ -123,3 +126,65 @@ function authenticateToken(req, res, next) {
         next();
     });
 }
+const getSetCollectionName = (language) => {
+    switch (language) {
+        case general_1.LanguageCode.En:
+            return set_1.DefaultSetName === null || set_1.DefaultSetName === void 0 ? void 0 : set_1.DefaultSetName.En;
+        case general_1.LanguageCode.Cn:
+            return set_1.DefaultSetName === null || set_1.DefaultSetName === void 0 ? void 0 : set_1.DefaultSetName.Cn;
+        case general_1.LanguageCode.Tl:
+            return set_1.DefaultSetName === null || set_1.DefaultSetName === void 0 ? void 0 : set_1.DefaultSetName.Tl;
+        case general_1.LanguageCode.Fr:
+            return set_1.DefaultSetName === null || set_1.DefaultSetName === void 0 ? void 0 : set_1.DefaultSetName.Fr;
+        case general_1.LanguageCode.De:
+            return set_1.DefaultSetName === null || set_1.DefaultSetName === void 0 ? void 0 : set_1.DefaultSetName.De;
+        case general_1.LanguageCode.Hi:
+            return set_1.DefaultSetName === null || set_1.DefaultSetName === void 0 ? void 0 : set_1.DefaultSetName.Hi;
+        case general_1.LanguageCode.Id:
+            return set_1.DefaultSetName === null || set_1.DefaultSetName === void 0 ? void 0 : set_1.DefaultSetName.Id;
+        case general_1.LanguageCode.It:
+            return set_1.DefaultSetName === null || set_1.DefaultSetName === void 0 ? void 0 : set_1.DefaultSetName.It;
+        case general_1.LanguageCode.Pl:
+            return set_1.DefaultSetName === null || set_1.DefaultSetName === void 0 ? void 0 : set_1.DefaultSetName.Pl;
+        case general_1.LanguageCode.Pt:
+            return set_1.DefaultSetName === null || set_1.DefaultSetName === void 0 ? void 0 : set_1.DefaultSetName.Pt;
+        case general_1.LanguageCode.Es:
+            return set_1.DefaultSetName === null || set_1.DefaultSetName === void 0 ? void 0 : set_1.DefaultSetName.Es;
+        case general_1.LanguageCode.Sw:
+            return set_1.DefaultSetName === null || set_1.DefaultSetName === void 0 ? void 0 : set_1.DefaultSetName.Sw;
+        default:
+            return set_1.DefaultSetName === null || set_1.DefaultSetName === void 0 ? void 0 : set_1.DefaultSetName.En;
+    }
+};
+exports.getSetCollectionName = getSetCollectionName;
+const getCardCollectionName = (language) => {
+    switch (language) {
+        case general_1.LanguageCode.En:
+            return card_1.DefaultCardName === null || card_1.DefaultCardName === void 0 ? void 0 : card_1.DefaultCardName.En;
+        case general_1.LanguageCode.Cn:
+            return card_1.DefaultCardName === null || card_1.DefaultCardName === void 0 ? void 0 : card_1.DefaultCardName.Cn;
+        case general_1.LanguageCode.Tl:
+            return card_1.DefaultCardName === null || card_1.DefaultCardName === void 0 ? void 0 : card_1.DefaultCardName.Tl;
+        case general_1.LanguageCode.Fr:
+            return card_1.DefaultCardName === null || card_1.DefaultCardName === void 0 ? void 0 : card_1.DefaultCardName.Fr;
+        case general_1.LanguageCode.De:
+            return card_1.DefaultCardName === null || card_1.DefaultCardName === void 0 ? void 0 : card_1.DefaultCardName.De;
+        case general_1.LanguageCode.Hi:
+            return card_1.DefaultCardName === null || card_1.DefaultCardName === void 0 ? void 0 : card_1.DefaultCardName.Hi;
+        case general_1.LanguageCode.Id:
+            return card_1.DefaultCardName === null || card_1.DefaultCardName === void 0 ? void 0 : card_1.DefaultCardName.Id;
+        case general_1.LanguageCode.It:
+            return card_1.DefaultCardName === null || card_1.DefaultCardName === void 0 ? void 0 : card_1.DefaultCardName.It;
+        case general_1.LanguageCode.Pl:
+            return card_1.DefaultCardName === null || card_1.DefaultCardName === void 0 ? void 0 : card_1.DefaultCardName.Pl;
+        case general_1.LanguageCode.Pt:
+            return card_1.DefaultCardName === null || card_1.DefaultCardName === void 0 ? void 0 : card_1.DefaultCardName.Pt;
+        case general_1.LanguageCode.Es:
+            return card_1.DefaultCardName === null || card_1.DefaultCardName === void 0 ? void 0 : card_1.DefaultCardName.Es;
+        case general_1.LanguageCode.Sw:
+            return card_1.DefaultCardName === null || card_1.DefaultCardName === void 0 ? void 0 : card_1.DefaultCardName.Sw;
+        default:
+            return card_1.DefaultCardName === null || card_1.DefaultCardName === void 0 ? void 0 : card_1.DefaultCardName.En;
+    }
+};
+exports.getCardCollectionName = getCardCollectionName;

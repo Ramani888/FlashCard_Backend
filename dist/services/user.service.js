@@ -9,13 +9,15 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUserDefaultCards = exports.updateUserStorageLimitData = exports.updateUserStorageData = exports.getUserStorageData = exports.createUserStorageLogsData = exports.createUserStorageData = exports.createUserCreditLogsData = exports.createUserCreditData = exports.getUserCreditData = exports.updateUserCreditData = void 0;
+exports.addAutoTranslateSetsAndCardsData = exports.createUserDefaultCards = exports.updateUserStorageLimitData = exports.updateUserStorageData = exports.getUserStorageData = exports.createUserStorageLogsData = exports.createUserStorageData = exports.createUserCreditLogsData = exports.createUserCreditData = exports.getUserCreditData = exports.updateUserCreditData = void 0;
 const userCredit_model_1 = require("../models/userCredit.model");
 const userCreditLogs_model_1 = require("../models/userCreditLogs.model");
 const userStorage_model_1 = require("../models/userStorage.model");
 const userStorageLogs_model_1 = require("../models/userStorageLogs.model");
 const set_services_1 = require("./set.services");
 const card_service_1 = require("./card.service");
+const google_translate_api_x_1 = require("google-translate-api-x");
+const general_1 = require("../utils/helpers/general");
 const updateUserCreditData = (updateData) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield userCredit_model_1.UserCredit.findOneAndUpdate({ userId: updateData === null || updateData === void 0 ? void 0 : updateData.userId }, { $set: { credit: updateData === null || updateData === void 0 ? void 0 : updateData.credit } }, { new: true, upsert: false });
@@ -106,10 +108,10 @@ const updateUserStorageLimitData = (updateData) => __awaiter(void 0, void 0, voi
     }
 });
 exports.updateUserStorageLimitData = updateUserStorageLimitData;
-const createUserDefaultCards = (newUserId) => __awaiter(void 0, void 0, void 0, function* () {
+const createUserDefaultCards = (newUserId, language) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     try {
-        const defaultSetData = yield (0, set_services_1.getDefaultSetData)();
+        const defaultSetData = yield (0, set_services_1.getDefaultSetData)(language);
         for (const set of defaultSetData) {
             const setData = {
                 name: set.name,
@@ -121,7 +123,7 @@ const createUserDefaultCards = (newUserId) => __awaiter(void 0, void 0, void 0, 
                 defaultAdded: true
             };
             const newSetId = yield (0, set_services_1.insertSetData)(setData);
-            const cardData = yield (0, card_service_1.getCardData)(((_a = set === null || set === void 0 ? void 0 : set._id) === null || _a === void 0 ? void 0 : _a.toString()) || '', ((_b = set === null || set === void 0 ? void 0 : set.userId) === null || _b === void 0 ? void 0 : _b.toString()) || '');
+            const cardData = yield (0, card_service_1.getDefaultCardData)(language, ((_a = set === null || set === void 0 ? void 0 : set._id) === null || _a === void 0 ? void 0 : _a.toString()) || '', ((_b = set === null || set === void 0 ? void 0 : set.userId) === null || _b === void 0 ? void 0 : _b.toString()) || '');
             const newCardData = cardData.map(card => ({
                 top: card.top,
                 bottom: card.bottom,
@@ -144,3 +146,101 @@ const createUserDefaultCards = (newUserId) => __awaiter(void 0, void 0, void 0, 
     }
 });
 exports.createUserDefaultCards = createUserDefaultCards;
+const addAutoTranslateSetsAndCardsData = (language) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b, _c, _d, _e, _f;
+    try {
+        const defaultSetData = yield (0, set_services_1.getDefaultSetData)(language);
+        console.log('defaultSetData', defaultSetData === null || defaultSetData === void 0 ? void 0 : defaultSetData.length);
+        // Helper function to retry translation with delay
+        const retryTranslate = (text_1, to_1, ...args_1) => __awaiter(void 0, [text_1, to_1, ...args_1], void 0, function* (text, to, maxRetries = 3, delay = 1000) {
+            let retries = 0;
+            while (retries < maxRetries) {
+                try {
+                    return yield (0, google_translate_api_x_1.translate)(text, { to });
+                }
+                catch (translateError) {
+                    retries++;
+                    console.error(`Translation error (attempt ${retries}/${maxRetries}):`, translateError);
+                    if (retries >= maxRetries) {
+                        throw translateError; // Throw after max retries
+                    }
+                    // Wait before retrying
+                    yield new Promise(resolve => setTimeout(resolve, delay));
+                }
+            }
+            // This should never be reached due to the throw above, but TypeScript needs it
+            return { text };
+        });
+        for (const set of defaultSetData) {
+            let setNameResult;
+            try {
+                setNameResult = yield retryTranslate(set.name, language);
+            }
+            catch (translateError) {
+                console.error('All translation attempts failed for set name:', translateError);
+                setNameResult = { text: set.name }; // Use original name only after all retries fail
+            }
+            const setData = {
+                name: (_a = setNameResult === null || setNameResult === void 0 ? void 0 : setNameResult.text) !== null && _a !== void 0 ? _a : set.name,
+                isPrivate: set.isPrivate,
+                color: set.color,
+                userId: set.userId,
+                isHighlight: set.isHighlight,
+                folderId: '',
+                defaultAdded: true,
+            };
+            const setCollectionName = (0, general_1.getSetCollectionName)(language);
+            const newSetId = yield (0, set_services_1.insertSetDataIntoMultiLanguageCollection)(setData, setCollectionName);
+            const cardData = yield (0, card_service_1.getCardData)(((_b = set === null || set === void 0 ? void 0 : set._id) === null || _b === void 0 ? void 0 : _b.toString()) || '', ((_c = set === null || set === void 0 ? void 0 : set.userId) === null || _c === void 0 ? void 0 : _c.toString()) || '');
+            console.log('cardData', cardData === null || cardData === void 0 ? void 0 : cardData.length);
+            // Translate each card field and handle promises in batches
+            const translatedCardData = [];
+            for (const card of cardData) {
+                try {
+                    // Translate top, bottom, and note with retry mechanism
+                    const [topTranslation, bottomTranslation, noteTranslation] = yield Promise.all([
+                        retryTranslate(card.top, language),
+                        retryTranslate(card.bottom, language),
+                        card.note && card.note !== '' ? retryTranslate(card.note, language) : { text: '' }
+                    ]);
+                    translatedCardData.push({
+                        top: (_d = topTranslation === null || topTranslation === void 0 ? void 0 : topTranslation.text) !== null && _d !== void 0 ? _d : card.top,
+                        bottom: (_e = bottomTranslation === null || bottomTranslation === void 0 ? void 0 : bottomTranslation.text) !== null && _e !== void 0 ? _e : card.bottom,
+                        isBlur: card.isBlur,
+                        position: card.position,
+                        userId: card.userId,
+                        setId: newSetId === null || newSetId === void 0 ? void 0 : newSetId.toString(),
+                        folderId: '',
+                        defaultAdded: true,
+                        note: (_f = noteTranslation === null || noteTranslation === void 0 ? void 0 : noteTranslation.text) !== null && _f !== void 0 ? _f : (card.note === null ? '' : card.note)
+                    });
+                }
+                catch (translateError) {
+                    console.error('All translation attempts failed for card:', translateError);
+                    // If all retries fail, add the original card without translation
+                    translatedCardData.push({
+                        top: card.top,
+                        bottom: card.bottom,
+                        isBlur: card.isBlur,
+                        position: card.position,
+                        userId: card.userId,
+                        setId: newSetId === null || newSetId === void 0 ? void 0 : newSetId.toString(),
+                        folderId: '',
+                        defaultAdded: true,
+                        note: card.note === null ? '' : card.note
+                    });
+                }
+            }
+            console.log('translatedCardData', translatedCardData === null || translatedCardData === void 0 ? void 0 : translatedCardData.length);
+            const cardCollectionName = (0, general_1.getCardCollectionName)(language);
+            if ((translatedCardData === null || translatedCardData === void 0 ? void 0 : translatedCardData.length) > 0) {
+                yield (0, card_service_1.insertCardDataIntoMultiLanguageCollection)(translatedCardData, cardCollectionName);
+            }
+        }
+        return;
+    }
+    catch (error) {
+        throw error;
+    }
+});
+exports.addAutoTranslateSetsAndCardsData = addAutoTranslateSetsAndCardsData;
