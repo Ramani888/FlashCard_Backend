@@ -6,7 +6,7 @@ exports.FLASHCARD_PDF_V1_BUCKET_NAME = 'flashcard-pdf-v1';
 exports.FLASHCARD_SUPPORT_V1_BUCKET_NAME = 'flashcard-support-v1';
 exports.FREE_TIER = {
     credit: 3,
-    storage: 250,
+    storage: 50,
     storageUnit: 'MB'
 };
 var LanguageCode;
