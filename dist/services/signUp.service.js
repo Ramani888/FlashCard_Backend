@@ -76,7 +76,6 @@ const createUser = (data) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const email = (_a = data === null || data === void 0 ? void 0 : data.email) === null || _a === void 0 ? void 0 : _a.toLowerCase();
         const userData = {
-            userName: data === null || data === void 0 ? void 0 : data.userName,
             email: email,
             password: data === null || data === void 0 ? void 0 : data.password,
             picture: data === null || data === void 0 ? void 0 : data.picture,

@@ -18,7 +18,7 @@ const getUsersData = (search, userId) => __awaiter(void 0, void 0, void 0, funct
         const objectId = new mongodb_1.ObjectId(userId === null || userId === void 0 ? void 0 : userId.toString());
         const cleanedSearch = search.trim().replace(/\s+/g, ' ');
         const users = yield user_model_1.User.find({
-            userName: { $regex: cleanedSearch, $options: 'i' }, // Case-insensitive search for userName
+            email: { $regex: cleanedSearch, $options: 'i' }, // Case-insensitive search for email
             _id: { $ne: objectId } // Exclude the user with the given ObjectId
         });
         return users;
@@ -92,7 +92,6 @@ const getContactsData = (userId) => __awaiter(void 0, void 0, void 0, function* 
                     "contactUserId": 1,
                     "createdAt": 1,
                     "updatedAt": 1,
-                    "userName": "$userData.userName",
                     "email": "$userData.email",
                     "password": "$userData.password",
                     "picture": "$userData.picture",

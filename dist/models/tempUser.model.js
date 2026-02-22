@@ -28,10 +28,6 @@ exports.TempUser = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const env = process.env;
 const TempUserSchema = new mongoose_1.Schema({
-    userName: {
-        type: String,
-        required: true
-    },
     email: {
         type: String,
         required: true

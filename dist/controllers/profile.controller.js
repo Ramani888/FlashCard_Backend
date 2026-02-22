@@ -123,7 +123,7 @@ const createSupport = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     try {
         // const sentenceData = getIssueSentence(bodyData?.supportType);
         const userData = yield (0, profile_service_1.getUserById)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.userId);
-        const emailTemplate = (0, support_1.getSupportEmailTemplate)(String(userData === null || userData === void 0 ? void 0 : userData.email), String(userData === null || userData === void 0 ? void 0 : userData.userName), bodyData === null || bodyData === void 0 ? void 0 : bodyData.supportMessage);
+        const emailTemplate = (0, support_1.getSupportEmailTemplate)(String(userData === null || userData === void 0 ? void 0 : userData.email), bodyData === null || bodyData === void 0 ? void 0 : bodyData.supportMessage);
         const supportTemplate = (0, SupportTemplate_1.getSupportTemplate)();
         if (req.file) {
             const imageUrl = yield (0, uploadConfig_1.uploadToS3)(req.file, general_1.FLASHCARD_SUPPORT_V1_BUCKET_NAME);

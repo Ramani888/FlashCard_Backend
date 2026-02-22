@@ -97,7 +97,7 @@ const verifyOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         };
         yield (0, subscription_service_1.createSubscriptionData)(subscribedData);
         //Send mail for account created
-        const accountCreatedTemplate = (0, CreateAccountTemplate_1.getCreateAccountTemplate)(tempUser === null || tempUser === void 0 ? void 0 : tempUser.userName);
+        const accountCreatedTemplate = (0, CreateAccountTemplate_1.getCreateAccountTemplate)();
         yield (0, sendMail_1.default)(tempUser === null || tempUser === void 0 ? void 0 : tempUser.email, 'Account Created', accountCreatedTemplate);
     }
     catch (err) {
