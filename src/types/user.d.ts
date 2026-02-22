@@ -17,7 +17,6 @@ export type UserJwt = {
 export interface IUser {
   _id?: ObjectId;
   email?: string;
-  userName?: string;
   password?: string;
   picture?: string;
   isPrivacy?: boolean;

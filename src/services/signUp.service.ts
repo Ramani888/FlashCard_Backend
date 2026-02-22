@@ -65,7 +65,6 @@ export const createUser = async (data: IUser) => {
     try {
         const email = data?.email?.toLowerCase();
         const userData = {
-            userName: data?.userName,
             email: email,
             password: data?.password,
             picture: data?.picture,

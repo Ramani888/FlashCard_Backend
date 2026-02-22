@@ -114,7 +114,7 @@ export const createSupport = async (req: AuthorizedRequest, res: Response) => {
         // const sentenceData = getIssueSentence(bodyData?.supportType);
         const userData = await getUserById(bodyData?.userId)
 
-        const emailTemplate = getSupportEmailTemplate(String(userData?.email), String(userData?.userName), bodyData?.supportMessage);
+        const emailTemplate = getSupportEmailTemplate(String(userData?.email), bodyData?.supportMessage);
         const supportTemplate = getSupportTemplate();
         if (req.file) {
             const imageUrl = await uploadToS3(req.file, FLASHCARD_SUPPORT_V1_BUCKET_NAME);

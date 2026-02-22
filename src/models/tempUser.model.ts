@@ -3,10 +3,6 @@ import mongoose, { Schema } from "mongoose";
 const env = process.env;
 
 const TempUserSchema = new Schema({
-    userName: {
-        type: String,
-        required: true
-    },
     email: {
         type: String,
         required: true

@@ -8,7 +8,7 @@ export const getUsersData = async (search: string, userId: string) => {
         const objectId = new ObjectId(userId?.toString());
         const cleanedSearch = search.trim().replace(/\s+/g, ' ');
         const users = await User.find({
-            userName: { $regex: cleanedSearch, $options: 'i' }, // Case-insensitive search for userName
+            email: { $regex: cleanedSearch, $options: 'i' }, // Case-insensitive search for email
             _id: { $ne: objectId }  // Exclude the user with the given ObjectId
         });
         return users;
@@ -78,7 +78,6 @@ export const getContactsData = async (userId: string) => {
                     "contactUserId": 1,
                     "createdAt": 1,
                     "updatedAt": 1,
-                    "userName": "$userData.userName",
                     "email": "$userData.email",
                     "password": "$userData.password",
                     "picture": "$userData.picture",

@@ -95,7 +95,7 @@ export const verifyOtp = async (req: AuthorizedRequest, res: Response) => {
         await createSubscriptionData(subscribedData);
 
         //Send mail for account created
-        const accountCreatedTemplate = getCreateAccountTemplate(tempUser?.userName);
+        const accountCreatedTemplate = getCreateAccountTemplate();
         await sendMail(tempUser?.email, 'Account Created', accountCreatedTemplate);
     } catch (err: any) {
         console.error(err);

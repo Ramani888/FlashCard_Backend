@@ -1,4 +1,4 @@
-export const getSupportEmailTemplate = (userEmail: string, userName: string, description: string) => {
+export const getSupportEmailTemplate = (userEmail: string, description: string) => {
     return `
         <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
             <h2 style="color: #C0392B; text-align: center;">New Support Request Received</h2>
@@ -6,7 +6,6 @@ export const getSupportEmailTemplate = (userEmail: string, userName: string, des
             <p>A new support request has been submitted with the following details:</p>
             
             <p><strong>User Email:</strong> ${userEmail}</p>
-            <p><strong>Username:</strong> ${userName}</p>
             <p><strong>Description:</strong> ${description}</p>
             
             <p>Please review this request and respond as needed.</p>

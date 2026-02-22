@@ -1,4 +1,4 @@
-export const getCreateAccountTemplate = (userName: string) => {
+export const getCreateAccountTemplate = () => {
     return `
         <!DOCTYPE html>
         <html>
@@ -21,7 +21,7 @@ export const getCreateAccountTemplate = (userName: string) => {
             </tr>
             <tr>
             <td style="background: #E9F9FF; border-radius: 24px; text-align: center;">
-                <h1 style="font-size: 36px; color: #002634;">Hi ${userName}, Your account has been succcessfully created!</h1>
+                <h1 style="font-size: 36px; color: #002634;">Your account has been successfully created!</h1>
                 <!-- <p style="font-size: 20px; color: #000;">We will contact you shortly. Thank you 🙌</p> -->
                 <a href="https://play.google.com/store/apps/details?id=com.flashcard.app" target="_blank">
                 <img src="https://flashcard-email-template-v1.s3.us-east-1.amazonaws.com/Iphone+Congrats+2.png" width="480" height="411">

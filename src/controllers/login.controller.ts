@@ -28,7 +28,7 @@ export const login = async (req: AuthorizedRequest, res: Response) => {
 
         const SECRET_KEY: any = env.SECRET_KEY;
         const token = jwt.sign(
-            { userId: existingUser?._id?.toString(), username: existingUser?.userName },
+            { userId: existingUser?._id?.toString() },
             SECRET_KEY,
             { expiresIn: '30d' } // expires in 5 minutes
         );
