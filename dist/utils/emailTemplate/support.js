@@ -49,7 +49,7 @@ const getSupportEmailTemplate = (userEmail, userName, description) => {
                         <img src="YOUR_CHAT_ICON_URL" alt="Chat Icon" style="width: 20px; height: 20px;">
                     </div>
                     <p style="color: #2b2b2b; font-size: 14px; margin: 0;">Have a question, feedback, or suggestion? Reply to this email.</p>
-                    <p style="color: #0d76d3; font-size: 14px; margin-top: 10px;">roadtojesusministry@gmail.com</p>
+                    <p style="color: #0d76d3; font-size: 14px; margin-top: 10px;">support@biblestudycards.app</p>
                 </div>
             </div>
         </body>

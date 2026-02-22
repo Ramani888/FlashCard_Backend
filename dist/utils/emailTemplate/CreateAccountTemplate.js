@@ -49,7 +49,7 @@ const getCreateAccountTemplate = (userName) => {
             </tr>
             <tr>
             <td style="text-align: center; padding: 20px; font-size: 18px;">
-                <p style="margin: 0;">roadtojesusministry@gmail.com</p>
+                <p style="margin: 0;">support@biblestudycards.app</p>
             </td>
             </tr>
         </table>
