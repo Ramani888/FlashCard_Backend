@@ -2,7 +2,7 @@ import { AuthorizedRequest } from "../types/user";
 import { StatusCodes } from "http-status-codes";
 import { Response } from 'express';
 import { UserApiSource } from "../utils/constants/user";
-import { addAutoTranslateSetsAndCardsData, createUserCreditLogsData, createUserDefaultCards, getUserCreditData, updateUserCreditData } from "../services/user.service";
+import { addAutoTranslateSetsAndCardsData, createUserCreditLogsData, createUserDefaultCards, deleteUserAccount, getUserCreditData, updateUserCreditData } from "../services/user.service";
 import { getAutoCardByUserId } from "../services/card.service";
 
 export const updateUserCredit = async (req: AuthorizedRequest, res: Response) => {
@@ -46,6 +46,20 @@ export const addAutoTranslateSetsAndCards = async (req: AuthorizedRequest, res: 
     try {
         await addAutoTranslateSetsAndCardsData(language);
         res.status(StatusCodes.OK).send({ success: true, message: UserApiSource.post.addAutoTranslateSetsAndCards.message });
+    } catch (err) {
+        console.log(err);
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
+    }
+}
+
+export const deleteAccount = async (req: AuthorizedRequest, res: Response) => {
+    const userId = req.user?.userId;
+    try {
+        if (!userId) {
+            return res.status(StatusCodes.UNAUTHORIZED).send({ error: 'User not authenticated.' });
+        }
+        await deleteUserAccount(userId);
+        res.status(StatusCodes.OK).send({ success: true, message: UserApiSource.delete.deleteAccount.message });
     } catch (err) {
         console.log(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });

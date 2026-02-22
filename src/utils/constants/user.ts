@@ -5,6 +5,9 @@ export const UserApiSource = {
     post: {
         addDefaultSetsAndCards: { path: '/addDefaultSetsAndCards', message: 'Default Sets and Cards Added Successfully.' },
         addAutoTranslateSetsAndCards: { path: '/addAutoTranslateSetsAndCards', message: 'Auto Translate Sets and Cards Added Successfully.' }
+    },
+    delete: {
+        deleteAccount: { path: '/account', message: 'Account Deleted Successfully.' }
     }
 }
 

@@ -2,11 +2,25 @@ import { UserCredit } from "../models/userCredit.model";
 import { UserCreditLogs } from "../models/userCreditLogs.model";
 import { UserStorage } from "../models/userStorage.model";
 import { UserStorageLogs } from "../models/userStorageLogs.model";
+import { User } from "../models/user.model";
+import { Card } from "../models/card.model";
+import { Set } from "../models/set.models";
+import { Folder } from "../models/folder.model";
+import { ImagesFolder } from "../models/imagesFolder.model";
+import { PdfFolder } from "../models/pdfFolder.model";
+import { Images } from "../models/images.model";
+import { Pdf } from "../models/pdf.model";
+import { Notes } from "../models/notes.model";
+import { Contacts } from "../models/contacts.model";
+import { Support } from "../models/support.model";
+import { UserSubscription } from "../models/userSubscription.model";
 import { IUserCredit, IUserCreditLogs, IUserStorage, IUserStorageLogs } from "../types/user";
 import { getDefaultSetData, insertSetData, insertSetDataIntoMultiLanguageCollection } from "./set.services";
 import { getCardData, getDefaultCardData, insertCardDataIntoMultiLanguageCollection, insertManyCardData } from "./card.service";
 import { translate } from "google-translate-api-x";
 import { getCardCollectionName, getSetCollectionName } from "../utils/helpers/general";
+import { deleteFromS3 } from "../routes/uploadConfig";
+import { FLASHCARD_IMAGES_V1_BUCKET_NAME, FLASHCARD_PDF_V1_BUCKET_NAME, FLASHCARD_SUPPORT_V1_BUCKET_NAME } from "../utils/constants/general";
 
 export const updateUserCreditData = async (updateData: IUserCredit) => {
     try {
@@ -242,6 +256,117 @@ export const addAutoTranslateSetsAndCardsData = async (language: string) => {
                 await insertCardDataIntoMultiLanguageCollection(translatedCardData, cardCollectionName);
             }
         }
+
+        return;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const deleteUserAccount = async (userId: string) => {
+    try {
+        // First, fetch all S3 file URLs that need to be deleted
+        const [userData, userImages, userPdfs, userSupports] = await Promise.all([
+            User.findById(userId),
+            Images.find({ userId: userId }),
+            Pdf.find({ userId: userId }),
+            Support.find({ userId: userId })
+        ]);
+
+        // Collect all S3 URLs to delete
+        const s3DeletionPromises: Promise<void>[] = [];
+
+        // Delete user's profile picture from S3
+        if (userData?.picture) {
+            s3DeletionPromises.push(
+                deleteFromS3(userData.picture, FLASHCARD_IMAGES_V1_BUCKET_NAME)
+                    .catch(err => console.error('Error deleting profile picture:', err))
+            );
+        }
+
+        // Delete all user's images from S3
+        userImages.forEach(image => {
+            if (image.url) {
+                s3DeletionPromises.push(
+                    deleteFromS3(image.url, FLASHCARD_IMAGES_V1_BUCKET_NAME)
+                        .catch(err => console.error('Error deleting image:', err))
+                );
+            }
+        });
+
+        // Delete all user's PDFs from S3
+        userPdfs.forEach(pdf => {
+            if (pdf.url) {
+                s3DeletionPromises.push(
+                    deleteFromS3(pdf.url, FLASHCARD_PDF_V1_BUCKET_NAME)
+                        .catch(err => console.error('Error deleting PDF:', err))
+                );
+            }
+        });
+
+        // Delete all user's support images from S3
+        userSupports.forEach(support => {
+            if (support.image) {
+                s3DeletionPromises.push(
+                    deleteFromS3(support.image, FLASHCARD_SUPPORT_V1_BUCKET_NAME)
+                        .catch(err => console.error('Error deleting support image:', err))
+                );
+            }
+        });
+
+        // Wait for all S3 deletions to complete
+        await Promise.all(s3DeletionPromises);
+
+        // Now delete all user-related data from all database collections
+        await Promise.all([
+            // Delete user's cards
+            Card.deleteMany({ userId: userId }),
+            
+            // Delete user's sets
+            Set.deleteMany({ userId: userId }),
+            
+            // Delete user's folders
+            Folder.deleteMany({ userId: userId }),
+            
+            // Delete user's image folders
+            ImagesFolder.deleteMany({ userId: userId }),
+            
+            // Delete user's pdf folders
+            PdfFolder.deleteMany({ userId: userId }),
+            
+            // Delete user's images
+            Images.deleteMany({ userId: userId }),
+            
+            // Delete user's pdfs
+            Pdf.deleteMany({ userId: userId }),
+            
+            // Delete user's notes
+            Notes.deleteMany({ userId: userId }),
+            
+            // Delete user's contacts (both as user and as contact)
+            Contacts.deleteMany({ $or: [{ userId: userId }, { contactUserId: userId }] }),
+            
+            // Delete user's support tickets
+            Support.deleteMany({ userId: userId }),
+            
+            // Delete user's subscription
+            UserSubscription.deleteMany({ userId: userId }),
+            
+            // Delete user's credit data
+            UserCredit.deleteMany({ userId: userId }),
+            
+            // Delete user's credit logs
+            UserCreditLogs.deleteMany({ userId: userId }),
+            
+            // Delete user's storage data
+            UserStorage.deleteMany({ userId: userId }),
+            
+            // Delete user's storage logs
+            UserStorageLogs.deleteMany({ userId: userId }),
+            
+            // Finally, delete the user account
+            User.findByIdAndDelete(userId)
+        ]);
 
         return;
     } catch (error) {

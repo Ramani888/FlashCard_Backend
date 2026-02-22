@@ -1,4 +1,13 @@
-type AuthorizedRequest = Express.Request & ?({ headers: { authorization: string } } & ?{ userData: JwtSign });
+type JwtPayload = {
+    userId: string;
+    exp?: number;
+};
+
+type AuthorizedRequest = Express.Request & { 
+    headers: { authorization?: string };
+    user?: JwtPayload;
+    userData?: JwtPayload;
+};
 
 declare namespace Express {
   type Request = AuthorizedRequest;
