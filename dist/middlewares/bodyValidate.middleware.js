@@ -40,7 +40,6 @@ exports.validateBody = validateBody;
 // You can add more validation rules for different routes as needed
 exports.extendedRules = {
     name: 'required|string',
-    isPrivate: 'required|boolean',
     color: 'required|string',
     cardTypeId: 'required|string',
     age: 'numeric|min:0|max:150',

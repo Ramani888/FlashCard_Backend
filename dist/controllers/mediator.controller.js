@@ -28,13 +28,13 @@ const getMediatorSet = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.getMediatorSet = getMediatorSet;
 const updateMediatorSet = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    var _a, _b, _c, _d;
+    var _a, _b, _c;
     const { userId, setId, folderId } = req.query;
     try {
         //Get set data
         const setData = yield (0, set_services_1.getSetBySetId)(setId);
         //Copy to create new set
-        const newSetData = Object.assign(Object.assign({ name: (_a = setData === null || setData === void 0 ? void 0 : setData.name) !== null && _a !== void 0 ? _a : '', isPrivate: (_b = setData === null || setData === void 0 ? void 0 : setData.isPrivate) !== null && _b !== void 0 ? _b : false, color: (_c = setData === null || setData === void 0 ? void 0 : setData.color) !== null && _c !== void 0 ? _c : '', userId: userId }, (folderId && { folderId })), { isHighlight: (_d = setData === null || setData === void 0 ? void 0 : setData.isHighlight) !== null && _d !== void 0 ? _d : false });
+        const newSetData = Object.assign(Object.assign({ name: (_a = setData === null || setData === void 0 ? void 0 : setData.name) !== null && _a !== void 0 ? _a : '', color: (_b = setData === null || setData === void 0 ? void 0 : setData.color) !== null && _b !== void 0 ? _b : '', userId: userId }, (folderId && { folderId })), { isHighlight: (_c = setData === null || setData === void 0 ? void 0 : setData.isHighlight) !== null && _c !== void 0 ? _c : false });
         const newSetId = yield (0, set_services_1.insertSetData)(newSetData);
         //Get card data
         const cardData = yield (0, card_service_1.getCardBySetId)(setId);

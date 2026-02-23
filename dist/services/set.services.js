@@ -145,7 +145,6 @@ const getSetData = (userId, search) => __awaiter(void 0, void 0, void 0, functio
                 $project: {
                     "_id": 1,
                     "name": 1,
-                    "isPrivate": 1,
                     "color": 1,
                     "userId": 1,
                     "folderId": 1,
@@ -257,7 +256,6 @@ const getSetDataByfolderId = (folderId, userId, search) => __awaiter(void 0, voi
                 $project: {
                     "_id": 1,
                     "name": 1,
-                    "isPrivate": 1,
                     "color": 1,
                     "userId": 1,
                     "folderId": 1,

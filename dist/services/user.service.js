@@ -129,7 +129,6 @@ const createUserDefaultCards = (newUserId, language) => __awaiter(void 0, void 0
         for (const set of defaultSetData) {
             const setData = {
                 name: set.name,
-                isPrivate: set.isPrivate,
                 color: set.color,
                 userId: newUserId,
                 isHighlight: set.isHighlight,
@@ -196,7 +195,6 @@ const addAutoTranslateSetsAndCardsData = (language) => __awaiter(void 0, void 0,
             }
             const setData = {
                 name: (_a = setNameResult === null || setNameResult === void 0 ? void 0 : setNameResult.text) !== null && _a !== void 0 ? _a : set.name,
-                isPrivate: set.isPrivate,
                 color: set.color,
                 userId: set.userId,
                 isHighlight: set.isHighlight,

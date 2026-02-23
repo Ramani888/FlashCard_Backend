@@ -13,10 +13,8 @@ exports.getMediatorSetData = void 0;
 const set_models_1 = require("../models/set.models");
 const getMediatorSetData = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // const result = await Set.find({ userId: userId?.toString(), isPrivate: false })
         const query = {
-            userId: userId === null || userId === void 0 ? void 0 : userId.toString(),
-            isPrivate: false
+            userId: userId === null || userId === void 0 ? void 0 : userId.toString()
         };
         const result = yield set_models_1.Set.aggregate([
             {
@@ -63,7 +61,6 @@ const getMediatorSetData = (userId) => __awaiter(void 0, void 0, void 0, functio
                 $project: {
                     "_id": 1,
                     "name": 1,
-                    "isPrivate": 1,
                     "color": 1,
                     "userId": 1,
                     "folderId": 1,
