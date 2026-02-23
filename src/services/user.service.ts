@@ -122,7 +122,6 @@ export const createUserDefaultCards = async (newUserId: string, language: string
         for (const set of defaultSetData) {
             const setData = {
                 name: set.name,
-                isPrivate: set.isPrivate,
                 color: set.color,
                 userId: newUserId,
                 isHighlight: set.isHighlight,
@@ -194,7 +193,6 @@ export const addAutoTranslateSetsAndCardsData = async (language: string) => {
 
             const setData = {
                 name: setNameResult?.text ?? set.name,
-                isPrivate: set.isPrivate,
                 color: set.color,
                 userId: set.userId,
                 isHighlight: set.isHighlight,

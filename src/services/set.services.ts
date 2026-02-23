@@ -129,7 +129,6 @@ export const getSetData = async (userId: string, search: string) => {
                 $project: {
                     "_id": 1,
                     "name": 1,
-                    "isPrivate": 1,
                     "color": 1,
                     "userId": 1,
                     "folderId": 1,
@@ -245,7 +244,6 @@ export const getSetDataByfolderId = async (folderId: string, userId: string, sea
                 $project: {
                     "_id": 1,
                     "name": 1,
-                    "isPrivate": 1,
                     "color": 1,
                     "userId": 1,
                     "folderId": 1,

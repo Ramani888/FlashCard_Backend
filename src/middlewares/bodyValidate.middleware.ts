@@ -40,7 +40,6 @@ export const validateBody = (rules: ValidationRules, source?: number) => {
 // You can add more validation rules for different routes as needed
 export const extendedRules: ValidationRules = {
   name: 'required|string',
-  isPrivate: 'required|boolean',
   color: 'required|string',
   cardTypeId: 'required|string',
   age: 'numeric|min:0|max:150',

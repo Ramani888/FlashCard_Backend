@@ -1,6 +1,5 @@
 export const createSetValidation = {
     name: 'required|string',
-    isPrivate: 'required|boolean',
     color: 'required|string',
     userId: 'required|string',
     folderId: 'string',

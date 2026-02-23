@@ -2,11 +2,8 @@ import { Set } from "../models/set.models";
 
 export const getMediatorSetData = async (userId: string) => {
     try {
-        // const result = await Set.find({ userId: userId?.toString(), isPrivate: false })
-
         const query = {
-            userId: userId?.toString(),
-            isPrivate: false
+            userId: userId?.toString()
         }
         const result = await Set.aggregate([
             {
@@ -53,7 +50,6 @@ export const getMediatorSetData = async (userId: string) => {
                 $project: {
                     "_id": 1,
                     "name": 1,
-                    "isPrivate": 1,
                     "color": 1,
                     "userId": 1,
                     "folderId": 1,

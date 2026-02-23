@@ -26,7 +26,6 @@ export const updateMediatorSet = async (req: AuthorizedRequest, res: Response) =
         //Copy to create new set
         const newSetData = {
             name: setData?.name ?? '',
-            isPrivate: setData?.isPrivate ?? false,
             color: setData?.color ?? '',
             userId: userId,
             ...(folderId && { folderId }),
