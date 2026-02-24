@@ -23,6 +23,7 @@ const general_2 = require("../utils/helpers/general");
 const sendMail_1 = __importDefault(require("../utils/helpers/sendMail"));
 const support_1 = require("../utils/emailTemplate/support");
 const SupportTemplate_1 = require("../utils/emailTemplate/SupportTemplate");
+const otpTemplate_1 = require("../utils/emailTemplate/otpTemplate");
 const updateProfilePicture = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const bodyData = req.body;
     try {
@@ -86,12 +87,7 @@ const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
         else {
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'User does not exists.' });
         }
-        const Template = `
-            <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
-                <p>Your OTP Code</p>
-                <p>Your OTP is <strong>${otp}</strong></p>
-            </div>
-        `;
+        const Template = (0, otpTemplate_1.getOtpTemplate)(Number(otp));
         // Send Mail
         yield (0, sendMail_1.default)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.email, 'OTP Verification', Template);
         // await updatePasswordData(bodyData);

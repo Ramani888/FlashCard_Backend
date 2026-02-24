@@ -75,7 +75,7 @@ const verifyOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         else if (Number(tempUser === null || tempUser === void 0 ? void 0 : tempUser.otp) !== Number(otp)) {
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'Invalid OTP.' });
         }
-        else if (Date.now() - (tempUser === null || tempUser === void 0 ? void 0 : tempUser.otpTimeOut) > 60000) {
+        else if (Date.now() - (tempUser === null || tempUser === void 0 ? void 0 : tempUser.otpTimeOut) > 120000) {
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'Your OTP has expired. Please resend it.' });
         }
         const newUserId = yield (0, signUp_service_1.createUser)(Object.assign(Object.assign({}, tempUser), { email: (_a = tempUser === null || tempUser === void 0 ? void 0 : tempUser.email) === null || _a === void 0 ? void 0 : _a.toLowerCase(), picture: signUp_1.DEFAULT_PICTURE }));
