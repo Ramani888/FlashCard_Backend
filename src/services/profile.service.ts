@@ -41,9 +41,10 @@ export const getSubscriptionData = async () => {
 
 export const updatePasswordData = async (updateData: IUser) => {
     try {
+        const LC_Email = updateData?.email?.toLowerCase();
         const result = await User.findOneAndUpdate(
-            { email: updateData?.email },
-            { $set: { password: updateData?.password }},
+            { email: LC_Email },
+            { $set: { password: updateData?.password } },
             { new: true, upsert: false }
         );
         return result;

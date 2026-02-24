@@ -64,14 +64,15 @@ export const updatePassword = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
     try {
         // Check if the user exists or not
-        const existingUser = await getUserByEmail(bodyData?.email);
+        const LC_Email = bodyData?.email?.toLowerCase();
+        const existingUser = await getUserByEmail(LC_Email);
         if (!existingUser) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User does not exists.' });
 
         // Generate OTP
         const otp = generateOTP();
 
         // Check if the temp user already exists
-        const existingTempUser = await getTempUserByEmail(bodyData?.email);
+        const existingTempUser = await getTempUserByEmail(LC_Email);
         if (existingTempUser) {
             updateTempUserPassword(bodyData, Number(otp))
         } else {
@@ -81,7 +82,7 @@ export const updatePassword = async (req: AuthorizedRequest, res: Response) => {
         const Template = getOtpTemplate(Number(otp));
 
         // Send Mail
-        await sendMail(bodyData?.email, 'OTP Verification', Template);
+        await sendMail(LC_Email, 'OTP Verification', Template);
         // await updatePasswordData(bodyData);
         res.status(StatusCodes.OK).send({ success: true, message: ProfileApiSource.put.updatePassword.message });
     } catch (err) {
@@ -93,7 +94,8 @@ export const updatePassword = async (req: AuthorizedRequest, res: Response) => {
 export const updatePasswordVerifyOtp = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
     try {
-        const existingTempUser = await getTempUserByEmail(bodyData?.email);
+        const LC_Email = bodyData?.email?.toLowerCase();
+        const existingTempUser = await getTempUserByEmail(LC_Email);
         if (Number(existingTempUser?.otp) !== Number(bodyData?.otp)) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'OTP Does Not Match.' });
 
         await updatePasswordData(bodyData);
