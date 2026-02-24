@@ -13,6 +13,7 @@ import { getSupportEmailTemplate } from "../utils/emailTemplate/support";
 import fs from 'fs/promises';
 import path from 'path';
 import { getSupportTemplate } from "../utils/emailTemplate/SupportTemplate";
+import { getOtpTemplate } from "../utils/emailTemplate/otpTemplate";
 
 export const updateProfilePicture = async (req: AuthorizedRequest, res: Response) => {
     const bodyData = req.body;
@@ -22,11 +23,11 @@ export const updateProfilePicture = async (req: AuthorizedRequest, res: Response
             return;
         }
         const userData = await getUserById(bodyData?._id);
-        if (userData?.picture)  {
+        if (userData?.picture) {
             await deleteFromS3(userData?.picture, FLASHCARD_IMAGES_V1_BUCKET_NAME)
         }
         const imageUrl = await uploadToS3(req.file, FLASHCARD_IMAGES_V1_BUCKET_NAME);
-        await updateProfilePictureData({...bodyData, picture: imageUrl});
+        await updateProfilePictureData({ ...bodyData, picture: imageUrl });
         const updateUserData = await getUserById(bodyData?._id);
         res.status(StatusCodes.OK).send({ user: updateUserData, success: true, message: ProfileApiSource.put.updateProfilePicture.message });
     } catch (err) {
@@ -55,7 +56,7 @@ export const getProfile = async (req: AuthorizedRequest, res: Response) => {
         res.status(StatusCodes.OK).send(data);
     } catch (err) {
         console.error(err);
-        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });    
+        res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
     }
 }
 
@@ -77,15 +78,10 @@ export const updatePassword = async (req: AuthorizedRequest, res: Response) => {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User does not exists.' });
         }
 
-        const Template = `
-            <div style="font-family: Arial, sans-serif; line-height: 1.6; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
-                <p>Your OTP Code</p>
-                <p>Your OTP is <strong>${otp}</strong></p>
-            </div>
-        `
+        const Template = getOtpTemplate(Number(otp));
 
-         // Send Mail
-         await sendMail(bodyData?.email, 'OTP Verification', Template);
+        // Send Mail
+        await sendMail(bodyData?.email, 'OTP Verification', Template);
         // await updatePasswordData(bodyData);
         res.status(StatusCodes.OK).send({ success: true, message: ProfileApiSource.put.updatePassword.message });
     } catch (err) {
@@ -99,7 +95,7 @@ export const updatePasswordVerifyOtp = async (req: AuthorizedRequest, res: Respo
     try {
         const existingTempUser = await getTempUserByEmail(bodyData?.email);
         if (Number(existingTempUser?.otp) !== Number(bodyData?.otp)) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'OTP Does Not Match.' });
-        
+
         await updatePasswordData(bodyData);
         res.status(StatusCodes.OK).send({ success: true, message: ProfileApiSource.put.updatePasswordVerifyOtp.message });
     } catch (err) {
@@ -118,14 +114,14 @@ export const createSupport = async (req: AuthorizedRequest, res: Response) => {
         const supportTemplate = getSupportTemplate();
         if (req.file) {
             const imageUrl = await uploadToS3(req.file, FLASHCARD_SUPPORT_V1_BUCKET_NAME);
-            await createSupportData({...bodyData, image: imageUrl})
+            await createSupportData({ ...bodyData, image: imageUrl })
             await sendMail('support@biblestudycards.app', 'SUPPORT', emailTemplate, imageUrl); //Roadtojesusministry@gmail.com
         } else {
-            await createSupportData({...bodyData})
+            await createSupportData({ ...bodyData })
             await sendMail('support@biblestudycards.app', 'SUPPORT', emailTemplate); //Roadtojesusministry@gmail.com
         }
         await sendMail(String(userData?.email), 'SUPPORT', supportTemplate);
-        
+
         res.status(StatusCodes.OK).send({ success: true, message: ProfileApiSource.post.createSupport.message });
     } catch (err) {
         console.error(err);

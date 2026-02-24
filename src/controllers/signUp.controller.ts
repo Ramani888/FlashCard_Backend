@@ -34,9 +34,9 @@ export const signUp = async (req: AuthorizedRequest, res: Response) => {
         const newPassword = await encryptPassword(bodyData?.password)
 
         if (existingTempUser) {
-            await updateTempUser({...bodyData, email: email, password: newPassword}, Number(otp), Date.now())
+            await updateTempUser({ ...bodyData, email: email, password: newPassword }, Number(otp), Date.now())
         } else {
-            await createTempUser({...bodyData, email: email, password: newPassword}, Number(otp), Date.now());
+            await createTempUser({ ...bodyData, email: email, password: newPassword }, Number(otp), Date.now());
         }
 
         const otpTemplate = getOtpTemplate(Number(otp));
@@ -44,7 +44,7 @@ export const signUp = async (req: AuthorizedRequest, res: Response) => {
         // Send Mail
         await sendMail(email, 'OTP Verification', otpTemplate);
 
-        res.status(StatusCodes.OK).send({ success: true, message: SignUpApiSource.post.signUp.message});        
+        res.status(StatusCodes.OK).send({ success: true, message: SignUpApiSource.post.signUp.message });
     } catch (err) {
         console.error(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
@@ -67,16 +67,16 @@ export const verifyOtp = async (req: AuthorizedRequest, res: Response) => {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Email Not Found.' });
         } else if (Number(tempUser?.otp) !== Number(otp)) {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid OTP.' });
-        } else if (Date.now() - tempUser?.otpTimeOut > 60000) {
+        } else if (Date.now() - tempUser?.otpTimeOut > 120000) {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Your OTP has expired. Please resend it.' });
         }
 
-        const newUserId = await createUser({...tempUser, email: tempUser?.email?.toLowerCase(), picture: DEFAULT_PICTURE});
+        const newUserId = await createUser({ ...tempUser, email: tempUser?.email?.toLowerCase(), picture: DEFAULT_PICTURE });
 
         //Create New User Credit
         await createUserCreditData({ userId: newUserId?.toString(), credit: FREE_TIER?.credit });
         await createUserCreditLogsData({ userId: newUserId?.toString(), creditBalance: FREE_TIER?.credit, type: 'credited', note: 'When create new account.' });
-        res.status(StatusCodes.OK).send({ success: true, message: SignUpApiSource.post.verifyOtp.userSuccessMsg});
+        res.status(StatusCodes.OK).send({ success: true, message: SignUpApiSource.post.verifyOtp.userSuccessMsg });
 
         //Create New User Storage
         await createUserStorageData({ userId: newUserId?.toString(), storage: FREE_TIER?.storage, unit: FREE_TIER?.storageUnit, coveredStorage: 0, coveredStorageUnit: FREE_TIER?.storageUnit });
@@ -124,7 +124,7 @@ export const resendOtp = async (req: AuthorizedRequest, res: Response) => {
         const existingTempUser = await getTempUserByEmail(LC_Email);
 
         if (existingTempUser) {
-            await updateTempUser({email: LC_Email}, Number(otp), Date.now())
+            await updateTempUser({ email: LC_Email }, Number(otp), Date.now())
         } else {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User not found.' });
         }
@@ -141,7 +141,7 @@ export const resendOtp = async (req: AuthorizedRequest, res: Response) => {
         // Send Mail
         await sendMail(LC_Email, 'OTP Verification', otpTemplate);
 
-        res.status(StatusCodes.OK).send({ success: true, message: SignUpApiSource.put.resendOtp.message}); 
+        res.status(StatusCodes.OK).send({ success: true, message: SignUpApiSource.put.resendOtp.message });
     } catch (err) {
         console.error(err);
         res.status(StatusCodes.INTERNAL_SERVER_ERROR).send({ error: err });
