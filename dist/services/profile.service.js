@@ -54,8 +54,10 @@ const getSubscriptionData = () => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.getSubscriptionData = getSubscriptionData;
 const updatePasswordData = (updateData) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     try {
-        const result = yield user_model_1.User.findOneAndUpdate({ email: updateData === null || updateData === void 0 ? void 0 : updateData.email }, { $set: { password: updateData === null || updateData === void 0 ? void 0 : updateData.password } }, { new: true, upsert: false });
+        const LC_Email = (_a = updateData === null || updateData === void 0 ? void 0 : updateData.email) === null || _a === void 0 ? void 0 : _a.toLowerCase();
+        const result = yield user_model_1.User.findOneAndUpdate({ email: LC_Email }, { $set: { password: updateData === null || updateData === void 0 ? void 0 : updateData.password } }, { new: true, upsert: false });
         return result;
     }
     catch (err) {

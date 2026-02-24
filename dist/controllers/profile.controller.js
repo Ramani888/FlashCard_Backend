@@ -71,16 +71,18 @@ const getProfile = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.getProfile = getProfile;
 const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const bodyData = req.body;
     try {
         // Check if the user exists or not
-        const existingUser = yield (0, signUp_service_1.getUserByEmail)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.email);
+        const LC_Email = (_a = bodyData === null || bodyData === void 0 ? void 0 : bodyData.email) === null || _a === void 0 ? void 0 : _a.toLowerCase();
+        const existingUser = yield (0, signUp_service_1.getUserByEmail)(LC_Email);
         if (!existingUser)
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'User does not exists.' });
         // Generate OTP
         const otp = (0, general_2.generateOTP)();
         // Check if the temp user already exists
-        const existingTempUser = yield (0, signUp_service_1.getTempUserByEmail)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.email);
+        const existingTempUser = yield (0, signUp_service_1.getTempUserByEmail)(LC_Email);
         if (existingTempUser) {
             (0, signUp_service_1.updateTempUserPassword)(bodyData, Number(otp));
         }
@@ -89,7 +91,7 @@ const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
         }
         const Template = (0, otpTemplate_1.getOtpTemplate)(Number(otp));
         // Send Mail
-        yield (0, sendMail_1.default)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.email, 'OTP Verification', Template);
+        yield (0, sendMail_1.default)(LC_Email, 'OTP Verification', Template);
         // await updatePasswordData(bodyData);
         res.status(http_status_codes_1.StatusCodes.OK).send({ success: true, message: profile_1.ProfileApiSource.put.updatePassword.message });
     }
@@ -100,9 +102,11 @@ const updatePassword = (req, res) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.updatePassword = updatePassword;
 const updatePasswordVerifyOtp = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const bodyData = req.body;
     try {
-        const existingTempUser = yield (0, signUp_service_1.getTempUserByEmail)(bodyData === null || bodyData === void 0 ? void 0 : bodyData.email);
+        const LC_Email = (_a = bodyData === null || bodyData === void 0 ? void 0 : bodyData.email) === null || _a === void 0 ? void 0 : _a.toLowerCase();
+        const existingTempUser = yield (0, signUp_service_1.getTempUserByEmail)(LC_Email);
         if (Number(existingTempUser === null || existingTempUser === void 0 ? void 0 : existingTempUser.otp) !== Number(bodyData === null || bodyData === void 0 ? void 0 : bodyData.otp))
             return res.status(http_status_codes_1.StatusCodes.BAD_REQUEST).json({ message: 'OTP Does Not Match.' });
         yield (0, profile_service_1.updatePasswordData)(bodyData);
